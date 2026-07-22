@@ -6,9 +6,7 @@ namespace Rimba\Work\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Rimba\Work\Models\ChecklistInstance;
 use Rimba\Work\Models\TaskInstance;
-use Rimba\Work\Models\WorkPackageInstance;
 
 final class TaskReleased
 {
@@ -19,4 +17,3 @@ final class TaskReleased
         public readonly TaskInstance $taskInstance,
     ) {}
 }
-

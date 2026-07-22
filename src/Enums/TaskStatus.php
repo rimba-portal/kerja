@@ -39,4 +39,3 @@ enum TaskStatus: string
         ], true);
     }
 }
-

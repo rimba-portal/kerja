@@ -6,8 +6,6 @@ namespace Rimba\Work\Builders;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Rimba\Work\Enums\ChecklistStatus;
-use Rimba\Work\Enums\TaskStatus;
 use Rimba\Work\Enums\WorkPackageStatus;
 
 final class WorkPackageInstanceBuilder extends Builder

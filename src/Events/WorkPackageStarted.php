@@ -6,8 +6,6 @@ namespace Rimba\Work\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Rimba\Work\Models\ChecklistInstance;
-use Rimba\Work\Models\TaskInstance;
 use Rimba\Work\Models\WorkPackageInstance;
 
 final class WorkPackageStarted
@@ -19,4 +17,3 @@ final class WorkPackageStarted
         public readonly WorkPackageInstance $workPackageInstance,
     ) {}
 }
-
