@@ -1,0 +1,340 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rimba\Work\Listeners;
+
+use Rimba\Trail\Models\AuditLog;
+use Rimba\Work\Actions\ActivateChecklist;
+use Rimba\Work\Actions\CompleteChecklist;
+use Rimba\Work\Actions\CompleteWorkPackage;
+use Rimba\Work\Actions\CreateTaskInstance;
+use Rimba\Work\Enums\ChecklistStatus;
+use Rimba\Work\Enums\TaskStatus;
+use Rimba\Work\Events\ChecklistActivated;
+use Rimba\Work\Events\ChecklistCompleted;
+use Rimba\Work\Events\TaskCancelled;
+use Rimba\Work\Events\TaskCompleted;
+use Rimba\Work\Events\TaskSkipped;
+use Rimba\Work\Events\WorkPackageStarted;
+
+/**
+|--------------------------------------------------------------------------
+| LISTENERS
+|--------------------------------------------------------------------------
+|
+| Listeners contain the workflow engine.
+|
+| WorkPackageStarted
+|     └─ CreateFirstChecklist
+|
+| ChecklistActivated
+|     └─ CreateTaskInstances
+|
+| TaskCompleted
+| TaskSkipped
+| TaskCancelled
+|     └─ AutoCompleteChecklist
+|
+| ChecklistCompleted
+|     ├─ ActivateNextChecklist
+|     └─ AutoCompleteWorkPackage
+|
+| All Events
+|     └─ WriteAuditLog
+|
+*/
+/*
+|--------------------------------------------------------------------------
+| CreateFirstChecklist
+|--------------------------------------------------------------------------
+*/
+
+final class CreateFirstChecklist
+{
+    public function handle(
+        WorkPackageStarted $event,
+    ): void {
+
+        $workPackageInstance =
+            $event->workPackageInstance;
+
+        $firstChecklist = $workPackageInstance
+            ->workPackage
+            ->checklists()
+            ->orderBy('sort_order')
+            ->first();
+
+        if (! $firstChecklist) {
+            return;
+        }
+
+        app(ActivateChecklist::class)
+            ->execute(
+                $workPackageInstance,
+                $firstChecklist,
+            );
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| CreateTaskInstances
+|--------------------------------------------------------------------------
+*/
+
+final class CreateTaskInstances
+{
+    public function handle(
+        ChecklistActivated $event,
+    ): void {
+
+        $checklistInstance =
+            $event->checklistInstance;
+
+        foreach (
+            $checklistInstance
+                ->checklist
+                ->tasks()
+                ->where('active', true)
+                ->get()
+            as $task
+        ) {
+
+            app(CreateTaskInstance::class)
+                ->execute(
+                    $checklistInstance,
+                    $task,
+                );
+        }
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| AutoCompleteChecklist
+|--------------------------------------------------------------------------
+|
+| Triggered by:
+| - TaskCompleted
+| - TaskSkipped
+| - TaskCancelled
+|
+*/
+
+final class AutoCompleteChecklist
+{
+    public function handle(
+        object $event,
+    ): void {
+
+        $checklistInstance =
+            $event
+                ->taskInstance
+                ->checklistInstance;
+
+        $remainingTasks =
+            $checklistInstance
+                ->taskInstances()
+                ->whereNotIn('status', [
+                    TaskStatus::Completed,
+                    TaskStatus::Skipped,
+                    TaskStatus::Cancelled,
+                ])
+                ->count();
+
+        if ($remainingTasks > 0) {
+            return;
+        }
+
+        app(CompleteChecklist::class)
+            ->execute(
+                $checklistInstance,
+            );
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| ActivateNextChecklist
+|--------------------------------------------------------------------------
+*/
+
+final class ActivateNextChecklist
+{
+    public function handle(
+        ChecklistCompleted $event,
+    ): void {
+
+        $completedChecklistInstance =
+            $event->checklistInstance;
+
+        $workPackageInstance =
+            $completedChecklistInstance
+                ->workPackageInstance;
+
+        $currentSortOrder =
+            $completedChecklistInstance
+                ->checklist
+                ->sort_order;
+
+        $nextChecklist =
+            $workPackageInstance
+                ->workPackage
+                ->checklists()
+                ->where(
+                    'sort_order',
+                    '>',
+                    $currentSortOrder,
+                )
+                ->orderBy('sort_order')
+                ->first();
+
+        if (! $nextChecklist) {
+            return;
+        }
+
+        app(ActivateChecklist::class)
+            ->execute(
+                $workPackageInstance,
+                $nextChecklist,
+            );
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| AutoCompleteWorkPackage
+|--------------------------------------------------------------------------
+*/
+
+final class AutoCompleteWorkPackage
+{
+    public function handle(
+        ChecklistCompleted $event,
+    ): void {
+
+        $workPackageInstance =
+            $event
+                ->checklistInstance
+                ->workPackageInstance;
+
+        $activeChecklistExists =
+            $workPackageInstance
+                ->checklistInstances()
+                ->where(
+                    'status',
+                    ChecklistStatus::Pending,
+                )
+                ->exists();
+
+        if ($activeChecklistExists) {
+            return;
+        }
+
+        $totalChecklists =
+            $workPackageInstance
+                ->workPackage
+                ->checklists()
+                ->count();
+
+        $completedChecklists =
+            $workPackageInstance
+                ->checklistInstances()
+                ->where(
+                    'status',
+                    ChecklistStatus::Completed,
+                )
+                ->count();
+
+        if ($totalChecklists !== $completedChecklists) {
+            return;
+        }
+
+        app(CompleteWorkPackage::class)
+            ->execute(
+                $workPackageInstance,
+            );
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| WriteAuditLog
+|--------------------------------------------------------------------------
+*/
+
+final class WriteAuditLog
+{
+    public function handle(
+        object $event,
+    ): void {
+
+        $model =
+            $event->taskInstance
+            ?? $event->checklistInstance
+            ?? $event->workPackageInstance
+            ?? null;
+
+        if (! $model) {
+            return;
+        }
+
+        AuditLog::create([
+            'ref_type' => $model::class,
+            'ref_id' => $model->getKey(),
+            'actor' => 'system',
+            'action' => class_basename($event),
+            'result' => 'success',
+            'reason' => null,
+            'metadata' => [],
+        ]);
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| EVENT REGISTRATION
+|--------------------------------------------------------------------------
+|
+| EventServiceProvider::$listen
+|
+*/
+
+protected $listen = [
+
+    WorkPackageStarted::class => [
+        CreateFirstChecklist::class,
+        WriteAuditLog::class,
+    ],
+
+    ChecklistActivated::class => [
+        CreateTaskInstances::class,
+        WriteAuditLog::class,
+    ],
+
+    TaskCompleted::class => [
+        AutoCompleteChecklist::class,
+        WriteAuditLog::class,
+    ],
+
+    TaskSkipped::class => [
+        AutoCompleteChecklist::class,
+        WriteAuditLog::class,
+    ],
+
+    TaskCancelled::class => [
+        AutoCompleteChecklist::class,
+        WriteAuditLog::class,
+    ],
+
+    ChecklistCompleted::class => [
+        ActivateNextChecklist::class,
+        AutoCompleteWorkPackage::class,
+        WriteAuditLog::class,
+    ],
+
+    WorkPackageCompleted::class => [
+        WriteAuditLog::class,
+    ],
+];

@@ -1,0 +1,34 @@
+{
+    "name": "rimba/kerja",
+    "description": "Execution layer for tasks, checklists, and work packages.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "BIT Ecosystem",
+            "email": "bit.ecosystem@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "rimba/asas": "^1.0",
+        "rimba/jejak": "^1.0",
+        "rimba/orang": "^1.0",
+        "rimba/pihak": "^1.0",
+        "spatie/laravel-permission": "^7.3"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Rimba\\Work\\WorkServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+           "Rimba\\Work\\": "src/"
+        }
+    },
+    "minimum-stability": "alpha",
+    "prefer-stable": true
+}

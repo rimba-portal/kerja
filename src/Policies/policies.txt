@@ -1,0 +1,358 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rimba\Work\Policies;
+
+use App\Models\User;
+use Rimba\Work\Enums\TaskStatus;
+use Rimba\Work\Models\Checklist;
+use Rimba\Work\Models\ChecklistInstance;
+use Rimba\Work\Models\Task;
+use Rimba\Work\Models\TaskInstance;
+use Rimba\Work\Models\WorkPackage;
+use Rimba\Work\Models\WorkPackageInstance;
+
+/**
+|--------------------------------------------------------------------------
+| POLICIES
+|--------------------------------------------------------------------------
+|
+| Admin
+| -----
+| WorkPackage CRUD
+| Checklist CRUD
+| Task CRUD
+|
+| User
+| ----
+| Claim queue tasks matching role
+| Release own task
+| Complete own task
+|
+| Supervisor
+| ----------
+| Skip task
+| Cancel task
+|
+*/
+
+/*
+|--------------------------------------------------------------------------
+| WorkPackagePolicy
+|--------------------------------------------------------------------------
+*/
+
+final class WorkPackagePolicy
+{
+    public function viewAny(
+        User $user,
+    ): bool {
+        return $user->can('work-package.viewAny');
+    }
+
+    public function view(
+        User $user,
+        WorkPackage $workPackage,
+    ): bool {
+        return $user->can('work-package.view');
+    }
+
+    public function create(
+        User $user,
+    ): bool {
+        return $user->can('work-package.create');
+    }
+
+    public function update(
+        User $user,
+        WorkPackage $workPackage,
+    ): bool {
+        return $user->can('work-package.update');
+    }
+
+    public function delete(
+        User $user,
+        WorkPackage $workPackage,
+    ): bool {
+        return $user->can('work-package.delete');
+    }
+
+    public function start(
+        User $user,
+        WorkPackage $workPackage,
+    ): bool {
+        return $user->can('work-package.start');
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| ChecklistPolicy
+|--------------------------------------------------------------------------
+*/
+
+final class ChecklistPolicy
+{
+    public function viewAny(
+        User $user,
+    ): bool {
+        return $user->can('checklist.viewAny');
+    }
+
+    public function create(
+        User $user,
+    ): bool {
+        return $user->can('checklist.create');
+    }
+
+    public function update(
+        User $user,
+        Checklist $checklist,
+    ): bool {
+        return $user->can('checklist.update');
+    }
+
+    public function delete(
+        User $user,
+        Checklist $checklist,
+    ): bool {
+        return $user->can('checklist.delete');
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| TaskPolicy
+|--------------------------------------------------------------------------
+*/
+
+final class TaskPolicy
+{
+    public function viewAny(
+        User $user,
+    ): bool {
+        return $user->can('task.viewAny');
+    }
+
+    public function create(
+        User $user,
+    ): bool {
+        return $user->can('task.create');
+    }
+
+    public function update(
+        User $user,
+        Task $task,
+    ): bool {
+        return $user->can('task.update');
+    }
+
+    public function delete(
+        User $user,
+        Task $task,
+    ): bool {
+        return $user->can('task.delete');
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| WorkPackageInstancePolicy
+|--------------------------------------------------------------------------
+*/
+
+final class WorkPackageInstancePolicy
+{
+    public function view(
+        User $user,
+        WorkPackageInstance $instance,
+    ): bool {
+        return $user->can('work-package-instance.view');
+    }
+
+    public function start(
+        User $user,
+    ): bool {
+        return $user->can('work-package-instance.start');
+    }
+
+    public function cancel(
+        User $user,
+        WorkPackageInstance $instance,
+    ): bool {
+        return $user->can('work-package-instance.cancel');
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| ChecklistInstancePolicy
+|--------------------------------------------------------------------------
+*/
+
+final class ChecklistInstancePolicy
+{
+    public function view(
+        User $user,
+        ChecklistInstance $instance,
+    ): bool {
+        return $user->can('checklist-instance.view');
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| TaskInstancePolicy
+|--------------------------------------------------------------------------
+*/
+
+final class TaskInstancePolicy
+{
+    public function view(
+        User $user,
+        TaskInstance $taskInstance,
+    ): bool {
+
+        if (
+            $taskInstance->assigned_to_id
+            === $user->staff?->id
+        ) {
+            return true;
+        }
+
+        return $user->can(
+            'task-instance.view'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Claim
+    |--------------------------------------------------------------------------
+    |
+    | Task must:
+    | - be queue
+    | - have matching role
+    |
+    */
+
+    public function claim(
+        User $user,
+        TaskInstance $taskInstance,
+    ): bool {
+
+        if (
+            $taskInstance->status
+            !== TaskStatus::Queue
+        ) {
+            return false;
+        }
+
+        return $user
+            ->staff
+            ?->roles()
+            ->whereKey(
+                $taskInstance
+                    ->task
+                    ->role_id
+            )
+            ->exists()
+            ?? false;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Release
+    |--------------------------------------------------------------------------
+    */
+
+    public function release(
+        User $user,
+        TaskInstance $taskInstance,
+    ): bool {
+
+        return $taskInstance->assigned_to_id
+            === $user->staff?->id;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Complete
+    |--------------------------------------------------------------------------
+    */
+
+    public function complete(
+        User $user,
+        TaskInstance $taskInstance,
+    ): bool {
+
+        return $taskInstance->assigned_to_id
+            === $user->staff?->id;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Skip
+    |--------------------------------------------------------------------------
+    */
+
+    public function skip(
+        User $user,
+        TaskInstance $taskInstance,
+    ): bool {
+
+        return $user->can(
+            'task-instance.skip'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cancel
+    |--------------------------------------------------------------------------
+    */
+
+    public function cancel(
+        User $user,
+        TaskInstance $taskInstance,
+    ): bool {
+
+        return $user->can(
+            'task-instance.cancel'
+        );
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| MODEL REGISTRATION
+|--------------------------------------------------------------------------
+|
+| WorkServiceProvider::boot()
+|
+*/
+
+WorkPackage::observe(
+    WorkPackageObserver::class
+);
+
+Checklist::observe(
+    ChecklistObserver::class
+);
+
+Task::observe(
+    TaskObserver::class
+);
+
+WorkPackageInstance::observe(
+    WorkPackageInstanceObserver::class
+);
+
+ChecklistInstance::observe(
+    ChecklistInstanceObserver::class
+);
+
+TaskInstance::observe(
+    TaskInstanceObserver::class
+);

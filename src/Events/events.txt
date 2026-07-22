@@ -1,0 +1,159 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rimba\Work\Events;
+
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
+use Rimba\Work\Models\ChecklistInstance;
+use Rimba\Work\Models\TaskInstance;
+use Rimba\Work\Models\WorkPackageInstance;
+
+/**
+|--------------------------------------------------------------------------
+| EVENTS
+|--------------------------------------------------------------------------
+|
+| Events report that something already happened.
+| They should never contain business logic.
+|
+*/
+
+final class WorkPackageStarted
+{
+    use Dispatchable;
+    use SerializesModels;
+
+    public function __construct(
+        public readonly WorkPackageInstance $workPackageInstance,
+    ) {}
+}
+
+final class ChecklistActivated
+{
+    use Dispatchable;
+    use SerializesModels;
+
+    public function __construct(
+        public readonly ChecklistInstance $checklistInstance,
+    ) {}
+}
+
+final class TaskClaimed
+{
+    use Dispatchable;
+    use SerializesModels;
+
+    public function __construct(
+        public readonly TaskInstance $taskInstance,
+    ) {}
+}
+
+final class TaskReleased
+{
+    use Dispatchable;
+    use SerializesModels;
+
+    public function __construct(
+        public readonly TaskInstance $taskInstance,
+    ) {}
+}
+
+final class TaskCompleted
+{
+    use Dispatchable;
+    use SerializesModels;
+
+    public function __construct(
+        public readonly TaskInstance $taskInstance,
+    ) {}
+}
+
+final class TaskSkipped
+{
+    use Dispatchable;
+    use SerializesModels;
+
+    public function __construct(
+        public readonly TaskInstance $taskInstance,
+    ) {}
+}
+
+final class TaskCancelled
+{
+    use Dispatchable;
+    use SerializesModels;
+
+    public function __construct(
+        public readonly TaskInstance $taskInstance,
+    ) {}
+}
+
+final class ChecklistCompleted
+{
+    use Dispatchable;
+    use SerializesModels;
+
+    public function __construct(
+        public readonly ChecklistInstance $checklistInstance,
+    ) {}
+}
+
+final class WorkPackageCompleted
+{
+    use Dispatchable;
+    use SerializesModels;
+
+    public function __construct(
+        public readonly WorkPackageInstance $workPackageInstance,
+    ) {}
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| EVENT REGISTRATION
+|--------------------------------------------------------------------------
+|
+| EventServiceProvider::$listen
+|
+*/
+
+protected $listen = [
+
+    WorkPackageStarted::class => [
+        CreateFirstChecklist::class,
+        WriteAuditLog::class,
+    ],
+
+    ChecklistActivated::class => [
+        CreateTaskInstances::class,
+        WriteAuditLog::class,
+    ],
+
+    TaskCompleted::class => [
+        AutoCompleteChecklist::class,
+        WriteAuditLog::class,
+    ],
+
+    TaskSkipped::class => [
+        AutoCompleteChecklist::class,
+        WriteAuditLog::class,
+    ],
+
+    TaskCancelled::class => [
+        AutoCompleteChecklist::class,
+        WriteAuditLog::class,
+    ],
+
+    ChecklistCompleted::class => [
+        ActivateNextChecklist::class,
+        AutoCompleteWorkPackage::class,
+        WriteAuditLog::class,
+    ],
+
+    WorkPackageCompleted::class => [
+        WriteAuditLog::class,
+    ],
+];
