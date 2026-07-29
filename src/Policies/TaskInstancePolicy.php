@@ -101,7 +101,6 @@ final class TaskInstancePolicy
 
     public function skip(
         User $user,
-        TaskInstance $taskInstance,
     ): bool {
 
         return $user->can(
@@ -117,7 +116,6 @@ final class TaskInstancePolicy
 
     public function cancel(
         User $user,
-        TaskInstance $taskInstance,
     ): bool {
 
         return $user->can(
