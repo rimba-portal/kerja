@@ -10,4 +10,7 @@ use Rimba\Work\Http\UI\Admin\Resources\WorkPackages\WorkPackageResource;
 class CreateWorkPackage extends CreateRecord
 {
     protected static string $resource = WorkPackageResource::class;
+
+    // Custom
+
 }
