@@ -22,7 +22,7 @@ class WorkPackageResource extends Resource
 {
     protected static ?string $model = WorkPackage::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowSmallRight;
 
     protected static ?string $recordTitleAttribute = 'name';
 
