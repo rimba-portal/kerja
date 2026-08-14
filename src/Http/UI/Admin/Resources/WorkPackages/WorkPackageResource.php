@@ -17,10 +17,13 @@ use Rimba\Work\Http\UI\Admin\Resources\WorkPackages\Schemas\WorkPackageForm;
 use Rimba\Work\Http\UI\Admin\Resources\WorkPackages\Schemas\WorkPackageInfolist;
 use Rimba\Work\Http\UI\Admin\Resources\WorkPackages\Tables\WorkPackagesTable;
 use Rimba\Work\Models\WorkPackage;
+use UnitEnum;
 
 class WorkPackageResource extends Resource
 {
     protected static ?string $model = WorkPackage::class;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Work';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowSmallRight;
 

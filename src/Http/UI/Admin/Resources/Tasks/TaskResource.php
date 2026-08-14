@@ -17,10 +17,13 @@ use Rimba\Work\Http\UI\Admin\Resources\Tasks\Schemas\TaskForm;
 use Rimba\Work\Http\UI\Admin\Resources\Tasks\Schemas\TaskInfolist;
 use Rimba\Work\Http\UI\Admin\Resources\Tasks\Tables\TasksTable;
 use Rimba\Work\Models\Task;
+use UnitEnum;
 
 class TaskResource extends Resource
 {
     protected static ?string $model = Task::class;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Work';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowSmallRight;
 
