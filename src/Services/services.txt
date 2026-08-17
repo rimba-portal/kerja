@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Services;
 
-use App\Trees\Organization\Models\Staff;
+use Rimba\People\Models\Staff;
 use Rimba\Work\Actions\ActivateChecklist;
 use Rimba\Work\Actions\AssignTask;
 use Rimba\Work\Actions\ClaimTask;

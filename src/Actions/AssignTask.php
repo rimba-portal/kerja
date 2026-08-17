@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Actions;
 
-use App\Trees\Organization\Models\Staff;
+use Rimba\People\Models\Staff;
 use Rimba\Work\Enums\TaskStatus;
 use Rimba\Work\Models\TaskInstance;
 
