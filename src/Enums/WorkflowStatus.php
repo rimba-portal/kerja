@@ -3,12 +3,10 @@
 declare(strict_types=1);
 
 namespace Rimba\Work\Enums;
-enum TaskStatus: string
+enum WorkflowStatus: string
 {
-    case Pending = 'pending';
-    case Ready = 'ready';
-    case Assigned = 'assigned';
-    case Started = 'started';
+    case Draft = 'draft';
+    case Active = 'active';
     case Waiting = 'waiting';
     case Completed = 'completed';
     case Cancelled = 'cancelled';

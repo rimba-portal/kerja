@@ -1,0 +1,343 @@
+{
+    "slug": "leave.application",
+    "title": "Apply Leave",
+    "description": "Employee leave request and authorization workflow.",
+    "version": 1,
+    "active": true,
+    "published": true,
+    "first_workpackage": "employee.execute.leave_request",
+    "workpackages": [
+        {
+            "slug": "employee.execute.leave_request",
+            "actor": "Employee",
+            "actor_selector": "initiator",
+            "activity_type": "execute",
+            "business_object": "Leave Request",
+            "execution_type": "human",
+            "suppliers": [
+                "Employee"
+            ],
+            "inputs": [
+                "Leave Menu"
+            ],
+            "outputs": [
+                "Leave Request Session"
+            ],
+            "customers": [
+                "Rimba"
+            ],
+            "next": [
+                "rimba.capture.employee.context"
+            ]
+        },
+        {
+            "slug": "rimba.capture.employee.context",
+            "actor": "Rimba",
+            "activity_type": "capture",
+            "business_object": "Employee Context",
+            "execution_type": "rimba",
+            "suppliers": [
+                "Authentication Service",
+                "Employee Directory",
+                "Organization Structure"
+            ],
+            "inputs": [
+                "Authenticated Identity"
+            ],
+            "outputs": [
+                "Employee Profile",
+                "Employee Roles",
+                "Employee Supervisor"
+            ],
+            "customers": [
+                "Leave Request Process"
+            ],
+            "handler": "leave.capture_employee_context",
+            "next": [
+                "rimba.capture.leave.eligibility"
+            ]
+        },
+        {
+            "slug": "rimba.capture.leave.eligibility",
+            "actor": "Rimba",
+            "activity_type": "capture",
+            "business_object": "Leave Eligibility",
+            "execution_type": "rimba",
+            "suppliers": [
+                "Benefits Configuration",
+                "Leave Ledger"
+            ],
+            "inputs": [
+                "Employee Profile"
+            ],
+            "outputs": [
+                "Leave Entitlement",
+                "Leave Balance"
+            ],
+            "customers": [
+                "Leave Request Form"
+            ],
+            "handler": "leave.capture_eligibility",
+            "next": [
+                "employee.create.leave.request"
+            ]
+        },
+        {
+            "slug": "employee.create.leave.request",
+            "actor": "Employee",
+            "actor_selector": "initiator",
+            "activity_type": "create",
+            "business_object": "Leave Request",
+            "execution_type": "human",
+            "suppliers": [
+                "Rimba"
+            ],
+            "inputs": [
+                "Employee Context",
+                "Leave Entitlement",
+                "Leave Balance"
+            ],
+            "outputs": [
+                "Leave Request Draft"
+            ],
+            "customers": [
+                "Rimba"
+            ],
+            "next": [
+                "rimba.verify.leave.request"
+            ]
+        },
+        {
+            "slug": "rimba.verify.leave.request",
+            "actor": "Rimba",
+            "activity_type": "verify",
+            "business_object": "Leave Request",
+            "execution_type": "rimba",
+            "suppliers": [
+                "Employee"
+            ],
+            "inputs": [
+                "Leave Request Draft",
+                "Leave Policy",
+                "Leave Balance"
+            ],
+            "outputs": [
+                "Verified Leave Request"
+            ],
+            "customers": [
+                "Employee"
+            ],
+            "handler": "leave.verify_request",
+            "next": [
+                "employee.communicate.leave.request"
+            ]
+        },
+        {
+            "slug": "employee.communicate.leave.request",
+            "actor": "Employee",
+            "actor_selector": "initiator",
+            "activity_type": "communicate",
+            "business_object": "Leave Request",
+            "execution_type": "human",
+            "suppliers": [
+                "Employee"
+            ],
+            "inputs": [
+                "Verified Leave Request"
+            ],
+            "outputs": [
+                "Submitted Leave Request"
+            ],
+            "customers": [
+                "Rimba"
+            ],
+            "next": [
+                "rimba.record.leave.request"
+            ]
+        },
+        {
+            "slug": "rimba.record.leave.request",
+            "actor": "Rimba",
+            "activity_type": "record",
+            "business_object": "Leave Request",
+            "execution_type": "rimba",
+            "suppliers": [
+                "Employee"
+            ],
+            "inputs": [
+                "Submitted Leave Request"
+            ],
+            "outputs": [
+                "Official Leave Request Record"
+            ],
+            "customers": [
+                "Supervisor"
+            ],
+            "handler": "leave.record_request",
+            "next": [
+                "supervisor.analyze.leave.request"
+            ]
+        },
+        {
+            "slug": "supervisor.analyze.leave.request",
+            "actor": "Supervisor",
+            "actor_selector": "employee.supervisor",
+            "activity_type": "analyze",
+            "business_object": "Leave Request",
+            "execution_type": "human",
+            "suppliers": [
+                "Employee",
+                "Rimba"
+            ],
+            "inputs": [
+                "Official Leave Request Record",
+                "Leave Eligibility"
+            ],
+            "outputs": [
+                "Leave Review Findings"
+            ],
+            "customers": [
+                "Supervisor"
+            ],
+            "next": [
+                "supervisor.decide.leave.request"
+            ]
+        },
+        {
+            "slug": "supervisor.decide.leave.request",
+            "actor": "Supervisor",
+            "actor_selector": "employee.supervisor",
+            "activity_type": "decide",
+            "business_object": "Leave Request",
+            "execution_type": "human",
+            "suppliers": [
+                "Supervisor"
+            ],
+            "inputs": [
+                "Leave Review Findings"
+            ],
+            "outputs": [
+                "Leave Decision"
+            ],
+            "customers": [
+                "Supervisor"
+            ],
+            "next": [
+                "supervisor.authorize.leave.request"
+            ]
+        },
+        {
+            "slug": "supervisor.authorize.leave.request",
+            "actor": "Supervisor",
+            "actor_selector": "employee.supervisor",
+            "activity_type": "authorize",
+            "business_object": "Leave Request",
+            "execution_type": "human",
+            "suppliers": [
+                "Supervisor"
+            ],
+            "inputs": [
+                "Leave Decision"
+            ],
+            "outputs": [
+                "Authorized Leave Decision"
+            ],
+            "customers": [
+                "Rimba"
+            ],
+            "next": [
+                "rimba.record.leave.decision"
+            ]
+        },
+        {
+            "slug": "rimba.record.leave.decision",
+            "actor": "Rimba",
+            "activity_type": "record",
+            "business_object": "Leave Decision",
+            "execution_type": "rimba",
+            "suppliers": [
+                "Supervisor"
+            ],
+            "inputs": [
+                "Authorized Leave Decision"
+            ],
+            "outputs": [
+                "Official Leave Decision Record"
+            ],
+            "customers": [
+                "Employee",
+                "Leave Administration"
+            ],
+            "handler": "leave.record_decision",
+            "next": [
+                "rimba.transform.leave.balance",
+                "rimba.transform.leave.calendar",
+                "rimba.communicate.leave.decision"
+            ]
+        },
+        {
+            "slug": "rimba.transform.leave.balance",
+            "actor": "Rimba",
+            "activity_type": "transform",
+            "business_object": "Leave Balance",
+            "execution_type": "event_driven",
+            "suppliers": [
+                "Leave Ledger"
+            ],
+            "inputs": [
+                "Official Leave Decision Record"
+            ],
+            "outputs": [
+                "Updated Leave Balance"
+            ],
+            "customers": [
+                "Employee"
+            ],
+            "trigger_event": "leave.authorized",
+            "next": []
+        },
+        {
+            "slug": "rimba.transform.leave.calendar",
+            "actor": "Rimba",
+            "activity_type": "transform",
+            "business_object": "Leave Calendar",
+            "execution_type": "event_driven",
+            "suppliers": [
+                "Leave Administration"
+            ],
+            "inputs": [
+                "Official Leave Decision Record"
+            ],
+            "outputs": [
+                "Leave Calendar Entry"
+            ],
+            "customers": [
+                "Employee",
+                "Team"
+            ],
+            "trigger_event": "leave.authorized",
+            "next": []
+        },
+        {
+            "slug": "rimba.communicate.leave.decision",
+            "actor": "Rimba",
+            "activity_type": "communicate",
+            "business_object": "Leave Decision",
+            "execution_type": "event_driven",
+            "suppliers": [
+                "Leave Administration"
+            ],
+            "inputs": [
+                "Official Leave Decision Record"
+            ],
+            "outputs": [
+                "Leave Decision Notification"
+            ],
+            "customers": [
+                "Employee"
+            ],
+            "trigger_event": "leave.decision.recorded",
+            "next": []
+        }
+    ]
+}

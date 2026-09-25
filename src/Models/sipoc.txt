@@ -1,0 +1,302 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rimba\Work\Models;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Str;
+use Rimba\Work\Enums\ActivityType;
+use Rimba\Work\Enums\ArtifactType;
+use Rimba\Work\Enums\ExecutionType;
+use Rimba\Work\Enums\TaskStatus;
+use Rimba\Work\Enums\WorkflowStatus;
+
+class WorkflowInstance extends Model
+{
+    protected $guarded = [];
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $instance): void {
+            $instance->uuid ??= (string) Str::uuid();
+        });
+    }
+
+    public function getTable(): string
+    {
+        return config(
+            'sipoc.tables.workflow_instances',
+            'sipoc_workflow_instances'
+        );
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'workflow_version' => 'integer',
+            'definition_snapshot' => 'array',
+            'status' => WorkflowStatus::class,
+            'context' => 'array',
+            'started_at' => 'datetime',
+            'completed_at' => 'datetime',
+            'cancelled_at' => 'datetime',
+            'failed_at' => 'datetime',
+        ];
+    }
+
+    public function subject(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    public function initiator(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(
+            config('bites.sipoc.models.task', Task::class),
+            'workflow_instance_id'
+        );
+    }
+
+    public function artifacts(): HasMany
+    {
+        return $this->hasMany(
+            config('bites.sipoc.models.artifact', Artifact::class),
+            'workflow_instance_id'
+        );
+    }
+
+    public function transitions(): HasMany
+    {
+        return $this->hasMany(
+            config('bites.sipoc.models.transition', Transition::class),
+            'workflow_instance_id'
+        );
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', WorkflowStatus::Active);
+    }
+
+    public function isTerminal(): bool
+    {
+        return in_array($this->status, [
+            WorkflowStatus::Completed,
+            WorkflowStatus::Cancelled,
+            WorkflowStatus::Failed,
+        ], true);
+    }
+}
+
+class Task extends Model
+{
+    protected $guarded = [];
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $task): void {
+            $task->uuid ??= (string) Str::uuid();
+
+            $task->name ??= trim(implode(' ', array_filter([
+                $task->actor,
+                $task->activity_type instanceof ActivityType
+                    ? $task->activity_type->label()
+                    : str((string) $task->activity_type)->headline(),
+                $task->business_object,
+            ])));
+        });
+    }
+
+    public function getTable(): string
+    {
+        return config('bites.sipoc.tables.tasks', 'sipoc_tasks');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'workflow_instance_id' => 'integer',
+            'workpackage_snapshot' => 'array',
+            'execution_type' => ExecutionType::class,
+            'activity_type' => ActivityType::class,
+            'status' => TaskStatus::class,
+            'sequence' => 'integer',
+            'attempt' => 'integer',
+            'suppliers' => 'array',
+            'inputs' => 'array',
+            'outputs' => 'array',
+            'customers' => 'array',
+            'payload' => 'array',
+            'result' => 'array',
+            'ready_at' => 'datetime',
+            'assigned_at' => 'datetime',
+            'started_at' => 'datetime',
+            'waiting_at' => 'datetime',
+            'completed_at' => 'datetime',
+            'cancelled_at' => 'datetime',
+            'failed_at' => 'datetime',
+            'due_at' => 'datetime',
+        ];
+    }
+
+    public function workflowInstance(): BelongsTo
+    {
+        return $this->belongsTo(
+            config('bites.sipoc.models.workflow_instance', WorkflowInstance::class),
+            'workflow_instance_id'
+        );
+    }
+
+    public function assignee(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    public function artifacts(): HasMany
+    {
+        return $this->hasMany(
+            config('bites.sipoc.models.artifact', Artifact::class),
+            'produced_by_task_id'
+        );
+    }
+
+    public function scopeOpen(Builder $query): Builder
+    {
+        return $query->whereIn('status', [
+            TaskStatus::Pending,
+            TaskStatus::Ready,
+            TaskStatus::Assigned,
+            TaskStatus::Started,
+            TaskStatus::Waiting,
+        ]);
+    }
+
+    public function scopeHuman(Builder $query): Builder
+    {
+        return $query->where(
+            'execution_type',
+            ExecutionType::Human
+        );
+    }
+
+    public function scopeAssignedTo(
+        Builder $query,
+        Model $assignee
+    ): Builder {
+        return $query->whereMorphedTo('assignee', $assignee);
+    }
+}
+
+class Artifact extends Model
+{
+    protected $guarded = [];
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $artifact): void {
+            $artifact->uuid ??= (string) Str::uuid();
+            $artifact->produced_at ??= now();
+        });
+    }
+
+    public function getTable(): string
+    {
+        return config('bites.sipoc.tables.artifacts', 'sipoc_artifacts');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'type' => ArtifactType::class,
+            'value' => 'array',
+            'metadata' => 'array',
+            'produced_at' => 'datetime',
+        ];
+    }
+
+    public function workflowInstance(): BelongsTo
+    {
+        return $this->belongsTo(
+            config('bites.sipoc.models.workflow_instance', WorkflowInstance::class),
+            'workflow_instance_id'
+        );
+    }
+
+    public function producedByTask(): BelongsTo
+    {
+        return $this->belongsTo(
+            config('bites.sipoc.models.task', Task::class),
+            'produced_by_task_id'
+        );
+    }
+
+    public function record(): MorphTo
+    {
+        return $this->morphTo();
+    }
+}
+
+class Transition extends Model
+{
+    protected $guarded = [];
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $transition): void {
+            $transition->performed_at ??= now();
+        });
+    }
+
+    public function getTable(): string
+    {
+        return config('bites.sipoc.tables.transitions', 'sipoc_transitions');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'payload' => 'array',
+            'metadata' => 'array',
+            'performed_at' => 'datetime',
+        ];
+    }
+
+    public function workflowInstance(): BelongsTo
+    {
+        return $this->belongsTo(
+            config('bites.sipoc.models.workflow_instance', WorkflowInstance::class),
+            'workflow_instance_id'
+        );
+    }
+
+    public function fromTask(): BelongsTo
+    {
+        return $this->belongsTo(
+            config('bites.sipoc.models.task', Task::class),
+            'from_task_id'
+        );
+    }
+
+    public function toTask(): BelongsTo
+    {
+        return $this->belongsTo(
+            config('bites.sipoc.models.task', Task::class),
+            'to_task_id'
+        );
+    }
+
+    public function actor(): MorphTo
+    {
+        return $this->morphTo();
+    }
+}

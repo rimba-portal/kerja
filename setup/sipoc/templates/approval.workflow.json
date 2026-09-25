@@ -1,0 +1,171 @@
+{
+    "slug": "template.approval",
+    "title": "Approval Workflow Template",
+    "description": "Reusable request, analysis, decision, authorization, record, and communication pattern.",
+    "version": 1,
+    "active": true,
+    "published": false,
+    "first_workpackage": "requester.create.request",
+    "workpackages": [
+        {
+            "slug": "requester.create.request",
+            "actor": "Requester",
+            "actor_selector": "initiator",
+            "activity_type": "create",
+            "business_object": "Request",
+            "execution_type": "human",
+            "suppliers": [
+                "Requester"
+            ],
+            "inputs": [
+                "Business Information"
+            ],
+            "outputs": [
+                "Request Draft"
+            ],
+            "customers": [
+                "Rimba"
+            ],
+            "next": [
+                "rimba.verify.request"
+            ]
+        },
+        {
+            "slug": "rimba.verify.request",
+            "actor": "Rimba",
+            "activity_type": "verify",
+            "business_object": "Request",
+            "execution_type": "rimba",
+            "suppliers": [
+                "Requester"
+            ],
+            "inputs": [
+                "Request Draft"
+            ],
+            "outputs": [
+                "Verified Request"
+            ],
+            "customers": [
+                "Approver"
+            ],
+            "handler": "request.verify",
+            "next": [
+                "approver.analyze.request"
+            ]
+        },
+        {
+            "slug": "approver.analyze.request",
+            "actor": "Approver",
+            "actor_selector": "request.approver",
+            "activity_type": "analyze",
+            "business_object": "Request",
+            "execution_type": "human",
+            "suppliers": [
+                "Requester",
+                "Rimba"
+            ],
+            "inputs": [
+                "Verified Request"
+            ],
+            "outputs": [
+                "Review Findings"
+            ],
+            "customers": [
+                "Approver"
+            ],
+            "next": [
+                "approver.decide.request"
+            ]
+        },
+        {
+            "slug": "approver.decide.request",
+            "actor": "Approver",
+            "actor_selector": "request.approver",
+            "activity_type": "decide",
+            "business_object": "Request",
+            "execution_type": "human",
+            "suppliers": [
+                "Approver"
+            ],
+            "inputs": [
+                "Review Findings"
+            ],
+            "outputs": [
+                "Request Decision"
+            ],
+            "customers": [
+                "Approver"
+            ],
+            "next": [
+                "approver.authorize.request"
+            ]
+        },
+        {
+            "slug": "approver.authorize.request",
+            "actor": "Approver",
+            "actor_selector": "request.approver",
+            "activity_type": "authorize",
+            "business_object": "Request",
+            "execution_type": "human",
+            "suppliers": [
+                "Approver"
+            ],
+            "inputs": [
+                "Request Decision"
+            ],
+            "outputs": [
+                "Authorized Decision"
+            ],
+            "customers": [
+                "Rimba"
+            ],
+            "next": [
+                "rimba.record.request.decision"
+            ]
+        },
+        {
+            "slug": "rimba.record.request.decision",
+            "actor": "Rimba",
+            "activity_type": "record",
+            "business_object": "Request Decision",
+            "execution_type": "rimba",
+            "suppliers": [
+                "Approver"
+            ],
+            "inputs": [
+                "Authorized Decision"
+            ],
+            "outputs": [
+                "Official Decision Record"
+            ],
+            "customers": [
+                "Requester"
+            ],
+            "handler": "request.record_decision",
+            "next": [
+                "rimba.communicate.request.decision"
+            ]
+        },
+        {
+            "slug": "rimba.communicate.request.decision",
+            "actor": "Rimba",
+            "activity_type": "communicate",
+            "business_object": "Request Decision",
+            "execution_type": "event_driven",
+            "suppliers": [
+                "Rimba"
+            ],
+            "inputs": [
+                "Official Decision Record"
+            ],
+            "outputs": [
+                "Decision Notification"
+            ],
+            "customers": [
+                "Requester"
+            ],
+            "trigger_event": "request.decision.recorded",
+            "next": []
+        }
+    ]
+}

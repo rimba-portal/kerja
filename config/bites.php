@@ -1,0 +1,59 @@
+<?php
+
+declare(strict_types=1);
+
+use Rimba\Sipoc\Models\Artifact;
+use Rimba\Sipoc\Models\Task;
+use Rimba\Sipoc\Models\Transition;
+use Rimba\Sipoc\Models\WorkflowInstance;
+
+return [
+    'sipoc' => [
+
+        /*
+     * Installed definitions editable by the application.
+     */
+        'setup_path' => storage_path('setup/sipoc'),
+
+        /*
+     * Definitions distributed with this package.
+     */
+        'package_setup_path' => dirname(__DIR__).'/setup/sipoc',
+
+        'system_actor' => 'Rimba',
+
+        'tables' => [
+            'workflow_instances' => 'sipoc_workflow_instances',
+            'tasks' => 'sipoc_tasks',
+            'artifacts' => 'sipoc_artifacts',
+            'transitions' => 'sipoc_transitions',
+        ],
+
+        'models' => [
+            'workflow_instance' => WorkflowInstance::class,
+            'task' => Task::class,
+            'artifact' => Artifact::class,
+            'transition' => Transition::class,
+        ],
+
+        /*
+     * Handler aliases referenced by JSON WorkPackages.
+     *
+     * Consuming packages may merge additional handlers.
+     */
+        'handlers' => [
+            // 'leave.capture_context' => CaptureEmployeeContext::class,
+        ],
+
+        'permissions' => [
+            'enforce' => false,
+            'abilities' => [
+                'init',
+                'view',
+                'work',
+                'own',
+                'administer',
+            ],
+        ],
+    ],
+];
