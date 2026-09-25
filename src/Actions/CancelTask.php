@@ -5,48 +5,107 @@ declare(strict_types=1);
 namespace Rimba\Work\Actions;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Rimba\Work\Enums\TaskStatus;
-use Rimba\Work\Models\Task;
+use Rimba\Work\Enums\WorkflowStatus;
 use Rimba\Work\Models\Transition;
+use Rimba\Work\Models\WorkflowInstance;
 use RuntimeException;
 
-class CancelTask
+class CancelWorkflow
 {
     public function execute(
-        Task $task,
+        WorkflowInstance $workflow,
         ?Model $actor = null,
         ?string $reason = null,
-    ): Task {
-        if (in_array($task->status, [
-            TaskStatus::Completed,
-            TaskStatus::Cancelled,
-        ], true)) {
-            throw new RuntimeException(
-                "Task [{$task->uuid}] cannot be cancelled."
-            );
-        }
+    ): WorkflowInstance {
+        return DB::transaction(function () use (
+            $workflow,
+            $actor,
+            $reason,
+        ): WorkflowInstance {
+            $workflow = WorkflowInstance::query()
+                ->lockForUpdate()
+                ->findOrFail($workflow->getKey());
 
-        $task->update([
-            'status' => TaskStatus::Cancelled,
-            'cancelled_at' => now(),
-            'failure_reason' => $reason,
-        ]);
+            if (
+                in_array(
+                    $workflow->status,
+                    [
+                        WorkflowStatus::Completed,
+                        WorkflowStatus::Cancelled,
+                    ],
+                    true,
+                )
+            ) {
+                throw new RuntimeException(
+                    "Workflow [{$workflow->uuid}] cannot be cancelled from status [{$workflow->status->value}]."
+                );
+            }
 
-        Transition::query()->create([
-            'workflow_instance_id' => $task->workflow_instance_id,
+            $cancellationReason = filled($reason)
+                ? $reason
+                : 'Workflow cancelled.';
 
-            'from_task_id' => $task->getKey(),
-            'from_workpackage_slug' => $task->workpackage_slug,
+            $cancelledAt = now();
 
-            'event' => 'task_cancelled',
-            'actor_type' => $actor?->getMorphClass(),
-            'actor_id' => $actor?->getKey(),
-            'payload' => [
-                'reason' => $reason,
-            ],
-            'performed_at' => now(),
-        ]);
+            $workflow->tasks()
+                ->whereIn('status', [
+                    TaskStatus::Pending,
+                    TaskStatus::Ready,
+                    TaskStatus::Assigned,
+                    TaskStatus::Started,
+                    TaskStatus::Waiting,
+                    TaskStatus::Failed,
+                ])
+                ->update([
+                    'status' =>
+                        TaskStatus::Cancelled->value,
 
-        return $task->fresh();
+                    'cancelled_at' =>
+                        $cancelledAt,
+
+                    'failure_reason' =>
+                        $cancellationReason,
+                ]);
+
+            $workflow->update([
+                'status' =>
+                    WorkflowStatus::Cancelled,
+
+                'current_workpackage_slug' =>
+                    null,
+
+                'cancelled_at' =>
+                    $cancelledAt,
+
+                'failure_reason' =>
+                    $cancellationReason,
+            ]);
+
+            Transition::query()->create([
+                'workflow_instance_id' =>
+                    $workflow->getKey(),
+
+                'event' =>
+                    'workflow_cancelled',
+
+                'actor_type' =>
+                    $actor?->getMorphClass(),
+
+                'actor_id' =>
+                    $actor?->getKey(),
+
+                'payload' => [
+                    'reason' =>
+                        $cancellationReason,
+                ],
+
+                'performed_at' =>
+                    $cancelledAt,
+            ]);
+
+            return $workflow->fresh();
+        });
     }
 }

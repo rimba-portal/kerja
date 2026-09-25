@@ -37,12 +37,22 @@ class AdvanceWorkflow
                 ->lockForUpdate()
                 ->findOrFail($workflow->getKey());
 
-            if ($workflow->status !== WorkflowStatus::Active) {
+            if (
+                ! in_array(
+                    $workflow->status,
+                    [
+                        WorkflowStatus::Active,
+                        WorkflowStatus::Waiting,
+                    ],
+                    true,
+                )
+            ) {
                 return $workflow;
             }
 
             $workPackage = $completedTask->workpackage_snapshot;
             $routes = $workPackage['next'] ?? [];
+            $eligibleRouteCount = 0;
 
             foreach ($routes as $route) {
                 $route = is_string($route)
@@ -57,22 +67,28 @@ class AdvanceWorkflow
                     );
                 }
 
-                if (! $this->workflowConditionEvaluator->matches(
-                    $workflow,
-                    $route['when'] ?? null,
-                )) {
+                if (
+                    ! $this->workflowConditionEvaluator->matches(
+                        $workflow,
+                        $route['when'] ?? null,
+                    )
+                ) {
                     continue;
                 }
+
+                $eligibleRouteCount++;
 
                 $nextDefinition = $this->findWorkPackage(
                     $workflow->definition_snapshot,
                     $nextSlug,
                 );
 
-                if (! $this->workPackageJoinService->isSatisfied(
-                    $workflow,
-                    $nextDefinition,
-                )) {
+                if (
+                    ! $this->workPackageJoinService->isSatisfied(
+                        $workflow,
+                        $nextDefinition,
+                    )
+                ) {
                     continue;
                 }
 
@@ -84,23 +100,47 @@ class AdvanceWorkflow
 
                 Transition::query()->firstOrCreate(
                     [
-                        'workflow_instance_id' => $workflow->getKey(),
-                        'from_task_id' => $completedTask->getKey(),
-                        'to_task_id' => $toTask->getKey(),
+                        'workflow_instance_id' =>
+                            $workflow->getKey(),
+
+                        'from_task_id' =>
+                            $completedTask->getKey(),
+
+                        'to_task_id' =>
+                            $toTask->getKey(),
+
                         'event' => 'completed',
                     ],
                     [
-                        'from_workpackage_slug' => $completedTask->workpackage_slug,
+                        'from_workpackage_slug' =>
+                            $completedTask->workpackage_slug,
 
-                        'to_workpackage_slug' => $nextSlug,
-                        'actor_type' => $actor?->getMorphClass(),
-                        'actor_id' => $actor?->getKey(),
+                        'to_workpackage_slug' =>
+                            $nextSlug,
+
+                        'actor_type' =>
+                            $actor?->getMorphClass(),
+
+                        'actor_id' =>
+                            $actor?->getKey(),
+
                         'performed_at' => now(),
                     ],
                 );
             }
 
-            return $this->completeWhenFinished($workflow);
+            if (
+                $routes !== []
+                && $eligibleRouteCount === 0
+            ) {
+                throw new RuntimeException(
+                    "No eligible next route was found after WorkPackage [{$completedTask->workpackage_slug}]."
+                );
+            }
+
+            return $this->synchronizeWorkflowStatus(
+                $workflow
+            );
         });
     }
 
@@ -121,20 +161,40 @@ class AdvanceWorkflow
         return $workPackage;
     }
 
-    private function completeWhenFinished(
+    private function synchronizeWorkflowStatus(
         WorkflowInstance $workflow,
     ): WorkflowInstance {
-        $hasOpenTasks = $workflow->tasks()
+        $hasActiveTasks = $workflow->tasks()
             ->whereIn('status', [
                 TaskStatus::Pending,
                 TaskStatus::Ready,
                 TaskStatus::Assigned,
                 TaskStatus::Started,
-                TaskStatus::Waiting,
             ])
             ->exists();
 
-        if ($hasOpenTasks) {
+        if ($hasActiveTasks) {
+            if (
+                $workflow->status
+                !== WorkflowStatus::Active
+            ) {
+                $workflow->update([
+                    'status' => WorkflowStatus::Active,
+                ]);
+            }
+
+            return $workflow->fresh();
+        }
+
+        $hasWaitingTasks = $workflow->tasks()
+            ->where('status', TaskStatus::Waiting)
+            ->exists();
+
+        if ($hasWaitingTasks) {
+            $workflow->update([
+                'status' => WorkflowStatus::Waiting,
+            ]);
+
             return $workflow->fresh();
         }
 

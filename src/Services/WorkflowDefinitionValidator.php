@@ -94,8 +94,7 @@ class WorkflowDefinitionValidator
         $slugs = [];
 
         foreach (
-            $definition['workpackages']
-            as $index => $workPackage
+            $definition['workpackages'] as $index => $workPackage
         ) {
             if (! is_array($workPackage)) {
                 $errors[] =
