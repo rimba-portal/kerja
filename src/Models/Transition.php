@@ -4,24 +4,33 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+#[Table('work_transitions')]
+#[Fillable([
+    'workflow_instance_id',
+    'from_task_id',
+    'to_task_id',
+    'from_workpackage_slug',
+    'to_workpackage_slug',
+    'event',
+    'actor_type',
+    'actor_id',
+    'payload',
+    'metadata',
+    'performed_at',
+])]
 class Transition extends Model
 {
-    protected $guarded = [];
-
     protected static function booted(): void
     {
         static::creating(function (self $transition): void {
             $transition->performed_at ??= now();
         });
-    }
-
-    public function getTable(): string
-    {
-        return config('bites.sipoc.tables.transitions', 'sipoc_transitions');
     }
 
     protected function casts(): array
@@ -35,26 +44,17 @@ class Transition extends Model
 
     public function workflowInstance(): BelongsTo
     {
-        return $this->belongsTo(
-            config('bites.sipoc.models.workflow_instance', WorkflowInstance::class),
-            'workflow_instance_id'
-        );
+        return $this->belongsTo(WorkflowInstance::class, 'workflow_instance_id');
     }
 
     public function fromTask(): BelongsTo
     {
-        return $this->belongsTo(
-            config('bites.sipoc.models.task', Task::class),
-            'from_task_id'
-        );
+        return $this->belongsTo(Task::class, 'from_task_id');
     }
 
     public function toTask(): BelongsTo
     {
-        return $this->belongsTo(
-            config('bites.sipoc.models.task', Task::class),
-            'to_task_id'
-        );
+        return $this->belongsTo(Task::class, 'to_task_id');
     }
 
     public function actor(): MorphTo

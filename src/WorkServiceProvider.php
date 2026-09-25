@@ -15,6 +15,8 @@ class WorkServiceProvider extends BitesServiceProvider
 {
     protected string $configFile = __DIR__.'/../config/bites.php';
 
+    protected string $viewsPath = __DIR__.'/../resources/views';
+
     protected function bootPackage(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');

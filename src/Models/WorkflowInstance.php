@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,23 +14,32 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 use Rimba\Work\Enums\WorkflowStatus;
 
+#[Table('work_workflow_instances')]
+#[Fillable([
+    'uuid',
+    'workflow_slug',
+    'workflow_version',
+    'definition_snapshot',
+    'subject_type',
+    'subject_id',
+    'initiator_type',
+    'initiator_id',
+    'current_workpackage_slug',
+    'status',
+    'context',
+    'started_at',
+    'completed_at',
+    'cancelled_at',
+    'failed_at',
+    'failure_reason',
+])]
 class WorkflowInstance extends Model
 {
-    protected $guarded = [];
-
     protected static function booted(): void
     {
         static::creating(function (self $instance): void {
             $instance->uuid ??= (string) Str::uuid();
         });
-    }
-
-    public function getTable(): string
-    {
-        return config(
-            'sipoc.tables.workflow_instances',
-            'sipoc_workflow_instances'
-        );
     }
 
     protected function casts(): array
@@ -57,40 +68,12 @@ class WorkflowInstance extends Model
 
     public function tasks(): HasMany
     {
-        return $this->hasMany(
-            config('bites.sipoc.models.task', Task::class),
-            'workflow_instance_id'
-        );
-    }
-
-    public function artifacts(): HasMany
-    {
-        return $this->hasMany(
-            config('bites.sipoc.models.artifact', Artifact::class),
-            'workflow_instance_id'
-        );
-    }
-
-    public function transitions(): HasMany
-    {
-        return $this->hasMany(
-            config('bites.sipoc.models.transition', Transition::class),
-            'workflow_instance_id'
-        );
+        return $this->hasMany(Task::class);
     }
 
     #[Scope]
     protected function active(Builder $query): Builder
     {
         return $query->where('status', WorkflowStatus::Active);
-    }
-
-    public function isTerminal(): bool
-    {
-        return in_array($this->status, [
-            WorkflowStatus::Completed,
-            WorkflowStatus::Cancelled,
-            WorkflowStatus::Failed,
-        ], true);
     }
 }

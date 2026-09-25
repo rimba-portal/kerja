@@ -4,27 +4,36 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 use Rimba\Work\Enums\ArtifactType;
 
+#[Table('work_artifacts')]
+#[Fillable([
+    'uuid',
+    'workflow_instance_id',
+    'produced_by_task_id',
+    'key',
+    'name',
+    'type',
+    'value',
+    'record_type',
+    'record_id',
+    'metadata',
+    'produced_at',
+])]
 class Artifact extends Model
 {
-    protected $guarded = [];
-
     protected static function booted(): void
     {
         static::creating(function (self $artifact): void {
             $artifact->uuid ??= (string) Str::uuid();
             $artifact->produced_at ??= now();
         });
-    }
-
-    public function getTable(): string
-    {
-        return config('bites.sipoc.tables.artifacts', 'sipoc_artifacts');
     }
 
     protected function casts(): array
@@ -39,18 +48,12 @@ class Artifact extends Model
 
     public function workflowInstance(): BelongsTo
     {
-        return $this->belongsTo(
-            config('bites.sipoc.models.workflow_instance', WorkflowInstance::class),
-            'workflow_instance_id'
-        );
+        return $this->belongsTo(WorkflowInstance::class, 'workflow_instance_id');
     }
 
     public function producedByTask(): BelongsTo
     {
-        return $this->belongsTo(
-            config('bites.sipoc.models.task', Task::class),
-            'produced_by_task_id'
-        );
+        return $this->belongsTo(Task::class, 'produced_by_task_id');
     }
 
     public function record(): MorphTo

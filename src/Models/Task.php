@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,10 +17,42 @@ use Rimba\Work\Enums\ActivityType;
 use Rimba\Work\Enums\ExecutionType;
 use Rimba\Work\Enums\TaskStatus;
 
+#[Table('sipoc_tasks')]
+#[Fillable([
+    'uuid',
+    'workflow_instance_id',
+    'workpackage_slug',
+    'workpackage_snapshot',
+    'name',
+    'execution_type',
+    'activity_type',
+    'business_object',
+    'actor',
+    'assignee_type',
+    'assignee_id',
+    'sequence',
+    'attempt',
+    'status',
+    'suppliers',
+    'inputs',
+    'outputs',
+    'customers',
+    'payload',
+    'result',
+    'handler',
+    'trigger_event',
+    'ready_at',
+    'assigned_at',
+    'started_at',
+    'waiting_at',
+    'completed_at',
+    'cancelled_at',
+    'failed_at',
+    'due_at',
+    'failure_reason',
+])]
 class Task extends Model
 {
-    protected $guarded = [];
-
     protected static function booted(): void
     {
         static::creating(function (self $task): void {
@@ -32,11 +66,6 @@ class Task extends Model
                 $task->business_object,
             ])));
         });
-    }
-
-    public function getTable(): string
-    {
-        return config('bites.sipoc.tables.tasks', 'sipoc_tasks');
     }
 
     protected function casts(): array
@@ -68,10 +97,7 @@ class Task extends Model
 
     public function workflowInstance(): BelongsTo
     {
-        return $this->belongsTo(
-            config('bites.sipoc.models.workflow_instance', WorkflowInstance::class),
-            'workflow_instance_id'
-        );
+        return $this->belongsTo(WorkflowInstance::class, 'workflow_instance_id');
     }
 
     public function assignee(): MorphTo
@@ -81,10 +107,7 @@ class Task extends Model
 
     public function artifacts(): HasMany
     {
-        return $this->hasMany(
-            config('bites.sipoc.models.artifact', Artifact::class),
-            'produced_by_task_id'
-        );
+        return $this->hasMany(Artifact::class, 'produced_by_task_id');
     }
 
     #[Scope]

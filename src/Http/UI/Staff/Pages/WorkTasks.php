@@ -8,6 +8,7 @@ use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -18,36 +19,33 @@ use Rimba\Work\Models\Task;
 use Rimba\Work\Services\TaskInboxService;
 use UnitEnum;
 
-class MySipocTasks extends Page implements HasTable
+class WorkTasks extends Page implements HasTable
 {
     use InteractsWithTable;
 
     protected static string|BackedEnum|null $navigationIcon =
-        'heroicon-o-queue-list';
+        Heroicon::OutlinedQueueList;
 
-    protected static string|UnitEnum|null $navigationGroup =
-        'ToDo';
+    protected static string|UnitEnum|null $navigationGroup ='ToDo';
 
-    protected static ?string $navigationLabel =
-        'My WorkPackages';
+    protected static ?string $navigationLabel ='My WorkPackages';
 
-    protected static ?string $title =
-        'My WorkPackages';
+    protected static ?string $title ='My WorkPackages';
 
-    protected string $view =
-        'sipoc::staff.my-sipoc-tasks';
+    protected string $view ='bites::staff.work-tasks';
 
     public function table(Table $table): Table
     {
         return $table
             ->query(
-                fn () => app(TaskInboxService::class)
+                app(TaskInboxService::class)
                     ->queryFor(auth()->user())
             )
             ->columns([
                 TextColumn::make('name')
                     ->label('WorkPackage')
                     ->searchable()
+                    ->sortable()
                     ->wrap(),
 
                 TextColumn::make('activity_type')
@@ -66,11 +64,16 @@ class MySipocTasks extends Page implements HasTable
             ->recordActions([
                 Action::make('start')
                     ->icon('heroicon-o-play')
+                    ->color('primary')
                     ->visible(
-                        fn (Task $record): bool => in_array($record->status, [
-                            TaskStatus::Ready,
-                            TaskStatus::Assigned,
-                        ], true)
+                        fn (Task $record): bool => in_array(
+                            $record->status,
+                            [
+                                TaskStatus::Ready,
+                                TaskStatus::Assigned,
+                            ],
+                            true,
+                        )
                     )
                     ->action(function (Task $record): void {
                         $record->update([
@@ -79,8 +82,8 @@ class MySipocTasks extends Page implements HasTable
                         ]);
 
                         Notification::make()
-                            ->title('WorkPackage started')
                             ->success()
+                            ->title('WorkPackage started')
                             ->send();
                     }),
 
@@ -95,12 +98,12 @@ class MySipocTasks extends Page implements HasTable
                         app(CompleteTask::class)->execute(
                             $record,
                             [],
-                            auth()->user()
+                            auth()->user(),
                         );
 
                         Notification::make()
-                            ->title('WorkPackage completed')
                             ->success()
+                            ->title('WorkPackage completed')
                             ->send();
                     }),
             ])
