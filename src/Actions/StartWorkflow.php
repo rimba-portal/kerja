@@ -14,7 +14,7 @@ use RuntimeException;
 class StartWorkflow
 {
     public function __construct(
-        private WorkflowDefinitionRepository $definitions,
+        private WorkflowDefinitionRepository $workflowDefinitionRepository,
         private CreateTask $createTask,
     ) {}
 
@@ -24,7 +24,7 @@ class StartWorkflow
         ?Model $initiator = null,
         array $context = []
     ): WorkflowInstance {
-        $definition = $this->definitions->find($workflowSlug);
+        $definition = $this->workflowDefinitionRepository->find($workflowSlug);
 
         return DB::transaction(function () use (
             $definition,
@@ -32,7 +32,7 @@ class StartWorkflow
             $initiator,
             $context
         ): WorkflowInstance {
-            $instance = WorkflowInstance::query()->create([
+            $workflowInstance = WorkflowInstance::query()->create([
                 'workflow_slug' => $definition['slug'],
                 'workflow_version' => $definition['version'],
                 'definition_snapshot' => $definition,
@@ -47,7 +47,7 @@ class StartWorkflow
             ]);
 
             $this->createTask->execute(
-                $instance,
+                $workflowInstance,
                 $this->workPackage(
                     $definition,
                     $definition['first_workpackage']
@@ -55,7 +55,7 @@ class StartWorkflow
                 $initiator
             );
 
-            return $instance->fresh();
+            return $workflowInstance->fresh();
         });
     }
 

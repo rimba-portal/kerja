@@ -13,7 +13,7 @@ use RuntimeException;
 class ExecuteRimbaTask
 {
     public function __construct(
-        private HandlerRegistry $handlers,
+        private HandlerRegistry $handlerRegistry,
     ) {}
 
     public function execute(Task $task): Task
@@ -36,7 +36,7 @@ class ExecuteRimbaTask
         ]);
 
         try {
-            $handler = $this->handlers->resolve($task->handler);
+            $handler = $this->handlerRegistry->resolve($task->handler);
 
             if (! method_exists($handler, 'execute')) {
                 throw new RuntimeException(
@@ -50,14 +50,14 @@ class ExecuteRimbaTask
                 $task,
                 is_array($result) ? $result : ['value' => $result]
             );
-        } catch (\Throwable $exception) {
+        } catch (\Throwable $throwable) {
             $task->update([
                 'status' => TaskStatus::Failed,
                 'failed_at' => now(),
-                'failure_reason' => $exception->getMessage(),
+                'failure_reason' => $throwable->getMessage(),
             ]);
 
-            throw $exception;
+            throw $throwable;
         }
     }
 }

@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Models;
 
+use Illuminate\Database\Eloquent\Attributes\WithoutIncrementing;
+use Illuminate\Database\Eloquent\Attributes\WithoutTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use LogicException;
 
+#[WithoutIncrementing]
+#[WithoutTimestamps]
 class WorkflowDefinition extends Model
 {
-    public $incrementing = false;
-
     protected $primaryKey = 'slug';
 
     protected $keyType = 'string';
-
-    public $timestamps = false;
 
     protected $guarded = [];
 

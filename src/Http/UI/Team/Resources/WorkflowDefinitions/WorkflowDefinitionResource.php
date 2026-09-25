@@ -22,20 +22,15 @@ class WorkflowDefinitionResource extends Resource
     protected static string|BackedEnum|null $navigationIcon =
         Heroicon::OutlinedRectangleStack;
 
-    protected static string|UnitEnum|null $navigationGroup =
-        'Workflow';
+    protected static string|UnitEnum|null $navigationGroup = 'Workflow';
 
-    protected static ?string $navigationLabel =
-        'SIPOC Workflow Studio';
+    protected static ?string $navigationLabel = 'Workflow Studio';
 
-    protected static ?string $modelLabel =
-        'Workflow Definition';
+    protected static ?string $modelLabel = 'Workflow Definition';
 
-    protected static ?string $pluralModelLabel =
-        'Workflow Definitions';
+    protected static ?string $pluralModelLabel = 'Workflow Definitions';
 
-    protected static ?string $slug =
-        'sipoc/workflow-definitions';
+    protected static ?string $slug = 'work/workflow-definitions';
 
     public static function form(Schema $schema): Schema
     {

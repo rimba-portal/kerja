@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create(
             'work_workflow_instances',
-            function (Blueprint $table) {
+            function (Blueprint $table): void {
                 $table->id();
                 $table->uuid('uuid')->unique();
                 $table->string('workflow_slug')->index();
@@ -34,7 +34,7 @@ return new class extends Migration
 
         Schema::create(
             'work_tasks',
-            function (Blueprint $table) {
+            function (Blueprint $table): void {
                 $table->id();
                 $table->uuid('uuid')->unique();
                 $table->foreignId('workflow_instance_id')->constrained('work_workflow_instances')->cascadeOnDelete();
@@ -86,7 +86,7 @@ return new class extends Migration
         );
         Schema::create(
             'work_artifacts',
-            function (Blueprint $table) {
+            function (Blueprint $table): void {
                 $table->id();
                 $table->uuid('uuid')->unique();
                 $table->foreignId('workflow_instance_id')->constrained('work_workflow_instances')->cascadeOnDelete();
@@ -109,7 +109,7 @@ return new class extends Migration
 
         Schema::create(
             'work_transitions',
-            function (Blueprint $table) {
+            function (Blueprint $table): void {
                 $table->id();
                 $table->foreignId('workflow_instance_id')->constrained('work_workflow_instances')->cascadeOnDelete();
                 $table->foreignId('from_task_id')->nullable()->constrained('work_tasks')->nullOnDelete();

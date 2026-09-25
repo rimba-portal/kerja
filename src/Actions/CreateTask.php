@@ -14,7 +14,7 @@ use Rimba\Work\Services\ActorResolverService;
 class CreateTask
 {
     public function __construct(
-        private ActorResolverService $actorResolver,
+        private ActorResolverService $actorResolverService,
     ) {}
 
     public function execute(
@@ -26,7 +26,7 @@ class CreateTask
             strtolower($workPackage['execution_type'])
         );
 
-        $assignee = $this->actorResolver->resolve(
+        $assignee = $this->actorResolverService->resolve(
             $workPackage,
             $initiator,
             $workflow->context ?? []
@@ -40,7 +40,7 @@ class CreateTask
             ExecutionType::EventDriven => TaskStatus::Waiting,
         };
 
-        $task = $workflow->tasks()->create([
+        $model = $workflow->tasks()->create([
             'workpackage_slug' => $workPackage['slug'],
             'workpackage_snapshot' => $workPackage,
             'execution_type' => $executionType,
@@ -68,9 +68,9 @@ class CreateTask
         ]);
 
         if ($executionType === ExecutionType::Rimba) {
-            app(ExecuteRimbaTask::class)->execute($task);
+            app(ExecuteRimbaTask::class)->execute($model);
         }
 
-        return $task->fresh();
+        return $model->fresh();
     }
 }

@@ -26,13 +26,13 @@ class WorkTasks extends Page implements HasTable
     protected static string|BackedEnum|null $navigationIcon =
         Heroicon::OutlinedQueueList;
 
-    protected static string|UnitEnum|null $navigationGroup ='ToDo';
+    protected static string|UnitEnum|null $navigationGroup = 'ToDo';
 
-    protected static ?string $navigationLabel ='My WorkPackages';
+    protected static ?string $navigationLabel = 'My WorkPackages';
 
-    protected static ?string $title ='My WorkPackages';
+    protected static ?string $title = 'My WorkPackages';
 
-    protected string $view ='bites::staff.work-tasks';
+    protected string $view = 'bites::staff.work-tasks';
 
     public function table(Table $table): Table
     {
