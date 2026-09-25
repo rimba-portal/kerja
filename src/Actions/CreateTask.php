@@ -20,35 +20,57 @@ class CreateTask
     public function execute(
         WorkflowInstance $workflow,
         array $workPackage,
-        ?Model $initiator = null
+        ?Model $initiator = null,
+        int $iteration = 1,
     ): Task {
         $executionType = ExecutionType::from(
             strtolower($workPackage['execution_type'])
         );
 
+        $executionKey = implode(':', [
+            $workPackage['slug'],
+            $iteration,
+        ]);
+
+        $existing = $workflow->tasks()
+            ->where('execution_key', $executionKey)
+            ->first();
+
+        if ($existing !== null) {
+            return $existing;
+        }
+
         $assignee = $this->actorResolverService->resolve(
             $workPackage,
             $initiator,
-            $workflow->context ?? []
+            $workflow->context ?? [],
         );
 
         $status = match ($executionType) {
             ExecutionType::Human => $assignee
                 ? TaskStatus::Assigned
                 : TaskStatus::Ready,
+
             ExecutionType::Rimba => TaskStatus::Ready,
+
             ExecutionType::EventDriven => TaskStatus::Waiting,
         };
 
         $model = $workflow->tasks()->create([
             'workpackage_slug' => $workPackage['slug'],
+            'execution_key' => $executionKey,
+            'iteration' => $iteration,
             'workpackage_snapshot' => $workPackage,
             'execution_type' => $executionType,
-            'activity_type' => strtolower($workPackage['activity_type']),
+            'activity_type' => strtolower(
+                $workPackage['activity_type']
+            ),
             'business_object' => $workPackage['business_object'],
             'actor' => $workPackage['actor'],
+
             'assignee_type' => $assignee?->getMorphClass(),
             'assignee_id' => $assignee?->getKey(),
+
             'status' => $status,
             'suppliers' => $workPackage['suppliers'] ?? [],
             'inputs' => $workPackage['inputs'] ?? [],
@@ -56,12 +78,16 @@ class CreateTask
             'customers' => $workPackage['customers'] ?? [],
             'handler' => $workPackage['handler'] ?? null,
             'trigger_event' => $workPackage['trigger_event'] ?? null,
+            'waiting_for' => $workPackage['wait_for'] ?? [],
+
             'ready_at' => $status === TaskStatus::Ready
                 ? now()
                 : null,
+
             'assigned_at' => $status === TaskStatus::Assigned
                 ? now()
                 : null,
+
             'waiting_at' => $status === TaskStatus::Waiting
                 ? now()
                 : null,

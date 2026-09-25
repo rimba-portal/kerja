@@ -9,6 +9,7 @@ use Rimba\Work\Enums\TaskStatus;
 use Rimba\Work\Models\Task;
 use Rimba\Work\Services\HandlerRegistry;
 use RuntimeException;
+use Throwable;
 
 class ExecuteRimbaTask
 {
@@ -33,10 +34,14 @@ class ExecuteRimbaTask
         $task->update([
             'status' => TaskStatus::Started,
             'started_at' => now(),
+            'failed_at' => null,
+            'failure_reason' => null,
         ]);
 
         try {
-            $handler = $this->handlerRegistry->resolve($task->handler);
+            $handler = $this->handlerRegistry->resolve(
+                $task->handler
+            );
 
             if (! method_exists($handler, 'execute')) {
                 throw new RuntimeException(
@@ -48,14 +53,29 @@ class ExecuteRimbaTask
 
             return app(CompleteTask::class)->execute(
                 $task,
-                is_array($result) ? $result : ['value' => $result]
+                is_array($result)
+                    ? $result
+                    : ['value' => $result],
             );
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $task->update([
                 'status' => TaskStatus::Failed,
                 'failed_at' => now(),
                 'failure_reason' => $throwable->getMessage(),
             ]);
+
+            $failurePolicy = data_get(
+                $task->workpackage_snapshot,
+                'failure.workflow',
+                'fail',
+            );
+
+            if ($failurePolicy === 'fail') {
+                app(FailWorkflow::class)->execute(
+                    $task->workflowInstance,
+                    $throwable->getMessage(),
+                );
+            }
 
             throw $throwable;
         }

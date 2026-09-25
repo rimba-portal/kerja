@@ -8,8 +8,11 @@ use Illuminate\Support\Facades\File;
 use Rimba\Base\Services\BitesServiceProvider;
 use Rimba\Work\Services\ActorResolverService;
 use Rimba\Work\Services\HandlerRegistry;
+use Rimba\Work\Services\WorkflowConditionEvaluator;
+use Rimba\Work\Services\WorkflowContextService;
 use Rimba\Work\Services\WorkflowDefinitionRepository;
 use Rimba\Work\Services\WorkflowDefinitionValidator;
+use Rimba\Work\Services\WorkPackageJoinService;
 
 class WorkServiceProvider extends BitesServiceProvider
 {
@@ -31,6 +34,9 @@ class WorkServiceProvider extends BitesServiceProvider
         $this->app->singleton(WorkflowDefinitionRepository::class);
         $this->app->singleton(ActorResolverService::class);
         $this->app->singleton(HandlerRegistry::class);
+        $this->app->singleton(WorkflowContextService::class);
+        $this->app->singleton(WorkflowConditionEvaluator::class);
+        $this->app->singleton(WorkPackageJoinService::class);
         $this->app->alias(WorkflowDefinitionRepository::class, 'sipoc.definitions');
 
     }

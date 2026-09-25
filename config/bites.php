@@ -22,13 +22,6 @@ return [
 
         'system_actor' => 'Rimba',
 
-        'tables' => [
-            'workflow_instances' => 'sipoc_workflow_instances',
-            'tasks' => 'sipoc_tasks',
-            'artifacts' => 'sipoc_artifacts',
-            'transitions' => 'sipoc_transitions',
-        ],
-
         'models' => [
             'workflow_instance' => WorkflowInstance::class,
             'task' => Task::class,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -39,6 +41,8 @@ return new class extends Migration
                 $table->uuid('uuid')->unique();
                 $table->foreignId('workflow_instance_id')->constrained('work_workflow_instances')->cascadeOnDelete();
                 $table->string('workpackage_slug')->index();
+                $table->string('execution_key')->nullable();
+                $table->unsignedInteger('iteration')->default(1);
                 $table->json('workpackage_snapshot');
                 $table->string('name');
                 $table->string('execution_type')->index();
@@ -57,6 +61,7 @@ return new class extends Migration
                 $table->json('result')->nullable();
                 $table->string('handler')->nullable();
                 $table->string('trigger_event')->nullable();
+                $table->json('waiting_for')->nullable();
                 $table->timestamp('ready_at')->nullable();
                 $table->timestamp('assigned_at')->nullable();
                 $table->timestamp('started_at')->nullable();
@@ -68,16 +73,15 @@ return new class extends Migration
                 $table->text('failure_reason')->nullable();
                 $table->timestamps();
 
+                $table->unique(['workflow_instance_id', 'execution_key'], 'work_task_execution_key_unique');
                 $table->index(
                     ['workflow_instance_id', 'workpackage_slug', 'sequence'],
                     'work_task_execution_index'
                 );
-
                 $table->index(
                     ['assignee_type', 'assignee_id', 'status'],
                     'work_task_assignee_inbox'
                 );
-
                 $table->index(
                     ['execution_type', 'status'],
                     'work_task_executor_queue'

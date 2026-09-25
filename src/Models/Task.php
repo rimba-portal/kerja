@@ -17,7 +17,7 @@ use Rimba\Work\Enums\ActivityType;
 use Rimba\Work\Enums\ExecutionType;
 use Rimba\Work\Enums\TaskStatus;
 
-#[Table('sipoc_tasks')]
+#[Table('work_tasks')]
 #[Fillable([
     'uuid',
     'workflow_instance_id',
@@ -50,6 +50,9 @@ use Rimba\Work\Enums\TaskStatus;
     'failed_at',
     'due_at',
     'failure_reason',
+    'execution_key',
+    'iteration',
+    'waiting_for',
 ])]
 class Task extends Model
 {
@@ -92,6 +95,8 @@ class Task extends Model
             'cancelled_at' => 'datetime',
             'failed_at' => 'datetime',
             'due_at' => 'datetime',
+            'iteration' => 'integer',
+            'waiting_for' => 'array',
         ];
     }
 
