@@ -23,7 +23,7 @@ class EventTaskService
         ?Model $actor = null,
         ?Model $subject = null,
     ): Collection {
-        $query = Task::query()
+        $builder = Task::query()
             ->with('workflowInstance')
             ->where(
                 'execution_type',
@@ -38,19 +38,18 @@ class EventTaskService
                 $event,
             );
 
-        if ($subject !== null) {
-            $query->whereHas(
+        if ($subject instanceof Model) {
+            $builder->whereHas(
                 'workflowInstance',
-                fn ($workflowQuery) =>
-                    $workflowQuery->whereMorphedTo(
-                        'subject',
-                        $subject,
-                    ),
+                fn ($workflowQuery) => $workflowQuery->whereMorphedTo(
+                    'subject',
+                    $subject,
+                ),
             );
         }
 
-        $tasks = $query->get();
-        $triggeredTasks = new Collection();
+        $tasks = $builder->get();
+        $triggeredTasks = new Collection;
 
         foreach ($tasks as $task) {
             $triggeredTasks->push(

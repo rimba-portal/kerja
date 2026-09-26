@@ -75,34 +75,25 @@ class TriggerEventTask
             ]);
 
             Transition::query()->create([
-                'workflow_instance_id' =>
-                    $task->workflow_instance_id,
+                'workflow_instance_id' => $task->workflow_instance_id,
 
-                'from_task_id' =>
-                    $task->getKey(),
+                'from_task_id' => $task->getKey(),
 
-                'from_workpackage_slug' =>
-                    $task->workpackage_slug,
+                'from_workpackage_slug' => $task->workpackage_slug,
 
-                'event' =>
-                    'event_triggered',
+                'event' => 'event_triggered',
 
-                'actor_type' =>
-                    $actor?->getMorphClass(),
+                'actor_type' => $actor?->getMorphClass(),
 
-                'actor_id' =>
-                    $actor?->getKey(),
+                'actor_id' => $actor?->getKey(),
 
                 'payload' => [
-                    'trigger_event' =>
-                        $task->trigger_event,
+                    'trigger_event' => $task->trigger_event,
 
-                    'event_payload' =>
-                        $payload,
+                    'event_payload' => $payload,
                 ],
 
-                'performed_at' =>
-                    $triggeredAt,
+                'performed_at' => $triggeredAt,
             ]);
 
             return app(CompleteTask::class)->execute(

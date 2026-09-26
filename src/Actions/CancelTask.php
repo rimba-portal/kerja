@@ -59,50 +59,37 @@ class CancelWorkflow
                     TaskStatus::Failed,
                 ])
                 ->update([
-                    'status' =>
-                        TaskStatus::Cancelled->value,
+                    'status' => TaskStatus::Cancelled->value,
 
-                    'cancelled_at' =>
-                        $cancelledAt,
+                    'cancelled_at' => $cancelledAt,
 
-                    'failure_reason' =>
-                        $cancellationReason,
+                    'failure_reason' => $cancellationReason,
                 ]);
 
             $workflow->update([
-                'status' =>
-                    WorkflowStatus::Cancelled,
+                'status' => WorkflowStatus::Cancelled,
 
-                'current_workpackage_slug' =>
-                    null,
+                'current_workpackage_slug' => null,
 
-                'cancelled_at' =>
-                    $cancelledAt,
+                'cancelled_at' => $cancelledAt,
 
-                'failure_reason' =>
-                    $cancellationReason,
+                'failure_reason' => $cancellationReason,
             ]);
 
             Transition::query()->create([
-                'workflow_instance_id' =>
-                    $workflow->getKey(),
+                'workflow_instance_id' => $workflow->getKey(),
 
-                'event' =>
-                    'workflow_cancelled',
+                'event' => 'workflow_cancelled',
 
-                'actor_type' =>
-                    $actor?->getMorphClass(),
+                'actor_type' => $actor?->getMorphClass(),
 
-                'actor_id' =>
-                    $actor?->getKey(),
+                'actor_id' => $actor?->getKey(),
 
                 'payload' => [
-                    'reason' =>
-                        $cancellationReason,
+                    'reason' => $cancellationReason,
                 ],
 
-                'performed_at' =>
-                    $cancelledAt,
+                'performed_at' => $cancelledAt,
             ]);
 
             return $workflow->fresh();

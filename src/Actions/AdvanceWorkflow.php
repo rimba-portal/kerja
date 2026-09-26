@@ -100,29 +100,22 @@ class AdvanceWorkflow
 
                 Transition::query()->firstOrCreate(
                     [
-                        'workflow_instance_id' =>
-                            $workflow->getKey(),
+                        'workflow_instance_id' => $workflow->getKey(),
 
-                        'from_task_id' =>
-                            $completedTask->getKey(),
+                        'from_task_id' => $completedTask->getKey(),
 
-                        'to_task_id' =>
-                            $toTask->getKey(),
+                        'to_task_id' => $toTask->getKey(),
 
                         'event' => 'completed',
                     ],
                     [
-                        'from_workpackage_slug' =>
-                            $completedTask->workpackage_slug,
+                        'from_workpackage_slug' => $completedTask->workpackage_slug,
 
-                        'to_workpackage_slug' =>
-                            $nextSlug,
+                        'to_workpackage_slug' => $nextSlug,
 
-                        'actor_type' =>
-                            $actor?->getMorphClass(),
+                        'actor_type' => $actor?->getMorphClass(),
 
-                        'actor_id' =>
-                            $actor?->getKey(),
+                        'actor_id' => $actor?->getKey(),
 
                         'performed_at' => now(),
                     ],

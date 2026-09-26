@@ -7,6 +7,7 @@ namespace Rimba\Work;
 use Illuminate\Support\Facades\File;
 use Rimba\Base\Services\BitesServiceProvider;
 use Rimba\Work\Services\ActorResolverService;
+use Rimba\Work\Services\EventTaskService;
 use Rimba\Work\Services\HandlerRegistry;
 use Rimba\Work\Services\WorkflowConditionEvaluator;
 use Rimba\Work\Services\WorkflowContextService;
@@ -37,6 +38,7 @@ class WorkServiceProvider extends BitesServiceProvider
         $this->app->singleton(WorkflowContextService::class);
         $this->app->singleton(WorkflowConditionEvaluator::class);
         $this->app->singleton(WorkPackageJoinService::class);
+        $this->app->singleton(EventTaskService::class);
         $this->app->alias(WorkflowDefinitionRepository::class, 'sipoc.definitions');
 
     }
