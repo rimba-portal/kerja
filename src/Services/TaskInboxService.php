@@ -4,20 +4,15 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Services;
 
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Rimba\Work\Models\Task;
 
-class TaskInboxService
+final class TaskInboxService
 {
-    public function queryFor(
-        Authenticatable&Model $subject
-    ) {
-        return Task::query()
-            ->with('workflowInstance')
-            ->human()
-            ->open()
-            ->whereMorphedTo('assignee', $subject)
-            ->latest('assigned_at');
+    public function __construct(private StaffJobRoleService $staffJobRoleService) {}
+
+    public function queryFor(Model $s)
+    {
+        return Task::query()->whereIn('status', ['ready', 'assigned', 'started'])->whereHas('workPackage', fn ($q) => $q->whereIn('actor_job_role_id', $this->staffJobRoleService->ids($s)));
     }
 }

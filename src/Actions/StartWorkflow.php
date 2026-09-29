@@ -6,71 +6,28 @@ namespace Rimba\Work\Actions;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Rimba\Work\Enums\WorkflowStatus;
+use Rimba\Work\Models\Workflow;
 use Rimba\Work\Models\WorkflowInstance;
-use Rimba\Work\Services\WorkflowDefinitionRepository;
+use Rimba\Work\Services\WorkflowInitiatorService;
 use RuntimeException;
 
-class StartWorkflow
+final class StartWorkflow
 {
-    public function __construct(
-        private WorkflowDefinitionRepository $workflowDefinitionRepository,
-        private CreateTask $createTask,
-    ) {}
+    public function __construct(private WorkflowInitiatorService $workflowInitiatorService, private CreateTask $createTask) {}
 
-    public function execute(
-        string $workflowSlug,
-        ?Model $subject = null,
-        ?Model $initiator = null,
-        array $context = []
-    ): WorkflowInstance {
-        $definition = $this->workflowDefinitionRepository->find($workflowSlug);
+    public function execute(Workflow $w, Model $i, array $payload): WorkflowInstance
+    {
+        if (! $this->workflowInitiatorService->mayStart($i, $w)) {
+            throw new RuntimeException('Initiator not allowed.');
+        }
 
-        return DB::transaction(function () use (
-            $definition,
-            $subject,
-            $initiator,
-            $context
-        ): WorkflowInstance {
-            $workflowInstance = WorkflowInstance::query()->create([
-                'workflow_slug' => $definition['slug'],
-                'workflow_version' => $definition['version'],
-                'definition_snapshot' => $definition,
-                'subject_type' => $subject?->getMorphClass(),
-                'subject_id' => $subject?->getKey(),
-                'initiator_type' => $initiator?->getMorphClass(),
-                'initiator_id' => $initiator?->getKey(),
-                'current_workpackage_slug' => $definition['first_workpackage'],
-                'status' => WorkflowStatus::Active,
-                'context' => $context,
-                'started_at' => now(),
-            ]);
+        $step = $w->startStep() ?? throw new RuntimeException('No start step.');
 
-            $this->createTask->execute(
-                $workflowInstance,
-                $this->workPackage(
-                    $definition,
-                    $definition['first_workpackage']
-                ),
-                $initiator
-            );
+        return DB::transaction(function () use ($w, $i, $payload, $step) {
+            $workflowInstance = WorkflowInstance::query()->create(['workflow_id' => $w->id, 'workflow_version' => $w->version, 'initiator_type' => $i->getMorphClass(), 'initiator_id' => $i->getKey(), 'current_workflow_step_id' => $step->id, 'status' => 'active', 'payload' => $payload, 'started_at' => now()]);
+            $this->createTask->execute($workflowInstance, $step);
 
             return $workflowInstance->fresh();
         });
-    }
-
-    private function workPackage(
-        array $definition,
-        string $slug
-    ): array {
-        foreach ($definition['workpackages'] as $workPackage) {
-            if ($workPackage['slug'] === $slug) {
-                return $workPackage;
-            }
-        }
-
-        throw new RuntimeException(
-            "WorkPackage [{$slug}] was not found."
-        );
     }
 }

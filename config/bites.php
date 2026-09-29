@@ -2,51 +2,20 @@
 
 declare(strict_types=1);
 
-use Rimba\Sipoc\Models\Artifact;
-use Rimba\Sipoc\Models\Task;
-use Rimba\Sipoc\Models\Transition;
-use Rimba\Sipoc\Models\WorkflowInstance;
+use Rimba\Organization\Models\OrgTeam;
+use Rimba\People\Models\Staff;
+use Rimba\Position\Models\JobRole;
 
 return [
-    'sipoc' => [
-
-        /*
-     * Installed definitions editable by the application.
-     */
-        'setup_path' => storage_path('setup/sipoc'),
-
-        /*
-     * Definitions distributed with this package.
-     */
-        'package_setup_path' => dirname(__DIR__).'/setup/sipoc',
-
-        'system_actor' => 'Rimba',
-
+    'kerja' => [
         'models' => [
-            'workflow_instance' => WorkflowInstance::class,
-            'task' => Task::class,
-            'artifact' => Artifact::class,
-            'transition' => Transition::class,
+            'org_team' => OrgTeam::class,
+            'job_role' => JobRole::class,
+            'staff' => Staff::class,
         ],
-
-        /*
-     * Handler aliases referenced by JSON WorkPackages.
-     *
-     * Consuming packages may merge additional handlers.
-     */
-        'handlers' => [
-            // 'leave.capture_context' => CaptureEmployeeContext::class,
-        ],
-
-        'permissions' => [
-            'enforce' => false,
-            'abilities' => [
-                'init',
-                'view',
-                'work',
-                'own',
-                'administer',
-            ],
+        'organization' => [
+            'staff_job_roles_relation' => 'jobRoles',
+            'job_role_team_foreign_key' => 'org_team_id',
         ],
     ],
 ];

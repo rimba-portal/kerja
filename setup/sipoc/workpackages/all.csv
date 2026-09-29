@@ -1,0 +1,137 @@
+domain,actor,activity_type,business_object,workpackage_slug
+HR,HiringManager,Create,Manpower Request,hiringmanager.create.manpower_request
+HR,HR,Analyze,Workforce Demand,hr.analyze.workforce_demand
+HR,DepartmentManager,Authorize,Manpower Request,departmentmanager.authorize.manpower_request
+HR,Rimba,Record,Manpower Request,rimba.record.manpower_request
+HR,HR,Create,Job Posting,hr.create.job_posting
+HR,Candidate,Communicate,Job Application,candidate.communicate.job_application
+HR,HR,Capture,Candidate Application,hr.capture.candidate_application
+HR,HR,Analyze,Candidate Application,hr.analyze.candidate_application
+HR,HiringManager,Decide,Hiring Outcome,hiringmanager.decide.hiring_outcome
+HR,HR,Authorize,Employment Offer,hr.authorize.employment_offer
+HR,Rimba,Record,Employment Offer,rimba.record.employment_offer
+HR,Employee,Execute,Leave Request,employee.execute.leave_request
+HR,Rimba,Capture,Employee Context,rimba.capture.employee_context
+HR,Rimba,Capture,Leave Eligibility,rimba.capture.leave_eligibility
+HR,Employee,Create,Leave Request,employee.create.leave_request
+HR,Rimba,Verify,Leave Request,rimba.verify.leave_request
+HR,Employee,Communicate,Leave Request,employee.communicate.leave_request
+HR,Supervisor,Analyze,Leave Request,supervisor.analyze.leave_request
+HR,Supervisor,Decide,Leave Request,supervisor.decide.leave_request
+HR,Supervisor,Authorize,Leave Request,supervisor.authorize.leave_request
+HR,Rimba,Record,Leave Request,rimba.record.leave_request
+HR,Rimba,Record,Leave Decision,rimba.record.leave_decision
+HR,Rimba,Transform,Leave Balance,rimba.transform.leave_balance
+HR,Rimba,Transform,Leave Calendar,rimba.transform.leave_calendar
+HR,Rimba,Communicate,Leave Decision,rimba.communicate.leave_decision
+HR,Employee,Create,Self Assessment,employee.create.self_assessment
+HR,Supervisor,Analyze,Performance Review,supervisor.analyze.performance_review
+HR,Supervisor,Decide,Performance Rating,supervisor.decide.performance_rating
+HR,Manager,Authorize,Performance Rating,manager.authorize.performance_rating
+HR,Rimba,Record,Performance Result,rimba.record.performance_result
+HR,Rimba,Communicate,Performance Result,rimba.communicate.performance_result
+HR,Employee,Communicate,Resignation,employee.communicate.resignation
+HR,HR,Verify,Resignation,hr.verify.resignation
+HR,Manager,Authorize,Resignation,manager.authorize.resignation
+HR,Rimba,Create,Exit Checklist,rimba.create.exit_checklist
+HR,Rimba,Record,Separation,rimba.record.separation
+HR,Rimba,Communicate,Separation,rimba.communicate.separation
+
+Finance,Employee,Create,Expense Claim,employee.create.expense_claim
+Finance,Employee,Capture,Claim Evidence,employee.capture.claim_evidence
+Finance,Rimba,Verify,Expense Claim,rimba.verify.expense_claim
+Finance,Supervisor,Analyze,Expense Claim,supervisor.analyze.expense_claim
+Finance,Supervisor,Authorize,Expense Claim,supervisor.authorize.expense_claim
+Finance,FinanceOfficer,Verify,Expense Claim,financeofficer.verify.expense_claim
+Finance,FinanceManager,Authorize,Claim Payment,financemanager.authorize.claim_payment
+Finance,Rimba,Record,Expense Claim,rimba.record.expense_claim
+Finance,Rimba,Record,Claim Payment,rimba.record.claim_payment
+Finance,Rimba,Communicate,Claim Status,rimba.communicate.claim_status
+Finance,FinanceOfficer,Capture,Vendor Invoice,financeofficer.capture.vendor_invoice
+Finance,FinanceOfficer,Verify,Vendor Invoice,financeofficer.verify.vendor_invoice
+Finance,FinanceOfficer,Analyze,Payment Obligation,financeofficer.analyze.payment_obligation
+Finance,FinanceManager,Authorize,Vendor Payment,financemanager.authorize.vendor_payment
+Finance,Rimba,Transform,Account Balance,rimba.transform.account_balance
+Finance,Rimba,Record,Vendor Payment,rimba.record.vendor_payment
+Finance,Rimba,Communicate,Payment Confirmation,rimba.communicate.payment_confirmation
+
+Procurement,Requester,Create,Purchase Requisition,requester.create.purchase_requisition
+Procurement,Rimba,Verify,Budget Availability,rimba.verify.budget_availability
+Procurement,Manager,Authorize,Purchase Requisition,manager.authorize.purchase_requisition
+Procurement,Buyer,Create,Purchase Order,buyer.create.purchase_order
+Procurement,Rimba,Record,Purchase Order,rimba.record.purchase_order
+Procurement,Supplier,Communicate,Order Confirmation,supplier.communicate.order_confirmation
+Procurement,Rimba,Communicate,Procurement Status,rimba.communicate.procurement_status
+
+Quality,Inspector,Create,NCR,inspector.create.ncr
+Quality,Rimba,Record,NCR,rimba.record.ncr
+Quality,QualityEngineer,Analyze,NCR,qualityengineer.analyze.ncr
+Quality,QualityEngineer,Decide,Investigation,qualityengineer.decide.investigation
+Quality,QualityManager,Authorize,Corrective Action,qualitymanager.authorize.corrective_action
+Quality,QualityEngineer,Create,Corrective Action,qualityengineer.create.corrective_action
+Quality,Owner,Execute,Corrective Action,owner.execute.corrective_action
+Quality,QualityEngineer,Verify,Corrective Action,qualityengineer.verify.corrective_action
+Quality,Rimba,Record,NCR Closure,rimba.record.ncr_closure
+Quality,Rimba,Communicate,NCR Closure,rimba.communicate.ncr_closure
+
+MES,Operator,Capture,Lot Information,operator.capture.lot_information
+MES,Rimba,Verify,Lot Readiness,rimba.verify.lot_readiness
+MES,Operator,Execute,Lot Release,operator.execute.lot_release
+MES,ProductionLine,Transform,Production Lot,productionline.transform.production_lot
+MES,Rimba,Record,Lot Movement,rimba.record.lot_movement
+MES,Rimba,Communicate,Lot Status,rimba.communicate.lot_status
+MES,InspectionMachine,Capture,Wafer Image,inspectionmachine.capture.wafer_image
+MES,WirebondMachine,Transform,Substrate,wirebondmachine.transform.substrate
+MES,AOIMachine,Verify,Bond Quality,aoimachine.verify.bond_quality
+MES,Rimba,Record,Production Result,rimba.record.production_result
+
+IndustrialEngineering,IEEngineer,Capture,Production Demand,ieengineer.capture.production_demand
+IndustrialEngineering,IEEngineer,Analyze,Capacity Requirement,ieengineer.analyze.capacity_requirement
+IndustrialEngineering,IEManager,Authorize,Capacity Plan,iemanager.authorize.capacity_plan
+IndustrialEngineering,Rimba,Record,Capacity Plan,rimba.record.capacity_plan
+IndustrialEngineering,IEEngineer,Create,Time Study,ieengineer.create.time_study
+IndustrialEngineering,IEEngineer,Capture,Process Time,ieengineer.capture.process_time
+IndustrialEngineering,IEEngineer,Analyze,Cycle Time,ieengineer.analyze.cycle_time
+IndustrialEngineering,IEManager,Authorize,Standard Time,iemanager.authorize.standard_time
+IndustrialEngineering,Rimba,Record,Standard Time,rimba.record.standard_time
+IndustrialEngineering,IEEngineer,Create,Line Balance Proposal,ieengineer.create.line_balance_proposal
+IndustrialEngineering,IEManager,Authorize,Line Balance,iemanager.authorize.line_balance
+IndustrialEngineering,Rimba,Record,Line Balance,rimba.record.line_balance
+
+Facilities,Rimba,Capture,Utility Consumption,rimba.capture.utility_consumption
+Facilities,FacilityEngineer,Analyze,Utility Usage,facilityengineer.analyze.utility_usage
+Facilities,FacilityManager,Decide,Utility Plan,facilitymanager.decide.utility_plan
+Facilities,Rimba,Record,Utility Report,rimba.record.utility_report
+Facilities,Planner,Create,Maintenance Schedule,planner.create.maintenance_schedule
+Facilities,Technician,Execute,Maintenance Task,technician.execute.maintenance_task
+Facilities,Technician,Capture,Maintenance Finding,technician.capture.maintenance_finding
+Facilities,Engineer,Analyze,Maintenance Result,engineer.analyze.maintenance_result
+Facilities,Engineer,Authorize,Facility Release,engineer.authorize.facility_release
+Facilities,Rimba,Record,Maintenance Result,rimba.record.maintenance_result
+Facilities,Requestor,Create,Building Modification Request,requestor.create.building_modification_request
+Facilities,FacilityEngineer,Analyze,Building Modification,facilityengineer.analyze.building_modification
+Facilities,FacilityManager,Authorize,Building Modification,facilitymanager.authorize.building_modification
+Facilities,Contractor,Execute,Building Modification,contractor.execute.building_modification
+Facilities,FacilityEngineer,Verify,Building Modification,facilityengineer.verify.building_modification
+Facilities,Rimba,Record,Building Modification,rimba.record.building_modification
+
+Logistics,WarehouseClerk,Capture,Delivery Note,warehouseclerk.capture.delivery_note
+Logistics,WarehouseClerk,Verify,Received Material,warehouseclerk.verify.received_material
+Logistics,WarehouseSupervisor,Authorize,Goods Receipt,warehousesupervisor.authorize.goods_receipt
+Logistics,Rimba,Record,Goods Receipt,rimba.record.goods_receipt
+Logistics,Rimba,Capture,Inventory Balance,rimba.capture.inventory_balance
+Logistics,InventoryController,Analyze,Inventory Variance,inventorycontroller.analyze.inventory_variance
+Logistics,InventoryController,Decide,Inventory Adjustment,inventorycontroller.decide.inventory_adjustment
+Logistics,Supervisor,Authorize,Inventory Adjustment,supervisor.authorize.inventory_adjustment
+Logistics,Rimba,Record,Inventory Adjustment,rimba.record.inventory_adjustment
+Logistics,Production,Create,Material Request,production.create.material_request
+Logistics,WarehouseClerk,Verify,Material Availability,warehouseclerk.verify.material_availability
+Logistics,WarehouseClerk,Execute,Material Issue,warehouseclerk.execute.material_issue
+Logistics,Rimba,Transform,Inventory Balance,rimba.transform.inventory_balance
+Logistics,Rimba,Record,Material Issue,rimba.record.material_issue
+Logistics,Planner,Create,Shipment Plan,planner.create.shipment_plan
+Logistics,WarehouseClerk,Execute,Shipment Preparation,warehouseclerk.execute.shipment_preparation
+Logistics,Inspector,Verify,Shipment,inspector.verify.shipment
+Logistics,Supervisor,Authorize,Shipment Release,supervisor.authorize.shipment_release
+Logistics,Rimba,Record,Shipment,rimba.record.shipment
+Logistics,Rimba,Communicate,Shipment Status,rimba.communicate.shipment_status

@@ -4,99 +4,19 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Actions;
 
-use Illuminate\Database\Eloquent\Model;
-use Rimba\Work\Enums\ExecutionType;
-use Rimba\Work\Enums\TaskStatus;
 use Rimba\Work\Models\Task;
 use Rimba\Work\Models\WorkflowInstance;
-use Rimba\Work\Services\ActorResolverService;
+use Rimba\Work\Models\WorkflowStep;
+use Rimba\Work\Services\ActorAssignmentService;
 
-class CreateTask
+final class CreateTask
 {
-    public function __construct(
-        private ActorResolverService $actorResolverService,
-    ) {}
+    public function __construct(private ActorAssignmentService $actorAssignmentService) {}
 
-    public function execute(
-        WorkflowInstance $workflow,
-        array $workPackage,
-        ?Model $initiator = null,
-        int $iteration = 1,
-    ): Task {
-        $executionType = ExecutionType::from(
-            strtolower($workPackage['execution_type'])
-        );
+    public function execute(WorkflowInstance $x, WorkflowStep $s): Task
+    {
+        $a = $this->actorAssignmentService->resolve($s->workPackage, $x);
 
-        $executionKey = implode(':', [
-            $workPackage['slug'],
-            $iteration,
-        ]);
-
-        $existing = $workflow->tasks()
-            ->where('execution_key', $executionKey)
-            ->first();
-
-        if ($existing !== null) {
-            return $existing;
-        }
-
-        $assignee = $this->actorResolverService->resolve(
-            $workPackage,
-            $initiator,
-            $workflow->context ?? [],
-        );
-
-        $status = match ($executionType) {
-            ExecutionType::Human => $assignee
-                ? TaskStatus::Assigned
-                : TaskStatus::Ready,
-
-            ExecutionType::Rimba => TaskStatus::Ready,
-
-            ExecutionType::EventDriven => TaskStatus::Waiting,
-        };
-
-        $model = $workflow->tasks()->create([
-            'workpackage_slug' => $workPackage['slug'],
-            'execution_key' => $executionKey,
-            'iteration' => $iteration,
-            'workpackage_snapshot' => $workPackage,
-            'execution_type' => $executionType,
-            'activity_type' => strtolower(
-                $workPackage['activity_type']
-            ),
-            'business_object' => $workPackage['business_object'],
-            'actor' => $workPackage['actor'],
-
-            'assignee_type' => $assignee?->getMorphClass(),
-            'assignee_id' => $assignee?->getKey(),
-
-            'status' => $status,
-            'suppliers' => $workPackage['suppliers'] ?? [],
-            'inputs' => $workPackage['inputs'] ?? [],
-            'outputs' => $workPackage['outputs'] ?? [],
-            'customers' => $workPackage['customers'] ?? [],
-            'handler' => $workPackage['handler'] ?? null,
-            'trigger_event' => $workPackage['trigger_event'] ?? null,
-            'waiting_for' => $workPackage['wait_for'] ?? [],
-
-            'ready_at' => $status === TaskStatus::Ready
-                ? now()
-                : null,
-
-            'assigned_at' => $status === TaskStatus::Assigned
-                ? now()
-                : null,
-
-            'waiting_at' => $status === TaskStatus::Waiting
-                ? now()
-                : null,
-        ]);
-
-        if ($executionType === ExecutionType::Rimba) {
-            app(ExecuteRimbaTask::class)->execute($model);
-        }
-
-        return $model->fresh();
+        return $x->tasks()->create(['workflow_step_id' => $s->id, 'work_package_id' => $s->work_package_id, 'work_package_version' => $s->workPackage->version, 'assignee_type' => $a?->getMorphClass(), 'assignee_id' => $a?->getKey(), 'status' => $a ? 'assigned' : 'ready', 'payload' => $x->payload, 'assigned_at' => $a ? now() : null]);
     }
 }
