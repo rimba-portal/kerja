@@ -10,8 +10,23 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('work_activity_types', fn (Blueprint $t): array => [$t->id(), $t->string('code')->unique(), $t->string('name'), $t->text('description')->nullable(), $t->boolean('is_active')->default(true), $t->timestamps()]);
-        Schema::create('work_business_objects', fn (Blueprint $t): array => [$t->id(), $t->string('code')->unique(), $t->string('name'), $t->string('model_class')->nullable(), $t->text('description')->nullable(), $t->boolean('is_active')->default(true), $t->timestamps()]);
+        Schema::create('work_activity_types', function (Blueprint $t): void {
+            $t->id();
+            $t->string('code')->unique();
+            $t->string('name');
+            $t->text('description')->nullable();
+            $t->boolean('is_active')->default(true);
+            $t->timestamps();
+        });
+        Schema::create('work_business_objects', function (Blueprint $t): void {
+            $t->id();
+            $t->string('code')->unique();
+            $t->string('name');
+            $t->string('model_class')->nullable();
+            $t->text('description')->nullable();
+            $t->boolean('is_active')->default(true);
+            $t->timestamps();
+        });
         Schema::create('work_packages', function (Blueprint $t): void {
             $t->id();
             $t->string('code')->unique();
@@ -29,7 +44,6 @@ return new class extends Migration
             $t->id();
             $t->foreignId('work_package_id')->constrained('work_packages')->cascadeOnDelete();
             $t->string('side')->index();
-            $t->string('party_type');
             $t->nullableMorphs('party');
             $t->string('name');
             $t->unsignedInteger('sequence')->default(1);

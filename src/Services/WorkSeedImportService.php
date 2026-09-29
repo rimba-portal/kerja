@@ -160,26 +160,26 @@ class WorkSeedImportService
         array $items
     ): int {
 
-        foreach ($items as $flow) {
+        foreach ($items as $item) {
 
             $workflowId =
                 $this->upsertWorkFlow(
-                    $flow
+                    $item
                 );
 
             $this->syncInitiators(
                 $workflowId,
-                $flow
+                $item
             );
 
             $this->syncFormFields(
                 $workflowId,
-                $flow
+                $item
             );
 
             $this->syncSteps(
                 $workflowId,
-                $flow
+                $item
             );
         }
 

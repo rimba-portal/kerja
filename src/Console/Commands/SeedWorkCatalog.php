@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Rimba\Work\Services\WorkSeedImportService;
 
+#[Description('Import WorkFlow and WorkPackage definitions from JSON')]
+#[Signature('rimba:seed {source}')]
 class SeedWorkCatalog extends Command
 {
-    protected $signature = 'rimba:seed {source}';
-
-    protected $description =
-        'Import WorkFlow and WorkPackage definitions from JSON';
-
     public function __construct(
-        private readonly WorkSeedImportService $importService,
+        private readonly WorkSeedImportService $workSeedImportService,
     ) {
         parent::__construct();
     }
@@ -31,7 +30,7 @@ class SeedWorkCatalog extends Command
             )
         );
 
-        $result = $this->importService->import($source);
+        $result = $this->workSeedImportService->import($source);
 
         $this->info(
             sprintf(
