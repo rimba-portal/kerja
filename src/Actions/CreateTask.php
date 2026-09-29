@@ -15,7 +15,7 @@ final class CreateTask
 
     public function execute(WorkflowInstance $x, WorkflowStep $s): Task
     {
-        $a = $this->actorAssignmentService->resolve($s->workPackage, $x);
+        $a = $this->actorAssignmentService->resolve($s->workPackage);
 
         return $x->tasks()->create(['workflow_step_id' => $s->id, 'work_package_id' => $s->work_package_id, 'work_package_version' => $s->workPackage->version, 'assignee_type' => $a?->getMorphClass(), 'assignee_id' => $a?->getKey(), 'status' => $a ? 'assigned' : 'ready', 'payload' => $x->payload, 'assigned_at' => $a ? now() : null]);
     }
