@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rimba\Work\Http\UI\Admin\Resources\TaskEvents\Pages;
 
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Rimba\Work\Http\UI\Admin\Resources\TaskEvents\TaskEventResource;
 
 class ListTaskEvents extends ListRecords
 {
-    protected static string $resource = \Rimba\Work\Http\UI\Admin\Resources\TaskEvents\TaskEventResource::class;
+    protected static string $resource = TaskEventResource::class;
 
     protected static ?string $title = 'Task Event Logs';
 

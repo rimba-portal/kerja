@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rimba\Work\Http\UI\Admin\Resources\Tasks;
 
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Rimba\Work\Http\UI\Admin\Resources\Tasks\Pages\ListTasks;
+use Rimba\Work\Models\Task;
+use UnitEnum;
 
 class TaskResource extends Resource
 {
-    protected static ?string $model = \Rimba\Work\Models\Task::class;
+    protected static ?string $model = Task::class;
 
     protected static string|UnitEnum|null $navigationGroup = 'Work';
 
@@ -21,23 +24,32 @@ class TaskResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'id';
 
-    public static function form(Schema $schema): Schema { return $schema->components([]); }
+    public static function form(Schema $schema): Schema
+    {
+        return $schema->components([]);
+    }
 
-    public static function infolist(Schema $schema): Schema { return $schema->components([]); }
+    public static function infolist(Schema $schema): Schema
+    {
+        return $schema->components([]);
+    }
 
-    public static function table(Table $table): Table { return $table->columns([]); }
+    public static function table(Table $table): Table
+    {
+        return $table->columns([]);
+    }
 
-    public static function getRelations(): array 
-    { 
-        return [ 
-            // 
+    public static function getRelations(): array
+    {
+        return [
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => \Rimba\Work\Http\UI\Admin\Resources\Tasks\Pages\ListTasks::route('/'),
+            'index' => ListTasks::route('/'),
             // 'create' => \Rimba\Work\Http\UI\Admin\Resources\Tasks\Pages\CreateTask::route('/create'),
             // 'view' => \Rimba\Work\Http\UI\Admin\Resources\Tasks\Pages\ViewTask::route('/{record}'),
             // 'edit' => \Rimba\Work\Http\UI\Admin\Resources\Tasks\Pages\EditTask::route('/{record}/edit'),

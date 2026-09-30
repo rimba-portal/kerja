@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rimba\Work\Http\UI\Admin\Resources\WorkFlowFormFields\Pages;
 
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Rimba\Work\Http\UI\Admin\Resources\WorkFlowFormFields\WorkFlowFormFieldResource;
 
 class ListWorkFlowFormFields extends ListRecords
 {
-    protected static string $resource = \Rimba\Work\Http\UI\Admin\Resources\WorkFlowFormFields\WorkFlowFormFieldResource::class;
+    protected static string $resource = WorkFlowFormFieldResource::class;
 
     protected static ?string $title = 'Form Fields';
 

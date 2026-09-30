@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rimba\Work\Http\UI\Admin\Resources\WorkFlowInstances\Pages;
 
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Rimba\Work\Http\UI\Admin\Resources\WorkFlowInstances\WorkFlowInstanceResource;
 
 class ListWorkFlowInstances extends ListRecords
 {
-    protected static string $resource = \Rimba\Work\Http\UI\Admin\Resources\WorkFlowInstances\WorkFlowInstanceResource::class;
+    protected static string $resource = WorkFlowInstanceResource::class;
 
     protected static ?string $title = 'Active Workflow Instances';
 
