@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Table(name: 'work_workflows')]
+#[Table(name: 'work_flows')]
 class WorkFlow extends Model
 {
     protected $guarded = [];
