@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rimba\Work\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,10 +13,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 
 #[Table(name: 'work_flow_instances')]
+#[Unguarded]
 class WorkFlowInstance extends Model
 {
-    protected $guarded = [];
-
     protected static function booted(): void
     {
         static::creating(fn (self $x) => $x->uuid ??= (string) Str::uuid());

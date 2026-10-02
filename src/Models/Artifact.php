@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Rimba\Work\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Model;
 
 #[Table(name: 'work_artifacts')]
-class Artifact extends Model
-{
-    protected $guarded = [];
-}
+#[Unguarded]
+class Artifact extends Model {}
