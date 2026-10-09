@@ -6,272 +6,152 @@ namespace Rimba\Work\Services;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Rimba\Work\Exceptions\CatalogReferenceNotFound;
 use RuntimeException;
 
-class WorkSeedImportService
+final class WorkSeedImportService
 {
     public function import(string $source): array
     {
-        $payload = $this->loadJson($source);
+        $p = $this->loadJson($source);
 
-        return DB::transaction(
-            function () use ($payload): array {
-
-                return [
-                    'activity_types' => $this->importActivityTypes(
-                        $payload['activity_types'] ?? []
-                    ),
-
-                    'business_objects' => $this->importBusinessObjects(
-                        $payload['business_objects'] ?? []
-                    ),
-
-                    'work_packages' => $this->importWorkPackages(
-                        $payload['work_packages'] ?? []
-                    ),
-
-                    'work_flows' => $this->importWorkFlows(
-                        $payload['work_flows'] ?? []
-                    ),
-                ];
+        return DB::transaction(function () use ($p): array {
+            $counts = [];
+            foreach (['activity_types' => 'work_activity_types', 'business_objects' => 'work_business_objects', 'lifecycles' => 'work_lifecycles', 'lifecycle_phases' => 'work_lifecycle_phases'] as $key => $table) {
+                $counts[$key] = $this->importSimple($table, $p[$key] ?? []);
             }
-        );
+
+            $counts['work_packages'] = $this->importWorkPackages($p['work_packages'] ?? []);
+            $counts['work_flows'] = $this->importWorkFlows($p['work_flows'] ?? []);
+
+            return $counts;
+        });
     }
 
-    protected function loadJson(
-        string $source
-    ): array {
-
-        $contents = str_starts_with(
-            $source,
-            'http'
-        )
-            ? file_get_contents($source)
-            : File::get($source);
-
-        $decoded = json_decode(
-            $contents,
-            true,
-            512,
-            JSON_THROW_ON_ERROR
-        );
-
+    private function loadJson(string $source): array
+    {
+        $contents = str_starts_with($source, 'http') ? file_get_contents($source) : File::get($source);
+        $decoded = json_decode((string) $contents, true, 512, JSON_THROW_ON_ERROR);
         if (! is_array($decoded)) {
-            throw new RuntimeException(
-                'Invalid JSON structure.'
-            );
+            throw new RuntimeException('Invalid JSON structure.');
         }
 
         return $decoded;
     }
 
-    protected function importActivityTypes(
-        array $items
-    ): int {
-
+    private function importSimple(string $table, array $items): int
+    {
         foreach ($items as $item) {
+            $row = $item;
+            unset($row['code']);
+            foreach (['business_object' => 'business_object_id', 'lifecycle' => 'lifecycle_id'] as $key => $fk) {
+                if (isset($row[$key])) {
+                    $row[$fk] = $this->id($key === 'lifecycle' ? 'work_lifecycles' : 'work_business_objects', $row[$key], $key);
+                    unset($row[$key]);
+                }
+            }
 
-            DB::table('work_activity_types')
-                ->updateOrInsert(
-                    [
-                        'code' => $item['code'],
-                    ],
-                    [
-                        'name' => $item['name'],
-                        'description' => $item['description']
-                                ?? null,
-                        'updated_at' => now(),
-                        'created_at' => now(),
-                    ]
-                );
+            DB::table($table)->updateOrInsert(['code' => $item['code']], $row + ['updated_at' => now(), 'created_at' => now()]);
         }
 
         return count($items);
     }
 
-    protected function importBusinessObjects(
-        array $items
-    ): int {
-
+    private function importWorkPackages(array $items): int
+    {
         foreach ($items as $item) {
+            DB::table('work_packages')->updateOrInsert(['code' => $item['code']], [
+                'name' => $item['name'], 'description' => $item['description'] ?? null,
+                'org_team_id' => $this->externalId('org_team', $item['org_team']),
+                'actor_job_role_id' => $this->externalId('job_role', $item['responsible_job_role'] ?? $item['actor_job_role']),
+                'activity_type_id' => $this->id('work_activity_types', $item['activity_type'], 'activity type'),
+                'business_object_id' => $this->id('work_business_objects', $item['business_object'], 'business object'),
+                'version' => $item['version'] ?? 1, 'status' => $item['status'] ?? 'draft', 'updated_at' => now(), 'created_at' => now(),
+            ]);
+            $id = $this->id('work_packages', $item['code'], 'work package');
+            DB::table('work_package_parties')->where('work_package_id', $id)->delete();
+            foreach (['suppliers' => 'supplier', 'customers' => 'customer'] as $key => $side) {
+                foreach ($item[$key] ?? [] as $i => $v) {
+                    DB::table('work_package_parties')->insert(['work_package_id' => $id, 'side' => $side, 'name' => is_array($v) ? $v['name'] : $v, 'sequence' => $i + 1, 'created_at' => now(), 'updated_at' => now()]);
+                }
+            }
 
-            DB::table('work_business_objects')
-                ->updateOrInsert(
-                    [
-                        'code' => $item['code'],
-                    ],
-                    [
-                        'name' => $item['name'],
-                        'model_class' => $item['model_class']
-                                ?? null,
-                        'description' => $item['description']
-                                ?? null,
-                        'updated_at' => now(),
-                        'created_at' => now(),
-                    ]
-                );
+            DB::table('work_package_payloads')->where('work_package_id', $id)->delete();
+            foreach (['inputs' => 'input', 'outputs' => 'output'] as $key => $direction) {
+                foreach ($item[$key] ?? [] as $i => $v) {
+                    $v = is_array($v) ? $v : ['code' => str($v)->snake()->upper()->value(), 'name' => $v];
+                    DB::table('work_package_payloads')->insert(['work_package_id' => $id, 'direction' => $direction, 'code' => $v['code'], 'name' => $v['name'], 'data_type' => $v['data_type'] ?? 'mixed', 'is_required' => $v['is_required'] ?? true, 'sequence' => $i + 1, 'created_at' => now(), 'updated_at' => now()]);
+                }
+            }
         }
 
         return count($items);
     }
 
-    protected function importWorkPackages(
-        array $items
-    ): int {
-
+    private function importWorkFlows(array $items): int
+    {
         foreach ($items as $item) {
+            DB::table('work_flows')->updateOrInsert(['code' => $item['code']], [
+                'name' => $item['name'], 'description' => $item['description'] ?? null,
+                'business_object_id' => isset($item['business_object']) ? $this->id('work_business_objects', $item['business_object'], 'business object') : null,
+                'lifecycle_phase_id' => isset($item['lifecycle_phase']) ? $this->id('work_lifecycle_phases', $item['lifecycle_phase'], 'lifecycle phase') : null,
+                'version' => $item['version'] ?? 1, 'status' => $item['status'] ?? 'draft', 'updated_at' => now(), 'created_at' => now(),
+            ]);
+            $wid = $this->id('work_flows', $item['code'], 'workflow');
+            foreach (['owner_roles' => 'work_flow_owners', 'initiator_roles' => 'work_flow_initiators'] as $key => $table) {
+                DB::table($table)->where('workflow_id', $wid)->delete();
+                foreach ($item[$key] ?? [] as $role) {
+                    DB::table($table)->insert(['workflow_id' => $wid, 'job_role_id' => $this->externalId('job_role', $role), 'created_at' => now(), 'updated_at' => now()]);
+                }
+            }
 
-            $id = DB::table(
-                'work_packages'
-            )->updateOrInsert(
-                [
-                    'code' => $item['code'],
-                ],
-                [
-                    'name' => $item['name'],
-                    'description' => $item['description']
-                            ?? null,
-                    'org_team_id' => $this->resolveOrgTeam(
-                        $item['org_team']
-                    ),
-                    'actor_job_role_id' => $this->resolveJobRole(
-                        $item['actor_job_role']
-                    ),
-                    'activity_type_id' => $this->resolveActivityType(
-                        $item['activity_type']
-                    ),
-                    'business_object_id' => $this->resolveBusinessObject(
-                        $item['business_object']
-                    ),
-                    'updated_at' => now(),
-                    'created_at' => now(),
-                ]
-            );
+            DB::table('work_flow_form_fields')->where('workflow_id', $wid)->delete();
+            foreach ($item['form_fields'] ?? [] as $i => $f) {
+                DB::table('work_flow_form_fields')->insert(['workflow_id' => $wid, 'code' => $f['code'], 'name' => $f['name'], 'field_type' => $f['field_type'], 'help_text' => $f['help_text'] ?? null, 'default_value' => $f['default_value'] ?? null, 'is_required' => $f['is_required'] ?? false, 'sequence' => $f['sequence'] ?? $i + 1, 'created_at' => now(), 'updated_at' => now()]);
+            }
 
-            $this->syncSipoc(
-                $item
-            );
+            $this->syncSteps($wid, $item['steps'] ?? []);
         }
 
         return count($items);
     }
 
-    protected function importWorkFlows(
-        array $items
-    ): int {
-
-        foreach ($items as $item) {
-
-            $workflowId =
-                $this->upsertWorkFlow(
-                    $item
-                );
-
-            $this->syncInitiators(
-                $workflowId,
-                $item
-            );
-
-            $this->syncFormFields(
-                $workflowId,
-                $item
-            );
-
-            $this->syncSteps(
-                $workflowId,
-                $item
-            );
+    private function syncSteps(int $wid, array $steps): void
+    {
+        $codes = [];
+        foreach ($steps as $i => $s) {
+            DB::table('work_flow_steps')->updateOrInsert(['workflow_id' => $wid, 'code' => $s['code']], [
+                'work_package_id' => $this->id('work_packages', $s['work_package'], 'work package'), 'name' => $s['name'], 'sequence' => $s['sequence'] ?? $i + 1, 'is_start' => $s['is_start'] ?? $i === 0, 'updated_at' => now(), 'created_at' => now()]);
+            $codes[$s['code']] = $this->stepId($wid, $s['code']);
         }
 
-        return count($items);
+        foreach ($steps as $step) {
+            $sid = $codes[$step['code']];
+            DB::table('work_flow_actions')->where('workflow_step_id', $sid)->delete();
+            foreach ($step['actions'] ?? [] as $i => $a) {
+                DB::table('work_flow_actions')->insert([
+                    'workflow_step_id' => $sid, 'code' => $a['code'], 'name' => $a['name'], 'style' => $a['style'] ?? 'primary',
+                    'target_workflow_step_id' => isset($a['target_step']) ? ($codes[$a['target_step']] ?? throw CatalogReferenceNotFound::for('workflow step', $a['target_step'])) : null,
+                    'completion_effect' => $a['completion_effect'] ?? 'continue', 'condition' => isset($a['condition']) ? json_encode($a['condition']) : null,
+                    'requires_confirmation' => $a['requires_confirmation'] ?? false, 'sequence' => $a['sequence'] ?? $i + 1, 'created_at' => now(), 'updated_at' => now()]);
+            }
+        }
     }
 
-    protected function syncSipoc(
-        array $definition
-    ): void {
-        //
-        // Import:
-        //
-        // suppliers
-        // inputs
-        // outputs
-        // customers
-        //
+    private function id(string $table, string $code, string $type): int
+    {
+        return (int) (DB::table($table)->where('code', $code)->value('id') ?? throw CatalogReferenceNotFound::for($type, $code));
     }
 
-    protected function syncInitiators(
-        int $workflowId,
-        array $definition
-    ): void {
-        //
+    private function stepId(int $wid, string $code): int
+    {
+        return (int) DB::table('work_flow_steps')->where('workflow_id', $wid)->where('code', $code)->value('id');
     }
 
-    protected function syncFormFields(
-        int $workflowId,
-        array $definition
-    ): void {
-        //
-    }
+    private function externalId(string $kind, string $code): int
+    {
+        $model = config("bites.kerja.models.{$kind}");
 
-    protected function syncSteps(
-        int $workflowId,
-        array $definition
-    ): void {
-        //
-    }
-
-    protected function upsertWorkFlow(
-        array $definition
-    ): int {
-        //
-        // create/update work_flows
-        //
-        return 1;
-    }
-
-    protected function resolveActivityType(
-        string $code
-    ): int {
-        return (int)
-            DB::table(
-                'work_activity_types'
-            )
-                ->where(
-                    'code',
-                    $code
-                )
-                ->value('id');
-    }
-
-    protected function resolveBusinessObject(
-        string $code
-    ): int {
-        return (int)
-            DB::table(
-                'work_business_objects'
-            )
-                ->where(
-                    'code',
-                    $code
-                )
-                ->value('id');
-    }
-
-    protected function resolveOrgTeam(
-        string $code
-    ): int {
-        //
-        // resolve OrgTeam
-        //
-        return 1;
-    }
-
-    protected function resolveJobRole(
-        string $code
-    ): int {
-        //
-        // resolve JobRole
-        //
-        return 1;
+        return (int) ($model::query()->where('code',$code)->value('id') ?? throw CatalogReferenceNotFound::for($kind,$code));
     }
 }
