@@ -34,8 +34,8 @@ class LifecycleTracking extends Model
         return $this->belongsTo(LifecyclePhase::class);
     }
 
-    public function lastWorkflowInstance(): BelongsTo
+    public function lastFlowInstance(): BelongsTo
     {
-        return $this->belongsTo(WorkFlowInstance::class, 'last_workflow_instance_id');
+        return $this->belongsTo(FlowInstance::class, 'last_workflow_instance_id');
     }
 }

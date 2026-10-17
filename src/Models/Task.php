@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
+use Rimba\Work\Enums\TaskStatus;
 
 #[Table(name: 'work_tasks')]
 #[Unguarded]
@@ -17,22 +18,36 @@ class Task extends Model
 {
     protected static function booted(): void
     {
-        static::creating(fn (self $x) => $x->uuid ??= (string) Str::uuid());
+        static::creating(fn (self $task) => $task->uuid ??= (string) Str::uuid());
     }
 
-    public function workflowInstance(): BelongsTo
+    protected function casts(): array
     {
-        return $this->belongsTo(WorkFlowInstance::class);
+        return [
+            'status' => TaskStatus::class,
+            'payload' => 'array',
+            'result' => 'array',
+            'work_package_version' => 'integer',
+            'assigned_at' => 'datetime',
+            'started_at' => 'datetime',
+            'completed_at' => 'datetime',
+            'due_at' => 'datetime',
+        ];
     }
 
-    public function workflowStep(): BelongsTo
+    public function flowInstance(): BelongsTo
     {
-        return $this->belongsTo(WorkFlowStep::class);
+        return $this->belongsTo(FlowInstance::class);
     }
 
-    public function workPackage(): BelongsTo
+    public function flowStep(): BelongsTo
     {
-        return $this->belongsTo(WorkPackage::class);
+        return $this->belongsTo(FlowStep::class);
+    }
+
+    public function package(): BelongsTo
+    {
+        return $this->belongsTo(Package::class);
     }
 
     public function assignee(): MorphTo

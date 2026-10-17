@@ -25,12 +25,12 @@ class BusinessObject extends Model
 
     public function workflows(): HasMany
     {
-        return $this->hasMany(WorkFlow::class);
+        return $this->hasMany(Flow::class);
     }
 
-    public function workPackages(): HasMany
+    public function packages(): HasMany
     {
-        return $this->hasMany(WorkPackage::class);
+        return $this->hasMany(Package::class);
     }
 
     public function resolveModelClass(): ?string

@@ -9,7 +9,7 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Rimba\Work\Services\WorkSeedImportService;
 
-#[Description('Import WorkFlow and WorkPackage definitions from JSON')]
+#[Description('Import Flow and Package definitions from JSON')]
 #[Signature('rimba:seed {source}')]
 class SeedWorkCatalog extends Command
 {

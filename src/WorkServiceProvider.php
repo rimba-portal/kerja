@@ -6,14 +6,15 @@ namespace Rimba\Work;
 
 use Illuminate\Support\Facades\File;
 use Rimba\Base\Services\BitesServiceProvider;
-use Rimba\Work\Services\ActorResolverService;
-use Rimba\Work\Services\EventTaskService;
-use Rimba\Work\Services\HandlerRegistry;
-use Rimba\Work\Services\WorkflowConditionEvaluator;
-use Rimba\Work\Services\WorkflowContextService;
-use Rimba\Work\Services\WorkflowDefinitionRepository;
-use Rimba\Work\Services\WorkflowDefinitionValidator;
-use Rimba\Work\Services\WorkPackageJoinService;
+use Rimba\Work\Services\CatalogRegistry;
+use Rimba\Work\Services\ConverterRegistry;
+use Rimba\Work\Services\EndpointClient;
+use Rimba\Work\Services\FlowDefinitionValidator;
+use Rimba\Work\Services\HookBindingRunner;
+use Rimba\Work\Services\HookPath;
+use Rimba\Work\Services\HookRunner;
+use Rimba\Work\Services\TaskEligibilityService;
+use Rimba\Work\Services\TaskRendererRegistry;
 
 class WorkServiceProvider extends BitesServiceProvider
 {
@@ -26,31 +27,32 @@ class WorkServiceProvider extends BitesServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->publishes([__DIR__.'/../setup' => storage_path('setup')], 'work-setup');
         $this->ensureSetupFilesExist();
-
     }
 
     protected function registerPackage(): void
     {
-        $this->app->singleton(WorkflowDefinitionValidator::class);
-        $this->app->singleton(WorkflowDefinitionRepository::class);
-        $this->app->singleton(ActorResolverService::class);
-        $this->app->singleton(HandlerRegistry::class);
-        $this->app->singleton(WorkflowContextService::class);
-        $this->app->singleton(WorkflowConditionEvaluator::class);
-        $this->app->singleton(WorkPackageJoinService::class);
-        $this->app->singleton(EventTaskService::class);
-        $this->app->alias(WorkflowDefinitionRepository::class, 'sipoc.definitions');
-
+        $this->app->singleton(CatalogRegistry::class);
+        $this->app->singleton(TaskRendererRegistry::class);
+        $this->app->singleton(ConverterRegistry::class);
+        $this->app->singleton(HookPath::class);
+        $this->app->singleton(EndpointClient::class);
+        $this->app->singleton(HookRunner::class);
+        $this->app->singleton(HookBindingRunner::class);
+        $this->app->singleton(TaskEligibilityService::class);
+        $this->app->singleton(FlowDefinitionValidator::class);
     }
 
     protected function ensureSetupFilesExist(): void
     {
         $source = __DIR__.'/../setup';
         $destination = storage_path('setup');
+        if (! File::isDirectory($source)) {
+            return;
+        }
+
         File::ensureDirectoryExists($destination);
         foreach (File::allFiles($source) as $file) {
-            $relativePath = $file->getRelativePathname();
-            $target = $destination.'/'.$relativePath;
+            $target = $destination.'/'.$file->getRelativePathname();
             if (! File::exists($target)) {
                 File::ensureDirectoryExists(dirname($target));
                 File::copy($file->getRealPath(), $target);

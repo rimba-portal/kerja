@@ -29,12 +29,12 @@ final class MyPendingTasksWidget extends TableWidget
                     ])
             )
             ->columns([
-                Tables\Columns\TextColumn::make('workPackage.name')
+                Tables\Columns\TextColumn::make('package.name')
                     ->label('Work Package')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('workflowStep.name')
+                Tables\Columns\TextColumn::make('flowStep.name')
                     ->label('Step')
                     ->searchable(),
 

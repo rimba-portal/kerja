@@ -21,6 +21,6 @@ class LifecyclePhase extends Model
 
     public function workflows(): HasMany
     {
-        return $this->hasMany(WorkFlow::class);
+        return $this->hasMany(Flow::class);
     }
 }

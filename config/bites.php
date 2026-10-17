@@ -15,7 +15,12 @@ return [
         ],
         'organization' => [
             'staff_job_roles_relation' => 'jobRoles',
-            'job_role_team_foreign_key' => 'org_team_id',
+        ],
+        'endpoint_auth' => [
+            // 'internal-service' => [
+            //     'type' => 'bearer',
+            //     'token' => env('KERJA_INTERNAL_SERVICE_TOKEN'),
+            // ],
         ],
     ],
 ];

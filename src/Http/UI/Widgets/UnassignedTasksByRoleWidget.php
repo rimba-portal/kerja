@@ -10,8 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 final class UnassignedTasksByRoleWidget extends StatsOverviewWidget
 {
-    protected ?string $heading =
-        'Unassigned Work By Role';
+    protected ?string $heading = 'Unassigned Work By Role';
 
     protected function getStats(): array
     {
@@ -19,16 +18,12 @@ final class UnassignedTasksByRoleWidget extends StatsOverviewWidget
 
         $total = DB::table('work_tasks')
             ->whereNull('assignee_id')
-            ->whereIn('status', [
-                'ready',
-                'assigned',
-                'started',
-            ])
+            ->where('status', 'ready')
             ->count();
 
         $stats[] = Stat::make(
             'Total Unassigned',
-            number_format($total)
+            number_format($total),
         )
             ->color($total > 0 ? 'danger' : 'success')
             ->description('Awaiting assignment')
@@ -39,13 +34,13 @@ final class UnassignedTasksByRoleWidget extends StatsOverviewWidget
                 'work_packages',
                 'work_tasks.work_package_id',
                 '=',
-                'work_packages.id'
+                'work_packages.id',
             )
             ->join(
                 'job_roles',
                 'work_packages.actor_job_role_id',
                 '=',
-                'job_roles.id'
+                'job_roles.id',
             )
             ->whereNull('work_tasks.assignee_id')
             ->where('work_tasks.status', 'ready')
@@ -60,7 +55,7 @@ final class UnassignedTasksByRoleWidget extends StatsOverviewWidget
         foreach ($roles as $role) {
             $stats[] = Stat::make(
                 $role->name,
-                number_format($role->total)
+                number_format($role->total),
             )
                 ->description('Ready tasks')
                 ->color('warning')

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Events;
 
-use Rimba\Work\Models\WorkflowInstance;
+use Rimba\Work\Models\FlowInstance;
 
 final readonly class WorkflowStarted
 {
-    public function __construct(public WorkflowInstance $workflowInstance) {}
+    public function __construct(
+        public FlowInstance $flowInstance,
+    ) {}
 }
