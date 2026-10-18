@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Http\UI\Widgets;
 
-use Filament\Actions\Action;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
@@ -22,7 +21,10 @@ final class MyPendingTasksWidget extends TableWidget
         return $table
             ->query(
                 Task::query()
-                    ->whereMorphedTo('assignee', $staff)
+                    ->whereMorphedTo(
+                        'assignee',
+                        $staff,
+                    )
                     ->whereIn('status', [
                         'assigned',
                         'started',
@@ -46,14 +48,6 @@ final class MyPendingTasksWidget extends TableWidget
                     ->since()
                     ->label('Assigned'),
             ])
-            ->recordActions([
-                Action::make('open')
-                    ->icon('heroicon-o-arrow-top-right-on-square')
-                    ->url(fn (Task $record): string => route(
-                        'filament.admin.resources.tasks.edit',
-                        $record
-                    )
-                    ),
-            ]);
+            ->recordActions([]);
     }
 }

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Tests\Unit;
 
+use PHPUnit\Framework\TestCase;
 use Rimba\Work\Models\FlowInstance;
 use Rimba\Work\Services\HookPath;
 use Rimba\Work\Support\HookContext;
-use Rimba\Work\Tests\TestCase;
 
 final class HookPathTest extends TestCase
 {

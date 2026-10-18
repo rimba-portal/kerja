@@ -21,6 +21,6 @@ class LifecyclePhase extends Model
 
     public function flows(): HasMany
     {
-        return $this->hasMany(Flow::class, 'business_object_id');
+        return $this->hasMany(Flow::class, 'lifecycle_phase_id');
     }
 }
