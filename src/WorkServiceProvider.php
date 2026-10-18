@@ -13,6 +13,12 @@ use Rimba\Work\Services\FlowDefinitionValidator;
 use Rimba\Work\Services\HookBindingRunner;
 use Rimba\Work\Services\HookPath;
 use Rimba\Work\Services\HookRunner;
+use Rimba\Work\Services\Import\CatalogImporter;
+use Rimba\Work\Services\Import\FlowImporter;
+use Rimba\Work\Services\Import\HookImporter;
+use Rimba\Work\Services\Import\OrganizationImporter;
+use Rimba\Work\Services\Import\PackageImporter;
+use Rimba\Work\Services\Import\ReferenceResolver;
 use Rimba\Work\Services\TaskEligibilityService;
 use Rimba\Work\Services\TaskRendererRegistry;
 
@@ -40,6 +46,12 @@ class WorkServiceProvider extends BitesServiceProvider
         $this->app->singleton(HookBindingRunner::class);
         $this->app->singleton(TaskEligibilityService::class);
         $this->app->singleton(FlowDefinitionValidator::class);
+        $this->app->singleton(ReferenceResolver::class);
+        $this->app->singleton(OrganizationImporter::class);
+        $this->app->singleton(CatalogImporter::class);
+        $this->app->singleton(PackageImporter::class);
+        $this->app->singleton(FlowImporter::class);
+        $this->app->singleton(HookImporter::class);
     }
 
     protected function ensureSetupFilesExist(): void
