@@ -6,7 +6,7 @@ namespace Rimba\Work\Events;
 
 use Rimba\Work\Models\FlowInstance;
 
-final readonly class WorkflowStarted
+final readonly class FlowStarted
 {
     public function __construct(
         public FlowInstance $flowInstance,

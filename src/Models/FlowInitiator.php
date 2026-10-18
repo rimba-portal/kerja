@@ -13,8 +13,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Unguarded]
 class FlowInitiator extends Model
 {
-    public function workflow(): BelongsTo
+    public function flow(): BelongsTo
     {
-        return $this->belongsTo(Flow::class);
+        return $this->belongsTo(
+            Flow::class,
+            'workflow_id',
+        );
+    }
+
+    public function orgTeam(): BelongsTo
+    {
+        return $this->belongsTo(
+            config('bites.kerja.models.org_team'),
+            'org_team_id',
+        );
+    }
+
+    public function jobRole(): BelongsTo
+    {
+        return $this->belongsTo(
+            config('bites.kerja.models.job_role'),
+            'job_role_id',
+        );
     }
 }

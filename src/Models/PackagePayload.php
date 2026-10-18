@@ -15,6 +15,9 @@ class PackagePayload extends Model
 {
     public function package(): BelongsTo
     {
-        return $this->belongsTo(Package::class);
+        return $this->belongsTo(
+            Package::class,
+            'work_package_id',
+        );
     }
 }

@@ -27,19 +27,27 @@ class FlowStep extends Model
         ];
     }
 
-    public function workflow(): BelongsTo
+    public function flow(): BelongsTo
     {
-        return $this->belongsTo(Flow::class);
+        return $this->belongsTo(
+            Flow::class,
+            'workflow_id',
+        );
     }
 
     public function package(): BelongsTo
     {
-        return $this->belongsTo(Package::class);
+        return $this->belongsTo(
+            Package::class,
+            'work_package_id',
+        );
     }
 
     public function actions(): HasMany
     {
-        return $this->hasMany(FlowAction::class, 'workflow_step_id')
-            ->orderBy('sequence');
+        return $this->hasMany(
+            FlowAction::class,
+            'workflow_step_id',
+        )->orderBy('sequence');
     }
 }

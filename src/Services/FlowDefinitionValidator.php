@@ -16,9 +16,9 @@ use Rimba\Work\Models\Hook;
 
 final class FlowDefinitionValidator
 {
-    public function validate(Flow $workflow): void
+    public function validate(Flow $flow): void
     {
-        $workflow->load([
+        $flow->load([
             'steps.package',
             'steps.actions.targetFlowStep',
             'hookBindings.hook',
@@ -28,19 +28,19 @@ final class FlowDefinitionValidator
             'nextLifecyclePhase',
         ]);
 
-        if ($workflow->steps->isEmpty()) {
+        if ($flow->steps->isEmpty()) {
             throw new InvalidArgumentException(
-                "Workflow [{$workflow->code}] must contain at least one Step."
+                "Flow [{$flow->code}] must contain at least one Step."
             );
         }
 
-        if ($workflow->steps->where('is_start', true)->count() !== 1) {
+        if ($flow->steps->where('is_start', true)->count() !== 1) {
             throw new InvalidArgumentException(
-                "Workflow [{$workflow->code}] must contain exactly one start Step."
+                "Flow [{$flow->code}] must contain exactly one start Step."
             );
         }
 
-        foreach ($workflow->steps as $step) {
+        foreach ($flow->steps as $step) {
             if (! $step->package) {
                 throw new InvalidArgumentException(
                     "Step [{$step->code}] requires a Package."
@@ -82,10 +82,10 @@ final class FlowDefinitionValidator
                 if (
                     $hasTarget
                     && $action->targetFlowStep?->workflow_id
-                        !== $workflow->id
+                        !== $flow->id
                 ) {
                     throw new InvalidArgumentException(
-                        'FlowAction target must belong to the same Workflow.'
+                        'FlowAction target must belong to the same Flow.'
                     );
                 }
 
@@ -123,7 +123,7 @@ final class FlowDefinitionValidator
             }
         }
 
-        foreach ($workflow->hookBindings as $binding) {
+        foreach ($flow->hookBindings as $binding) {
             $this->assertPoint(
                 $binding->hook_point,
                 HookPoint::WorkflowLoad,
@@ -132,13 +132,13 @@ final class FlowDefinitionValidator
             $this->validateHook($binding->hook);
         }
 
-        $type = $workflow->lifecycle_transition_type
+        $type = $flow->lifecycle_transition_type
             ?? LifecycleTransitionType::Stay;
 
         if ($type === LifecycleTransitionType::Transition) {
             if (
-                ! $workflow->lifecyclePhase
-                || ! $workflow->nextLifecyclePhase
+                ! $flow->lifecyclePhase
+                || ! $flow->nextLifecyclePhase
             ) {
                 throw new InvalidArgumentException(
                     'Explicit Lifecycle transition requires source and target phases.'
@@ -146,14 +146,14 @@ final class FlowDefinitionValidator
             }
 
             if (
-                $workflow->lifecyclePhase->lifecycle_id
-                !== $workflow->nextLifecyclePhase->lifecycle_id
+                $flow->lifecyclePhase->lifecycle_id
+                !== $flow->nextLifecyclePhase->lifecycle_id
             ) {
                 throw new InvalidArgumentException(
                     'Lifecycle transition target must belong to the same Lifecycle.'
                 );
             }
-        } elseif ($workflow->next_lifecycle_phase_id !== null) {
+        } elseif ($flow->next_lifecycle_phase_id !== null) {
             throw new InvalidArgumentException(
                 'next_lifecycle_phase_id is only valid for transition type.'
             );

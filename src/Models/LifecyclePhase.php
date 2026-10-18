@@ -19,8 +19,8 @@ class LifecyclePhase extends Model
         return $this->belongsTo(Lifecycle::class);
     }
 
-    public function workflows(): HasMany
+    public function flows(): HasMany
     {
-        return $this->hasMany(Flow::class);
+        return $this->hasMany(Flow::class, 'business_object_id');
     }
 }

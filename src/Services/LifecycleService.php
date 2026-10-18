@@ -17,7 +17,7 @@ final class LifecycleService
 {
     public function track(
         Model $subject,
-        BusinessObject $object,
+        BusinessObject $businessObject,
         Lifecycle $lifecycle,
         LifecyclePhase $phase,
     ): LifecycleTracking {
@@ -28,7 +28,7 @@ final class LifecycleService
                 'lifecycle_id' => $lifecycle->id,
             ],
             [
-                'business_object_id' => $object->id,
+                'business_object_id' => $businessObject->id,
                 'lifecycle_phase_id' => $phase->id,
             ],
         );
@@ -37,14 +37,14 @@ final class LifecycleService
     public function ensureTracking(
         FlowInstance $instance,
     ): ?LifecycleTracking {
-        $workflow = $instance->workflow;
-        $phase = $workflow->lifecyclePhase;
+        $flow = $instance->flow;
+        $phase = $flow->lifecyclePhase;
         $subject = $instance->subject;
 
         if (
             ! $subject
             || ! $phase
-            || ! $workflow->businessObject
+            || ! $flow->businessObject
         ) {
             return null;
         }
@@ -56,7 +56,7 @@ final class LifecycleService
                 'lifecycle_id' => $phase->lifecycle_id,
             ],
             [
-                'business_object_id' => $workflow->business_object_id,
+                'business_object_id' => $flow->business_object_id,
                 'lifecycle_phase_id' => $phase->id,
                 'last_workflow_instance_id' => $instance->id,
             ],
@@ -66,8 +66,8 @@ final class LifecycleService
     public function transition(
         FlowInstance $instance,
     ): ?LifecycleTracking {
-        $workflow = $instance->workflow;
-        $phase = $workflow->lifecyclePhase;
+        $flow = $instance->flow;
+        $phase = $flow->lifecyclePhase;
 
         if (! $instance->subject || ! $phase) {
             return null;
@@ -78,15 +78,13 @@ final class LifecycleService
             ->where('lifecycle_id', $phase->lifecycle_id)
             ->first();
 
-        if (! $tracking) {
-            $tracking = $this->ensureTracking($instance);
-        }
+        $tracking ??= $this->ensureTracking($instance);
 
         if (! $tracking) {
             return null;
         }
 
-        $type = $workflow->lifecycle_transition_type
+        $type = $flow->lifecycle_transition_type
             ?? LifecycleTransitionType::Stay;
 
         if ($type === LifecycleTransitionType::Stay) {
@@ -98,9 +96,9 @@ final class LifecycleService
         }
 
         if ($type === LifecycleTransitionType::Transition) {
-            $target = $workflow->nextLifecyclePhase
+            $target = $flow->nextLifecyclePhase
                 ?? throw new RuntimeException(
-                    'Explicit Lifecycle transition requires next_lifecycle_phase_id.'
+                    'Explicit Lifecycle transition requires a target phase.'
                 );
 
             if ($target->lifecycle_id !== $phase->lifecycle_id) {

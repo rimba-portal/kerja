@@ -40,22 +40,28 @@ class FlowInstance extends Model
         ];
     }
 
-    public function workflow(): BelongsTo
+    public function flow(): BelongsTo
     {
-        return $this->belongsTo(Flow::class);
+        return $this->belongsTo(
+            Flow::class,
+            'workflow_id',
+        );
     }
 
     public function currentFlowStep(): BelongsTo
     {
         return $this->belongsTo(
             FlowStep::class,
-            'current_workflow_step_id'
+            'current_workflow_step_id',
         );
     }
 
     public function tasks(): HasMany
     {
-        return $this->hasMany(Task::class, 'workflow_instance_id');
+        return $this->hasMany(
+            Task::class,
+            'workflow_instance_id',
+        );
     }
 
     public function initiator(): MorphTo

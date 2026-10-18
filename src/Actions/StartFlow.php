@@ -20,7 +20,7 @@ use RuntimeException;
 final class StartFlow
 {
     public function __construct(
-        private FlowInitiatorService $workflowInitiatorService,
+        private FlowInitiatorService $flowInitiatorService,
         private CreateTask $createTask,
         private TaskEventLogger $taskEventLogger,
         private HookBindingRunner $hookBindingRunner,
@@ -28,35 +28,35 @@ final class StartFlow
     ) {}
 
     public function execute(
-        Flow $workflow,
+        Flow $flow,
         Model $initiator,
         ?Model $subject = null,
         array $formData = [],
     ): FlowInstance {
-        if (! $this->workflowInitiatorService->mayStart(
+        if (! $this->flowInitiatorService->mayStart(
             $initiator,
-            $workflow,
+            $flow,
         )) {
             throw new RuntimeException(
-                'Initiator not allowed.'
+                'Initiator is not permitted to start this Flow.'
             );
         }
 
-        $step = $workflow->startStep()
+        $step = $flow->startStep()
             ?? throw new RuntimeException(
-                'No start step.'
+                'Flow has no start Step.'
             );
 
         return DB::transaction(function () use (
-            $workflow,
+            $flow,
             $initiator,
             $subject,
             $formData,
             $step,
         ): FlowInstance {
             $flowInstance = FlowInstance::query()->create([
-                'workflow_id' => $workflow->id,
-                'workflow_version' => $workflow->version,
+                'workflow_id' => $flow->id,
+                'workflow_version' => $flow->version,
                 'initiator_type' => $initiator->getMorphClass(),
                 'initiator_id' => $initiator->getKey(),
                 'subject_type' => $subject?->getMorphClass(),
@@ -68,8 +68,7 @@ final class StartFlow
                 'started_at' => now(),
             ]);
 
-            $this->lifecycleService
-                ->ensureTracking($flowInstance);
+            $this->lifecycleService->ensureTracking($flowInstance);
 
             $hookContext = new HookContext(
                 instance: $flowInstance,
@@ -78,7 +77,7 @@ final class StartFlow
             );
 
             $this->hookBindingRunner->runFor(
-                $workflow,
+                $flow,
                 HookPoint::WorkflowLoad,
                 $hookContext,
             );
@@ -89,12 +88,14 @@ final class StartFlow
                 $hookContext,
             );
 
-            $task = $this->createTask
-                ->execute($flowInstance, $step);
+            $task = $this->createTask->execute(
+                $flowInstance,
+                $step,
+            );
 
             $this->taskEventLogger->log(
                 $flowInstance,
-                'workflow_started',
+                'flow_started',
                 $initiator,
                 $task,
             );

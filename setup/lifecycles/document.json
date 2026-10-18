@@ -1,778 +1,864 @@
 {
-    "org_units": [
-        { "code": "INFORMATION_MANAGEMENT", "name": "Information Management", "description": "Organizational unit responsible for controlled information, document control, records management and related information-governance activities." }
-    ],
+  "org_units": [
+    {
+      "code": "INFORMATION_MANAGEMENT",
+      "name": "Information Management",
+      "description": "Organizational unit responsible for controlled information, document control, records management and related information-governance activities."
+    }
+  ],
 
-    "org_teams": [
-        { "code": "DOCUMENT_CONTROL", "name": "Document Control", "org_unit": "INFORMATION_MANAGEMENT", "is_active": true },
-        { "code": "RECORDS_MANAGEMENT", "name": "Records Management", "org_unit": "INFORMATION_MANAGEMENT", "is_active": true }
-    ],
+  "org_teams": [
+    {
+      "code": "DOCUMENT_CONTROL",
+      "name": "Document Control",
+      "org_unit": "INFORMATION_MANAGEMENT",
+      "is_active": true
+    },
+    {
+      "code": "RECORDS_MANAGEMENT",
+      "name": "Records Management",
+      "org_unit": "INFORMATION_MANAGEMENT",
+      "is_active": true
+    }
+  ],
 
-    "job_roles": [
-        { "code": "DOCUMENT_AUTHOR", "name": "Document Author", "type": "operation", "description": "Authors and revises controlled documents." },
-        { "code": "DOCUMENT_REVIEWER", "name": "Document Reviewer", "type": "operation", "description": "Reviews and verifies controlled documents." },
-        { "code": "DOCUMENT_APPROVER", "name": "Document Approver", "type": "approval", "description": "Makes formal approval decisions for controlled documents." },
-        { "code": "DOCUMENT_CONTROLLER", "name": "Document Controller", "type": "operation", "description": "Controls publication and distribution of approved documents." },
-        { "code": "RECORDS_MANAGER", "name": "Records Manager", "type": "operation", "description": "Controls archival, retention and disposition of documented information." }
-    ],
-    "activity_types": [
+  "job_roles": [
+    {
+      "code": "DOCUMENT_AUTHOR",
+      "name": "Document Author",
+      "type": "operation",
+      "description": "Authors and revises controlled documents."
+    },
+    {
+      "code": "DOCUMENT_REVIEWER",
+      "name": "Document Reviewer",
+      "type": "operation",
+      "description": "Reviews and verifies controlled documents."
+    },
+    {
+      "code": "DOCUMENT_APPROVER",
+      "name": "Document Approver",
+      "type": "approval",
+      "description": "Makes formal approval decisions for controlled documents."
+    },
+    {
+      "code": "DOCUMENT_CONTROLLER",
+      "name": "Document Controller",
+      "type": "operation",
+      "description": "Controls publication and distribution of approved documents."
+    },
+    {
+      "code": "RECORDS_MANAGER",
+      "name": "Records Manager",
+      "type": "operation",
+      "description": "Controls archival, retention and disposition of documented information."
+    }
+  ],
+
+  "activity_types": [
+    {
+      "code": "creates",
+      "name": "Create",
+      "description": "Create or author new information or work.",
+      "is_active": true
+    },
+    {
+      "code": "verifies",
+      "name": "Verify",
+      "description": "Check information or work for correctness, completeness and required criteria.",
+      "is_active": true
+    },
+    {
+      "code": "analyzes",
+      "name": "Analyze",
+      "description": "Review and analyze information or work to determine required changes or disposition.",
+      "is_active": true
+    },
+    {
+      "code": "authorizes",
+      "name": "Authorize",
+      "description": "Exercise formal authority over information or work.",
+      "is_active": true
+    },
+    {
+      "code": "records",
+      "name": "Record",
+      "description": "Record controlled information or evidence.",
+      "is_active": true
+    },
+    {
+      "code": "informs",
+      "name": "Communicate",
+      "description": "Communicate or distribute information to intended recipients.",
+      "is_active": true
+    }
+  ],
+
+  "business_objects": [
+    {
+      "code": "document",
+      "name": "Document",
+      "model_class": null,
+      "description": "A controlled document or item of documented information managed through the Document Lifecycle.",
+      "is_active": true
+    }
+  ],
+
+  "lifecycles": [
+    {
+      "code": "ikd",
+      "name": "Document Lifecycle",
+      "business_object": "document",
+      "description": "Manages controlled documents and documented information such as policies, procedures, specifications, manuals and work instructions from authoring and review through approval, publication, revision, distribution, retention, archival and disposal."
+    }
+  ],
+
+  "lifecycle_phases": [
+    {
+      "code": "ikd-create",
+      "name": "Create",
+      "lifecycle": "ikd",
+      "sequence": 1,
+      "functional_role": "DOCUMENT_AUTHOR",
+      "description": "Document is in the Create phase of the Document Lifecycle."
+    },
+    {
+      "code": "ikd-review",
+      "name": "Review",
+      "lifecycle": "ikd",
+      "sequence": 2,
+      "functional_role": "DOCUMENT_REVIEWER",
+      "description": "Document is in the Review phase of the Document Lifecycle."
+    },
+    {
+      "code": "ikd-approve",
+      "name": "Approve",
+      "lifecycle": "ikd",
+      "sequence": 3,
+      "functional_role": "DOCUMENT_APPROVER",
+      "description": "Document is in the Approve phase of the Document Lifecycle."
+    },
+    {
+      "code": "ikd-publish",
+      "name": "Publish",
+      "lifecycle": "ikd",
+      "sequence": 4,
+      "functional_role": "DOCUMENT_CONTROLLER",
+      "description": "Document is in the Publish phase of the Document Lifecycle."
+    },
+    {
+      "code": "ikd-archive",
+      "name": "Archive",
+      "lifecycle": "ikd",
+      "sequence": 5,
+      "functional_role": "RECORDS_MANAGER",
+      "description": "Document is in the Archive phase of the Document Lifecycle."
+    }
+  ],
+
+  "work_packages": [
+    {
+      "code": "document-author",
+      "name": "Author Document",
+      "description": "Prepare the document content and required document metadata.",
+      "org_team": "DOCUMENT_CONTROL",
+      "responsible_job_role": "DOCUMENT_AUTHOR",
+      "activity_type": "creates",
+      "business_object": "document",
+      "version": 1,
+      "status": "active",
+      "suppliers": [
+        "Document Requestor"
+      ],
+      "inputs": [
         {
-            "code": "creates",
-            "name": "Create",
-            "description": "Create or author new information or work.",
-            "is_active": true
-        },
-        {
-            "code": "verifies",
-            "name": "Verify",
-            "description": "Check information or work for correctness, completeness, and required criteria.",
-            "is_active": true
-        },
-        {
-            "code": "analyzes",
-            "name": "Analyze",
-            "description": "Review and analyze information or work to determine required changes or disposition.",
-            "is_active": true
-        },
-        {
-            "code": "authorizes",
-            "name": "Authorize",
-            "description": "Exercise formal authority over information or work.",
-            "is_active": true
-        },
-        {
-            "code": "records",
-            "name": "Record",
-            "description": "Record controlled information or evidence.",
-            "is_active": true
-        },
-        {
-            "code": "informs",
-            "name": "Communicate",
-            "description": "Communicate or distribute information to intended recipients.",
-            "is_active": true
+          "code": "document-requirement",
+          "name": "Document Requirement",
+          "data_type": "mixed",
+          "is_required": true
         }
-    ],
-    "business_objects": [
+      ],
+      "outputs": [
         {
-            "code": "document",
-            "name": "Document",
-            "model_class": null,
-            "description": "A controlled document or item of documented information managed through the Document Lifecycle.",
-            "is_active": true
+          "code": "draft-document",
+          "name": "Draft Document",
+          "data_type": "mixed",
+          "is_required": true
         }
-    ],
-    "lifecycles": [
+      ],
+      "customers": [
+        "Document Reviewer"
+      ]
+    },
+
+    {
+      "code": "document-review",
+      "name": "Review Document",
+      "description": "Review document content for correctness, completeness, suitability and required changes.",
+      "org_team": "DOCUMENT_CONTROL",
+      "responsible_job_role": "DOCUMENT_REVIEWER",
+      "activity_type": "verifies",
+      "business_object": "document",
+      "version": 1,
+      "status": "active",
+      "suppliers": [
+        "Document Author"
+      ],
+      "inputs": [
         {
-            "code": "ikd",
-            "name": "Document Lifecycle",
-            "business_object": "document",
-            "description": "Manages controlled documents and documented information such as policies, procedures, specifications, manuals and work instructions from authoring and review through approval, publication, revision, distribution, retention, archival and disposal."
+          "code": "draft-document",
+          "name": "Draft Document",
+          "data_type": "mixed",
+          "is_required": true
         }
-    ],
-    "lifecycle_phases": [
+      ],
+      "outputs": [
         {
-            "code": "ikd-create",
-            "name": "Create",
-            "lifecycle": "ikd",
-            "sequence": 1,
-            "functional_role": "DOCUMENT_AUTHOR",
-            "description": "Document is in the Create phase of the Document Lifecycle."
+          "code": "reviewed-document",
+          "name": "Reviewed Document",
+          "data_type": "mixed",
+          "is_required": true
         },
         {
-            "code": "ikd-review",
-            "name": "Review",
-            "lifecycle": "ikd",
-            "sequence": 2,
-            "functional_role": "DOCUMENT_REVIEWER",
-            "description": "Document is in the Review phase of the Document Lifecycle."
-        },
-        {
-            "code": "ikd-approve",
-            "name": "Approve",
-            "lifecycle": "ikd",
-            "sequence": 3,
-            "functional_role": "DOCUMENT_APPROVER",
-            "description": "Document is in the Approve phase of the Document Lifecycle."
-        },
-        {
-            "code": "ikd-publish",
-            "name": "Publish",
-            "lifecycle": "ikd",
-            "sequence": 4,
-            "functional_role": "DOCUMENT_CONTROLLER",
-            "description": "Document is in the Publish phase of the Document Lifecycle."
-        },
-        {
-            "code": "ikd-archive",
-            "name": "Archive",
-            "lifecycle": "ikd",
-            "sequence": 5,
-            "functional_role": "RECORDS_MANAGER",
-            "description": "Document is in the Archive phase of the Document Lifecycle."
+          "code": "review-comments",
+          "name": "Review Comments",
+          "data_type": "mixed",
+          "is_required": false
         }
-    ],
-    "work_packages": [
+      ],
+      "customers": [
+        "Document Author",
+        "Document Approver"
+      ]
+    },
+
+    {
+      "code": "document-revise",
+      "name": "Revise Document",
+      "description": "Revise document content in response to review comments or returned information.",
+      "org_team": "DOCUMENT_CONTROL",
+      "responsible_job_role": "DOCUMENT_AUTHOR",
+      "activity_type": "creates",
+      "business_object": "document",
+      "version": 1,
+      "status": "active",
+      "suppliers": [
+        "Document Reviewer"
+      ],
+      "inputs": [
         {
-            "code": "document-author",
-            "name": "Author Document",
-            "description": "Prepare the document content and required document metadata.",
-            "org_team": "DOCUMENT_CONTROL",
-            "responsible_job_role": "DOCUMENT_AUTHOR",
-            "activity_type": "creates",
-            "business_object": "document",
-            "version": 1,
-            "status": "active",
-            "suppliers": [
-                "Document Requestor"
-            ],
-            "inputs": [
-                {
-                    "code": "document-requirement",
-                    "name": "Document Requirement",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "code": "draft-document",
-                    "name": "Draft Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "customers": [
-                "Document Reviewer"
-            ]
-        },
-        {
-            "code": "document-review",
-            "name": "Review Document",
-            "description": "Review document content for correctness, completeness, suitability, and required changes.",
-            "org_team": "DOCUMENT_CONTROL",
-            "responsible_job_role": "DOCUMENT_REVIEWER",
-            "activity_type": "verifies",
-            "business_object": "document",
-            "version": 1,
-            "status": "active",
-            "suppliers": [
-                "Document Author"
-            ],
-            "inputs": [
-                {
-                    "code": "draft-document",
-                    "name": "Draft Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "code": "reviewed-document",
-                    "name": "Reviewed Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "customers": [
-                "Document Author",
-                "Document Approver"
-            ]
-        },
-        {
-            "code": "document-revise",
-            "name": "Revise Document",
-            "description": "Revise document content in response to review comments or returned information.",
-            "org_team": "DOCUMENT_CONTROL",
-            "responsible_job_role": "DOCUMENT_AUTHOR",
-            "activity_type": "creates",
-            "business_object": "document",
-            "version": 1,
-            "status": "active",
-            "suppliers": [
-                "Document Reviewer"
-            ],
-            "inputs": [
-                {
-                    "code": "review-comments",
-                    "name": "Review Comments",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "code": "revised-document",
-                    "name": "Revised Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "customers": [
-                "Document Reviewer"
-            ]
-        },
-        {
-            "code": "document-approval-check",
-            "name": "Verify Document for Approval",
-            "description": "Verify that the document and its supporting information are ready for an approval decision.",
-            "org_team": "DOCUMENT_CONTROL",
-            "responsible_job_role": "DOCUMENT_REVIEWER",
-            "activity_type": "verifies",
-            "business_object": "document",
-            "version": 1,
-            "status": "active",
-            "suppliers": [
-                "Document Reviewer"
-            ],
-            "inputs": [
-                {
-                    "code": "reviewed-document",
-                    "name": "Reviewed Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "code": "approval-ready-document",
-                    "name": "Approval Ready Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "customers": [
-                "Document Approver"
-            ]
-        },
-        {
-            "code": "document-approve",
-            "name": "Approve Document",
-            "description": "Evaluate the reviewed document and make the formal approval decision.",
-            "org_team": "DOCUMENT_CONTROL",
-            "responsible_job_role": "DOCUMENT_APPROVER",
-            "activity_type": "authorizes",
-            "business_object": "document",
-            "version": 1,
-            "status": "active",
-            "suppliers": [
-                "Document Reviewer"
-            ],
-            "inputs": [
-                {
-                    "code": "approval-ready-document",
-                    "name": "Approval Ready Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "code": "approval-decision",
-                    "name": "Approval Decision",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "customers": [
-                "Document Controller"
-            ]
-        },
-        {
-            "code": "document-publish-check",
-            "name": "Verify Document for Publication",
-            "description": "Verify that an approved document is ready to be published as controlled information.",
-            "org_team": "DOCUMENT_CONTROL",
-            "responsible_job_role": "DOCUMENT_CONTROLLER",
-            "activity_type": "verifies",
-            "business_object": "document",
-            "version": 1,
-            "status": "active",
-            "suppliers": [
-                "Document Approver"
-            ],
-            "inputs": [
-                {
-                    "code": "approved-document",
-                    "name": "Approved Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "code": "publication-ready-document",
-                    "name": "Publication Ready Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "customers": [
-                "Document Controller"
-            ]
-        },
-        {
-            "code": "document-publish",
-            "name": "Publish Document",
-            "description": "Record and release the approved document as the controlled published version.",
-            "org_team": "DOCUMENT_CONTROL",
-            "responsible_job_role": "DOCUMENT_CONTROLLER",
-            "activity_type": "records",
-            "business_object": "document",
-            "version": 1,
-            "status": "active",
-            "suppliers": [
-                "Document Approver"
-            ],
-            "inputs": [
-                {
-                    "code": "publication-ready-document",
-                    "name": "Publication Ready Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "code": "published-document",
-                    "name": "Published Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "customers": [
-                "Document Users"
-            ]
-        },
-        {
-            "code": "document-distribute",
-            "name": "Distribute Document",
-            "description": "Communicate or distribute the published controlled document to its intended recipients.",
-            "org_team": "DOCUMENT_CONTROL",
-            "responsible_job_role": "DOCUMENT_CONTROLLER",
-            "activity_type": "informs",
-            "business_object": "document",
-            "version": 1,
-            "status": "active",
-            "suppliers": [
-                "Document Controller"
-            ],
-            "inputs": [
-                {
-                    "code": "published-document",
-                    "name": "Published Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "code": "distribution-record",
-                    "name": "Distribution Record",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "customers": [
-                "Document Users"
-            ]
-        },
-        {
-            "code": "document-archive-check",
-            "name": "Verify Document for Archive",
-            "description": "Verify that the document is eligible and ready for archival.",
-            "org_team": "RECORDS_MANAGEMENT",
-            "responsible_job_role": "RECORDS_MANAGER",
-            "activity_type": "verifies",
-            "business_object": "document",
-            "version": 1,
-            "status": "active",
-            "suppliers": [
-                "Document Controller"
-            ],
-            "inputs": [
-                {
-                    "code": "controlled-document",
-                    "name": "Controlled Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "code": "archive-ready-document",
-                    "name": "Archive Ready Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "customers": [
-                "Records Manager"
-            ]
-        },
-        {
-            "code": "document-archive",
-            "name": "Archive Document",
-            "description": "Record the document as archived and retain the required archival information.",
-            "org_team": "RECORDS_MANAGEMENT",
-            "responsible_job_role": "RECORDS_MANAGER",
-            "activity_type": "records",
-            "business_object": "document",
-            "version": 1,
-            "status": "active",
-            "suppliers": [
-                "Document Controller"
-            ],
-            "inputs": [
-                {
-                    "code": "archive-ready-document",
-                    "name": "Archive Ready Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "code": "archived-document",
-                    "name": "Archived Document",
-                    "data_type": "mixed",
-                    "is_required": true
-                }
-            ],
-            "customers": [
-                "Records Management"
-            ]
+          "code": "review-comments",
+          "name": "Review Comments",
+          "data_type": "mixed",
+          "is_required": true
         }
-    ],
-    "work_flows": [
+      ],
+      "outputs": [
         {
-            "code": "document-authoring",
-            "name": "Document Authoring",
-            "description": "Creates the initial controlled document content and submits it for review.",
-            "business_object": "document",
-            "lifecycle_phase": "ikd-create",
-            "version": 1,
-            "status": "active",
-            "owner_roles": [
-                "DOCUMENT_AUTHOR"
-            ],
-            "initiator_roles": [
-                "DOCUMENT_AUTHOR"
-            ],
-            "steps": [
-                {
-                    "code": "author",
-                    "name": "Author Document",
-                    "step_type": "submit",
-                    "work_package": "document-author",
-                    "sequence": 1,
-                    "is_start": true,
-                    "actions": [
-                        {
-                            "action_type": "submit",
-                            "terminal_status": "completed",
-                            "sequence": 1
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "code": "document-review",
-            "name": "Document Review",
-            "description": "Reviews submitted document content and either verifies it or returns it to the author for revision.",
-            "business_object": "document",
-            "lifecycle_phase": "ikd-review",
-            "version": 1,
-            "status": "active",
-            "owner_roles": [
-                "DOCUMENT_REVIEWER"
-            ],
-            "initiator_roles": [
-                "DOCUMENT_AUTHOR",
-                "DOCUMENT_REVIEWER"
-            ],
-            "steps": [
-                {
-                    "code": "review",
-                    "name": "Review Document",
-                    "step_type": "verify",
-                    "work_package": "document-review",
-                    "sequence": 1,
-                    "is_start": true,
-                    "actions": [
-                        {
-                            "action_type": "verify",
-                            "terminal_status": "completed",
-                            "sequence": 1
-                        },
-                        {
-                            "action_type": "return",
-                            "target_step": "revise",
-                            "sequence": 2,
-                            "requires_confirmation": true
-                        },
-                        {
-                            "action_type": "cancel",
-                            "terminal_status": "cancelled",
-                            "sequence": 3,
-                            "requires_confirmation": true
-                        }
-                    ]
-                },
-                {
-                    "code": "revise",
-                    "name": "Revise Document",
-                    "step_type": "submit",
-                    "work_package": "document-revise",
-                    "sequence": 2,
-                    "actions": [
-                        {
-                            "action_type": "submit",
-                            "target_step": "review",
-                            "sequence": 1
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "code": "document-approval",
-            "name": "Document Approval",
-            "description": "Verifies that the reviewed document is ready for approval and obtains the formal authorization decision.",
-            "business_object": "document",
-            "lifecycle_phase": "ikd-approve",
-            "version": 1,
-            "status": "active",
-            "owner_roles": [
-                "DOCUMENT_APPROVER"
-            ],
-            "initiator_roles": [
-                "DOCUMENT_REVIEWER"
-            ],
-            "steps": [
-                {
-                    "code": "approval-check",
-                    "name": "Verify Approval Package",
-                    "step_type": "verify",
-                    "work_package": "document-approval-check",
-                    "sequence": 1,
-                    "is_start": true,
-                    "actions": [
-                        {
-                            "action_type": "verify",
-                            "target_step": "approval",
-                            "sequence": 1
-                        },
-                        {
-                            "action_type": "return",
-                            "terminal_status": "cancelled",
-                            "sequence": 2,
-                            "requires_confirmation": true
-                        },
-                        {
-                            "action_type": "cancel",
-                            "terminal_status": "cancelled",
-                            "sequence": 3,
-                            "requires_confirmation": true
-                        }
-                    ]
-                },
-                {
-                    "code": "approval",
-                    "name": "Approve Document",
-                    "step_type": "approve",
-                    "work_package": "document-approve",
-                    "sequence": 2,
-                    "actions": [
-                        {
-                            "action_type": "approve",
-                            "terminal_status": "completed",
-                            "sequence": 1
-                        },
-                        {
-                            "action_type": "reject",
-                            "terminal_status": "rejected",
-                            "sequence": 2,
-                            "requires_confirmation": true
-                        },
-                        {
-                            "action_type": "return",
-                            "target_step": "approval-check",
-                            "sequence": 3,
-                            "requires_confirmation": true
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "code": "document-publication",
-            "name": "Document Publication",
-            "description": "Verifies an approved document for publication, publishes the controlled version, and distributes it to intended users.",
-            "business_object": "document",
-            "lifecycle_phase": "ikd-publish",
-            "version": 1,
-            "status": "active",
-            "owner_roles": [
-                "DOCUMENT_CONTROLLER"
-            ],
-            "initiator_roles": [
-                "DOCUMENT_CONTROLLER"
-            ],
-            "steps": [
-                {
-                    "code": "publication-check",
-                    "name": "Verify for Publication",
-                    "step_type": "verify",
-                    "work_package": "document-publish-check",
-                    "sequence": 1,
-                    "is_start": true,
-                    "actions": [
-                        {
-                            "action_type": "verify",
-                            "target_step": "publish",
-                            "sequence": 1
-                        },
-                        {
-                            "action_type": "return",
-                            "terminal_status": "cancelled",
-                            "sequence": 2,
-                            "requires_confirmation": true
-                        },
-                        {
-                            "action_type": "cancel",
-                            "terminal_status": "cancelled",
-                            "sequence": 3,
-                            "requires_confirmation": true
-                        }
-                    ]
-                },
-                {
-                    "code": "publish",
-                    "name": "Publish Document",
-                    "step_type": "acknowledge",
-                    "work_package": "document-publish",
-                    "sequence": 2,
-                    "actions": [
-                        {
-                            "action_type": "proceed",
-                            "target_step": "distribute",
-                            "sequence": 1
-                        },
-                        {
-                            "action_type": "return",
-                            "target_step": "publication-check",
-                            "sequence": 2,
-                            "requires_confirmation": true
-                        },
-                        {
-                            "action_type": "cancel",
-                            "terminal_status": "cancelled",
-                            "sequence": 3,
-                            "requires_confirmation": true
-                        }
-                    ]
-                },
-                {
-                    "code": "distribute",
-                    "name": "Distribute Published Document",
-                    "step_type": "acknowledge",
-                    "work_package": "document-distribute",
-                    "sequence": 3,
-                    "actions": [
-                        {
-                            "action_type": "proceed",
-                            "terminal_status": "completed",
-                            "sequence": 1
-                        },
-                        {
-                            "action_type": "return",
-                            "target_step": "publish",
-                            "sequence": 2,
-                            "requires_confirmation": true
-                        },
-                        {
-                            "action_type": "cancel",
-                            "terminal_status": "cancelled",
-                            "sequence": 3,
-                            "requires_confirmation": true
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "code": "document-archival",
-            "name": "Document Archival",
-            "description": "Verifies a controlled document for archival and records it as archived.",
-            "business_object": "document",
-            "lifecycle_phase": "ikd-archive",
-            "version": 1,
-            "status": "active",
-            "owner_roles": [
-                "RECORDS_MANAGER"
-            ],
-            "initiator_roles": [
-                "DOCUMENT_CONTROLLER",
-                "RECORDS_MANAGER"
-            ],
-            "steps": [
-                {
-                    "code": "archive-check",
-                    "name": "Verify for Archive",
-                    "step_type": "verify",
-                    "work_package": "document-archive-check",
-                    "sequence": 1,
-                    "is_start": true,
-                    "actions": [
-                        {
-                            "action_type": "verify",
-                            "target_step": "archive",
-                            "sequence": 1
-                        },
-                        {
-                            "action_type": "return",
-                            "terminal_status": "cancelled",
-                            "sequence": 2,
-                            "requires_confirmation": true
-                        },
-                        {
-                            "action_type": "cancel",
-                            "terminal_status": "cancelled",
-                            "sequence": 3,
-                            "requires_confirmation": true
-                        }
-                    ]
-                },
-                {
-                    "code": "archive",
-                    "name": "Archive Document",
-                    "step_type": "acknowledge",
-                    "work_package": "document-archive",
-                    "sequence": 2,
-                    "actions": [
-                        {
-                            "action_type": "proceed",
-                            "terminal_status": "completed",
-                            "sequence": 1
-                        },
-                        {
-                            "action_type": "return",
-                            "target_step": "archive-check",
-                            "sequence": 2,
-                            "requires_confirmation": true
-                        },
-                        {
-                            "action_type": "cancel",
-                            "terminal_status": "cancelled",
-                            "sequence": 3,
-                            "requires_confirmation": true
-                        }
-                    ]
-                }
-            ]
+          "code": "draft-document",
+          "name": "Revised Draft Document",
+          "data_type": "mixed",
+          "is_required": true
         }
-    ]
+      ],
+      "customers": [
+        "Document Reviewer"
+      ]
+    },
+
+    {
+      "code": "document-approval-check",
+      "name": "Verify Document for Approval",
+      "description": "Verify that the reviewed document and its supporting information are ready for an approval decision.",
+      "org_team": "DOCUMENT_CONTROL",
+      "responsible_job_role": "DOCUMENT_REVIEWER",
+      "activity_type": "verifies",
+      "business_object": "document",
+      "version": 1,
+      "status": "active",
+      "suppliers": [
+        "Document Reviewer"
+      ],
+      "inputs": [
+        {
+          "code": "reviewed-document",
+          "name": "Reviewed Document",
+          "data_type": "mixed",
+          "is_required": true
+        }
+      ],
+      "outputs": [
+        {
+          "code": "approval-ready-document",
+          "name": "Approval Ready Document",
+          "data_type": "mixed",
+          "is_required": true
+        }
+      ],
+      "customers": [
+        "Document Approver"
+      ]
+    },
+
+    {
+      "code": "document-approve",
+      "name": "Approve Document",
+      "description": "Evaluate the reviewed document and make the formal approval decision.",
+      "org_team": "DOCUMENT_CONTROL",
+      "responsible_job_role": "DOCUMENT_APPROVER",
+      "activity_type": "authorizes",
+      "business_object": "document",
+      "version": 1,
+      "status": "active",
+      "suppliers": [
+        "Document Reviewer"
+      ],
+      "inputs": [
+        {
+          "code": "approval-ready-document",
+          "name": "Approval Ready Document",
+          "data_type": "mixed",
+          "is_required": true
+        }
+      ],
+      "outputs": [
+        {
+          "code": "approval-decision",
+          "name": "Approval Decision",
+          "data_type": "mixed",
+          "is_required": true
+        },
+        {
+          "code": "approved-document",
+          "name": "Approved Document",
+          "data_type": "mixed",
+          "is_required": true
+        }
+      ],
+      "customers": [
+        "Document Controller"
+      ]
+    },
+
+    {
+      "code": "document-publish-check",
+      "name": "Verify Document for Publication",
+      "description": "Verify that an approved document is ready to be published as controlled information.",
+      "org_team": "DOCUMENT_CONTROL",
+      "responsible_job_role": "DOCUMENT_CONTROLLER",
+      "activity_type": "verifies",
+      "business_object": "document",
+      "version": 1,
+      "status": "active",
+      "suppliers": [
+        "Document Approver"
+      ],
+      "inputs": [
+        {
+          "code": "approved-document",
+          "name": "Approved Document",
+          "data_type": "mixed",
+          "is_required": true
+        }
+      ],
+      "outputs": [
+        {
+          "code": "publication-ready-document",
+          "name": "Publication Ready Document",
+          "data_type": "mixed",
+          "is_required": true
+        }
+      ],
+      "customers": [
+        "Document Controller"
+      ]
+    },
+
+    {
+      "code": "document-publish",
+      "name": "Publish Document",
+      "description": "Record and release the approved document as the controlled published version.",
+      "org_team": "DOCUMENT_CONTROL",
+      "responsible_job_role": "DOCUMENT_CONTROLLER",
+      "activity_type": "records",
+      "business_object": "document",
+      "version": 1,
+      "status": "active",
+      "suppliers": [
+        "Document Controller"
+      ],
+      "inputs": [
+        {
+          "code": "publication-ready-document",
+          "name": "Publication Ready Document",
+          "data_type": "mixed",
+          "is_required": true
+        }
+      ],
+      "outputs": [
+        {
+          "code": "published-document",
+          "name": "Published Document",
+          "data_type": "mixed",
+          "is_required": true
+        }
+      ],
+      "customers": [
+        "Document Users",
+        "Records Management"
+      ]
+    },
+
+    {
+      "code": "document-distribute",
+      "name": "Distribute Document",
+      "description": "Communicate or distribute the published controlled document to its intended recipients.",
+      "org_team": "DOCUMENT_CONTROL",
+      "responsible_job_role": "DOCUMENT_CONTROLLER",
+      "activity_type": "informs",
+      "business_object": "document",
+      "version": 1,
+      "status": "active",
+      "suppliers": [
+        "Document Controller"
+      ],
+      "inputs": [
+        {
+          "code": "published-document",
+          "name": "Published Document",
+          "data_type": "mixed",
+          "is_required": true
+        }
+      ],
+      "outputs": [
+        {
+          "code": "distribution-record",
+          "name": "Distribution Record",
+          "data_type": "mixed",
+          "is_required": true
+        }
+      ],
+      "customers": [
+        "Document Users"
+      ]
+    },
+
+    {
+      "code": "document-archive-check",
+      "name": "Verify Document for Archive",
+      "description": "Verify that the published controlled document is eligible and ready for archival.",
+      "org_team": "RECORDS_MANAGEMENT",
+      "responsible_job_role": "RECORDS_MANAGER",
+      "activity_type": "verifies",
+      "business_object": "document",
+      "version": 1,
+      "status": "active",
+      "suppliers": [
+        "Document Controller"
+      ],
+      "inputs": [
+        {
+          "code": "published-document",
+          "name": "Published Document",
+          "data_type": "mixed",
+          "is_required": true
+        }
+      ],
+      "outputs": [
+        {
+          "code": "archive-ready-document",
+          "name": "Archive Ready Document",
+          "data_type": "mixed",
+          "is_required": true
+        }
+      ],
+      "customers": [
+        "Records Manager"
+      ]
+    },
+
+    {
+      "code": "document-archive",
+      "name": "Archive Document",
+      "description": "Record the controlled document as archived and retain the required archival information.",
+      "org_team": "RECORDS_MANAGEMENT",
+      "responsible_job_role": "RECORDS_MANAGER",
+      "activity_type": "records",
+      "business_object": "document",
+      "version": 1,
+      "status": "active",
+      "suppliers": [
+        "Records Manager"
+      ],
+      "inputs": [
+        {
+          "code": "archive-ready-document",
+          "name": "Archive Ready Document",
+          "data_type": "mixed",
+          "is_required": true
+        }
+      ],
+      "outputs": [
+        {
+          "code": "archived-document",
+          "name": "Archived Document",
+          "data_type": "mixed",
+          "is_required": true
+        }
+      ],
+      "customers": [
+        "Records Management"
+      ]
+    }
+  ],
+
+  "work_flows": [
+    {
+      "code": "document-authoring",
+      "name": "Document Authoring",
+      "description": "Creates the initial controlled document content and submits it for review.",
+      "business_object": "document",
+      "lifecycle_phase": "ikd-create",
+      "lifecycle_transition_type": "advance",
+      "version": 1,
+      "status": "active",
+      "owner_roles": [
+        "DOCUMENT_AUTHOR"
+      ],
+      "initiator_roles": [
+        "DOCUMENT_AUTHOR"
+      ],
+      "steps": [
+        {
+          "code": "author",
+          "name": "Author Document",
+          "step_type": "submit",
+          "work_package": "document-author",
+          "sequence": 1,
+          "is_start": true,
+          "actions": [
+            {
+              "action_type": "submit",
+              "terminal_status": "completed",
+              "sequence": 1
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "code": "document-review",
+      "name": "Document Review",
+      "description": "Reviews submitted document content and either verifies it or returns it to the author for revision.",
+      "business_object": "document",
+      "lifecycle_phase": "ikd-review",
+      "lifecycle_transition_type": "advance",
+      "version": 1,
+      "status": "active",
+      "owner_roles": [
+        "DOCUMENT_REVIEWER"
+      ],
+      "initiator_roles": [
+        "DOCUMENT_AUTHOR",
+        "DOCUMENT_REVIEWER"
+      ],
+      "steps": [
+        {
+          "code": "review",
+          "name": "Review Document",
+          "step_type": "verify",
+          "work_package": "document-review",
+          "sequence": 1,
+          "is_start": true,
+          "actions": [
+            {
+              "action_type": "verify",
+              "terminal_status": "completed",
+              "sequence": 1
+            },
+            {
+              "action_type": "return",
+              "target_step": "revise",
+              "sequence": 2,
+              "requires_confirmation": true
+            },
+            {
+              "action_type": "cancel",
+              "terminal_status": "cancelled",
+              "sequence": 3,
+              "requires_confirmation": true
+            }
+          ]
+        },
+        {
+          "code": "revise",
+          "name": "Revise Document",
+          "step_type": "submit",
+          "work_package": "document-revise",
+          "sequence": 2,
+          "is_start": false,
+          "actions": [
+            {
+              "action_type": "submit",
+              "target_step": "review",
+              "sequence": 1
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "code": "document-approval",
+      "name": "Document Approval",
+      "description": "Verifies that the reviewed document is ready for approval and obtains the formal authorization decision.",
+      "business_object": "document",
+      "lifecycle_phase": "ikd-approve",
+      "lifecycle_transition_type": "advance",
+      "version": 1,
+      "status": "active",
+      "owner_roles": [
+        "DOCUMENT_APPROVER"
+      ],
+      "initiator_roles": [
+        "DOCUMENT_REVIEWER"
+      ],
+      "steps": [
+        {
+          "code": "approval-check",
+          "name": "Verify Approval Package",
+          "step_type": "verify",
+          "work_package": "document-approval-check",
+          "sequence": 1,
+          "is_start": true,
+          "actions": [
+            {
+              "action_type": "verify",
+              "target_step": "approval",
+              "sequence": 1
+            },
+            {
+              "action_type": "return",
+              "terminal_status": "cancelled",
+              "sequence": 2,
+              "requires_confirmation": true
+            },
+            {
+              "action_type": "cancel",
+              "terminal_status": "cancelled",
+              "sequence": 3,
+              "requires_confirmation": true
+            }
+          ]
+        },
+        {
+          "code": "approval",
+          "name": "Approve Document",
+          "step_type": "approve",
+          "work_package": "document-approve",
+          "sequence": 2,
+          "is_start": false,
+          "actions": [
+            {
+              "action_type": "approve",
+              "terminal_status": "completed",
+              "sequence": 1
+            },
+            {
+              "action_type": "reject",
+              "terminal_status": "rejected",
+              "sequence": 2,
+              "requires_confirmation": true
+            },
+            {
+              "action_type": "return",
+              "target_step": "approval-check",
+              "sequence": 3,
+              "requires_confirmation": true
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "code": "document-publication",
+      "name": "Document Publication",
+      "description": "Verifies an approved document for publication, publishes the controlled version and distributes it to intended users.",
+      "business_object": "document",
+      "lifecycle_phase": "ikd-publish",
+      "lifecycle_transition_type": "stay",
+      "version": 1,
+      "status": "active",
+      "owner_roles": [
+        "DOCUMENT_CONTROLLER"
+      ],
+      "initiator_roles": [
+        "DOCUMENT_CONTROLLER"
+      ],
+      "steps": [
+        {
+          "code": "publication-check",
+          "name": "Verify for Publication",
+          "step_type": "verify",
+          "work_package": "document-publish-check",
+          "sequence": 1,
+          "is_start": true,
+          "actions": [
+            {
+              "action_type": "verify",
+              "target_step": "publish",
+              "sequence": 1
+            },
+            {
+              "action_type": "return",
+              "terminal_status": "cancelled",
+              "sequence": 2,
+              "requires_confirmation": true
+            },
+            {
+              "action_type": "cancel",
+              "terminal_status": "cancelled",
+              "sequence": 3,
+              "requires_confirmation": true
+            }
+          ]
+        },
+        {
+          "code": "publish",
+          "name": "Publish Document",
+          "step_type": "acknowledge",
+          "work_package": "document-publish",
+          "sequence": 2,
+          "is_start": false,
+          "actions": [
+            {
+              "action_type": "proceed",
+              "target_step": "distribute",
+              "sequence": 1
+            },
+            {
+              "action_type": "return",
+              "target_step": "publication-check",
+              "sequence": 2,
+              "requires_confirmation": true
+            },
+            {
+              "action_type": "cancel",
+              "terminal_status": "cancelled",
+              "sequence": 3,
+              "requires_confirmation": true
+            }
+          ]
+        },
+        {
+          "code": "distribute",
+          "name": "Distribute Published Document",
+          "step_type": "acknowledge",
+          "work_package": "document-distribute",
+          "sequence": 3,
+          "is_start": false,
+          "actions": [
+            {
+              "action_type": "proceed",
+              "terminal_status": "completed",
+              "sequence": 1
+            },
+            {
+              "action_type": "return",
+              "target_step": "publish",
+              "sequence": 2,
+              "requires_confirmation": true
+            },
+            {
+              "action_type": "cancel",
+              "terminal_status": "cancelled",
+              "sequence": 3,
+              "requires_confirmation": true
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "code": "document-archival",
+      "name": "Document Archival",
+      "description": "Verifies a published controlled document for archival and records it as archived.",
+      "business_object": "document",
+      "lifecycle_phase": "ikd-publish",
+      "lifecycle_transition_type": "transition",
+      "next_lifecycle_phase": "ikd-archive",
+      "version": 1,
+      "status": "active",
+      "owner_roles": [
+        "RECORDS_MANAGER"
+      ],
+      "initiator_roles": [
+        "DOCUMENT_CONTROLLER",
+        "RECORDS_MANAGER"
+      ],
+      "steps": [
+        {
+          "code": "archive-check",
+          "name": "Verify for Archive",
+          "step_type": "verify",
+          "work_package": "document-archive-check",
+          "sequence": 1,
+          "is_start": true,
+          "actions": [
+            {
+              "action_type": "verify",
+              "target_step": "archive",
+              "sequence": 1
+            },
+            {
+              "action_type": "return",
+              "terminal_status": "cancelled",
+              "sequence": 2,
+              "requires_confirmation": true
+            },
+            {
+              "action_type": "cancel",
+              "terminal_status": "cancelled",
+              "sequence": 3,
+              "requires_confirmation": true
+            }
+          ]
+        },
+        {
+          "code": "archive",
+          "name": "Archive Document",
+          "step_type": "acknowledge",
+          "work_package": "document-archive",
+          "sequence": 2,
+          "is_start": false,
+          "actions": [
+            {
+              "action_type": "proceed",
+              "terminal_status": "completed",
+              "sequence": 1
+            },
+            {
+              "action_type": "return",
+              "target_step": "archive-check",
+              "sequence": 2,
+              "requires_confirmation": true
+            },
+            {
+              "action_type": "cancel",
+              "terminal_status": "cancelled",
+              "sequence": 3,
+              "requires_confirmation": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "endpoints": [],
+  "hooks": [],
+  "hook_bindings": []
 }

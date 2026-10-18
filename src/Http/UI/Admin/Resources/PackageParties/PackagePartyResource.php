@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Work\Http\UI\Admin\Resources\PackagePartys;
+namespace Rimba\Work\Http\UI\Admin\Resources\PackageParties;
 
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Rimba\Work\Http\UI\Admin\Resources\PackagePartys\Pages\ListPackagePartys;
+use Rimba\Work\Http\UI\Admin\Resources\PackageParties\Pages\ListPackageParties;
 use Rimba\Work\Models\PackageParty;
 use UnitEnum;
 
@@ -49,10 +49,10 @@ class PackagePartyResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListPackagePartys::route('/'),
-            // 'create' => \Rimba\Work\Http\UI\Admin\Resources\PackagePartys\Pages\CreatePackageParty::route('/create'),
-            // 'view' => \Rimba\Work\Http\UI\Admin\Resources\PackagePartys\Pages\ViewPackageParty::route('/{record}'),
-            // 'edit' => \Rimba\Work\Http\UI\Admin\Resources\PackagePartys\Pages\EditPackageParty::route('/{record}/edit'),
+            'index' => ListPackageParties::route('/'),
+            // 'create' => \Rimba\Work\Http\UI\Admin\Resources\PackageParties\Pages\CreatePackageParty::route('/create'),
+            // 'view' => \Rimba\Work\Http\UI\Admin\Resources\PackageParties\Pages\ViewPackageParty::route('/{record}'),
+            // 'edit' => \Rimba\Work\Http\UI\Admin\Resources\PackageParties\Pages\EditPackageParty::route('/{record}/edit'),
             //
         ];
     }

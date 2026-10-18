@@ -23,9 +23,9 @@ class BusinessObject extends Model
         return $this->hasMany(Lifecycle::class);
     }
 
-    public function workflows(): HasMany
+    public function flows(): HasMany
     {
-        return $this->hasMany(Flow::class);
+        return $this->hasMany(Flow::class, 'business_object_id');
     }
 
     public function packages(): HasMany

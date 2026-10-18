@@ -18,7 +18,9 @@ class Task extends Model
 {
     protected static function booted(): void
     {
-        static::creating(fn (self $task) => $task->uuid ??= (string) Str::uuid());
+        static::creating(
+            fn (self $task) => $task->uuid ??= (string) Str::uuid()
+        );
     }
 
     protected function casts(): array
@@ -37,17 +39,26 @@ class Task extends Model
 
     public function flowInstance(): BelongsTo
     {
-        return $this->belongsTo(FlowInstance::class);
+        return $this->belongsTo(
+            FlowInstance::class,
+            'workflow_instance_id',
+        );
     }
 
     public function flowStep(): BelongsTo
     {
-        return $this->belongsTo(FlowStep::class);
+        return $this->belongsTo(
+            FlowStep::class,
+            'workflow_step_id',
+        );
     }
 
     public function package(): BelongsTo
     {
-        return $this->belongsTo(Package::class);
+        return $this->belongsTo(
+            Package::class,
+            'work_package_id',
+        );
     }
 
     public function assignee(): MorphTo

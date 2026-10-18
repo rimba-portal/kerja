@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Work\Http\UI\Admin\Resources\PackagePartys\Pages;
+namespace Rimba\Work\Http\UI\Admin\Resources\PackageParties\Pages;
 
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-use Rimba\Work\Http\UI\Admin\Resources\PackagePartys\PackagePartyResource;
+use Rimba\Work\Http\UI\Admin\Resources\PackageParties\PackagePartyResource;
 
-class ListPackagePartys extends ListRecords
+class ListPackageParties extends ListRecords
 {
     protected static string $resource = PackagePartyResource::class;
 
