@@ -1,0 +1,334 @@
+[
+  {
+    "category": "governance",
+    "code": "gs",
+    "name": "Strategy Lifecycle",
+    "definition": "Manages organizational strategy, objectives and direction from business analysis, priorities and strategic planning through approval, execution, performance monitoring, review, adaptation and renewal."
+  },
+  {
+    "category": "governance",
+    "code": "gsp",
+    "name": "Project Lifecycle",
+    "definition": "Manages a project or temporary initiative from proposal, business case and approval through initiation, planning, resources, execution, monitoring, delivery, handover, closure and benefits review."
+  },
+  {
+    "category": "governance",
+    "code": "gsr",
+    "name": "Risk Lifecycle",
+    "definition": "Manages business, operational or strategic risks from identification and assessment through likelihood and impact analysis, ownership, mitigation or treatment, monitoring, escalation, acceptance, reassessment and closure."
+  },
+  {
+    "category": "governance",
+    "code": "gsc",
+    "name": "Compliance Lifecycle",
+    "definition": "Manages legal, regulatory, policy, standard, contractual and internal compliance obligations from identification and applicability assessment through controls, evidence, monitoring, reporting, remediation and reassessment."
+  },
+  {
+    "category": "governance",
+    "code": "ge",
+    "name": "Environmental Lifecycle",
+    "definition": "Manages environmental aspects, impacts and controls involving emissions, waste, pollution, energy, water, resources and environmental obligations from identification and assessment through control, monitoring, reporting and reassessment."
+  },
+  {
+    "category": "governance",
+    "code": "ges",
+    "name": "Sustainability Lifecycle",
+    "definition": "Manages sustainability commitments, goals and initiatives involving environmental, resource and long-term organizational impacts from assessment and target setting through implementation, measurement, reporting, improvement and renewal."
+  },
+
+  {
+    "category": "information",
+    "code": "ik",
+    "name": "Knowledge Lifecycle",
+    "definition": "Manages organizational knowledge, know-how, lessons learned and reusable information from creation or capture through validation, classification, storage, sharing, application, maintenance, preservation and retirement."
+  },
+  {
+    "category": "information",
+    "code": "ikd",
+    "name": "Document Lifecycle",
+    "definition": "Manages controlled documents and documented information such as policies, procedures, specifications, manuals and work instructions from authoring and review through approval, publication, revision, distribution, retention, archival and disposal."
+  },
+  {
+    "category": "information",
+    "code": "ia",
+    "name": "Audit Lifecycle",
+    "definition": "Manages internal, external or compliance audits from audit planning, scope and criteria definition through evidence collection, examination, findings, reporting, corrective-action follow-up and formal closure."
+  },
+  {
+    "category": "information",
+    "code": "ic",
+    "name": "Continuous Improvement Lifecycle",
+    "definition": "Manages improvement opportunities, ideas and performance gaps from identification and prioritization through analysis, improvement action, implementation, verification, effectiveness review, standardization and further improvement."
+  },
+
+  {
+    "category": "workforce",
+    "code": "ww",
+    "name": "Workforce Lifecycle",
+    "definition": "Manages organizational workforce capacity, staffing and people resources from workforce planning and acquisition through deployment, development, retention, transition and workforce renewal."
+  },
+  {
+    "category": "workforce",
+    "code": "wwe",
+    "name": "Employee Lifecycle",
+    "definition": "Manages an employee's employment relationship from recruitment and entry through onboarding, active employment, development, performance, career movement, retention and separation."
+  },
+  {
+    "category": "workforce",
+    "code": "wwr",
+    "name": "Recruitment Lifecycle",
+    "definition": "Manages recruitment and hiring from manpower or vacancy request and job requisition through candidate sourcing, application, screening, interview, assessment, selection, offer, acceptance and recruitment closure."
+  },
+  {
+    "category": "workforce",
+    "code": "wwo",
+    "name": "Onboarding Lifecycle",
+    "definition": "Manages new employee, worker or contractor onboarding from pre-arrival preparation through registration, access provisioning, orientation, induction, initial training, integration and readiness for work."
+  },
+  {
+    "category": "workforce",
+    "code": "wwt",
+    "name": "Training Lifecycle",
+    "definition": "Manages employee or workforce training from training-needs identification and course planning through enrolment, scheduling, delivery, attendance, assessment, completion, evaluation and training records."
+  },
+  {
+    "category": "workforce",
+    "code": "wwc",
+    "name": "Certification Lifecycle",
+    "definition": "Manages qualifications, licences, authorizations and competency certifications from eligibility and assessment through approval, issuance, validity, renewal or recertification, suspension, expiration and revocation."
+  },
+  {
+    "category": "workforce",
+    "code": "wwp",
+    "name": "Performance Lifecycle",
+    "definition": "Manages employee performance from goals, objectives and expectations through monitoring, feedback, coaching, appraisal, evaluation, improvement actions, recognition and performance-period closure."
+  },
+  {
+    "category": "workforce",
+    "code": "wwd",
+    "name": "Career Development Lifecycle",
+    "definition": "Manages employee career and professional development from capability and career assessment through development plans, learning, experience, mentoring, progression, promotion and advancement."
+  },
+  {
+    "category": "workforce",
+    "code": "wws",
+    "name": "Succession Lifecycle",
+    "definition": "Manages succession for critical positions and roles from critical-role identification and talent nomination through assessment, development, readiness monitoring, succession planning, placement and plan renewal."
+  },
+  {
+    "category": "workforce",
+    "code": "wwx",
+    "name": "Offboarding Lifecycle",
+    "definition": "Manages employee, worker or contractor exit and separation through resignation or termination, handover, knowledge transfer, clearance, access removal, asset return, final processing and departure closure."
+  },
+
+  {
+    "category": "product",
+    "code": "pp",
+    "name": "Product Lifecycle",
+    "definition": "Manages a product from idea, concept and development through introduction, commercialization, growth, maturity, change, decline, withdrawal, obsolescence and end-of-life support."
+  },
+  {
+    "category": "product",
+    "code": "ppn",
+    "name": "New Product Introduction Lifecycle",
+    "definition": "Manages new-product introduction or NPI from approved product development through industrialization, manufacturing readiness, process setup, pilot production, controlled launch, ramp-up and transfer to stable production."
+  },
+  {
+    "category": "product",
+    "code": "ppd",
+    "name": "Product Design Lifecycle",
+    "definition": "Manages product design from customer or technical requirements and concept development through detailed design, engineering analysis, prototype, verification, design review, release and design revision."
+  },
+  {
+    "category": "product",
+    "code": "ppq",
+    "name": "Product Qualification Lifecycle",
+    "definition": "Manages product qualification and validation from qualification requirements and test planning through samples, testing, evaluation, approval, conditional approval, requalification and qualification closure."
+  },
+  {
+    "category": "product",
+    "code": "pm",
+    "name": "Market Lifecycle",
+    "definition": "Manages an addressable market, market segment or commercial opportunity from market discovery and analysis through entry, development, growth, maturity, contraction, repositioning and exit."
+  },
+  {
+    "category": "product",
+    "code": "pmd",
+    "name": "Demand Lifecycle",
+    "definition": "Manages customer, market or internal demand from demand capture and validation through forecasting, prioritization, planning alignment, supply or capacity alignment, monitoring and forecast revision."
+  },
+  {
+    "category": "product",
+    "code": "pmp",
+    "name": "Sales Lifecycle",
+    "definition": "Manages sales opportunities from lead generation and qualification through customer engagement, requirements, quotation or proposal, negotiation, commitment, conversion, win or loss and sales closure."
+  },
+
+  {
+    "category": "fulfilment",
+    "code": "fi",
+    "name": "Internal Offering Lifecycle",
+    "definition": "Manages an internal organizational offering from identification and design through approval, publication, availability, change and retirement. An active offering defines something available to eligible internal users to request, such as information, access, approval, support, material, equipment, training, work or another provided outcome."
+  },
+  {
+    "category": "fulfilment",
+    "code": "fir",
+    "name": "Request Lifecycle",
+    "definition": "Manages a request for an active internal offering from submission and validation through assessment, approval where required, assignment, fulfilment, delivery or completion, confirmation, cancellation and closure."
+  },
+  {
+    "category": "fulfilment",
+    "code": "fo",
+    "name": "Order Lifecycle",
+    "definition": "Manages a formal order or commitment for goods, products or services from order capture and validation through confirmation, planning, allocation, fulfilment, shipment or delivery, acceptance, invoicing, cancellation and closure."
+  },
+  {
+    "category": "fulfilment",
+    "code": "fs",
+    "name": "Service Lifecycle",
+    "definition": "Manages an internal or external service or organizational offering from service need, definition and design through approval, introduction, availability, operation, support, performance review, improvement, change and retirement."
+  },
+
+  {
+    "category": "operations",
+    "code": "op",
+    "name": "Production Lifecycle",
+    "definition": "Manages production and manufacturing output from production demand, planning and scheduling through material preparation, execution, monitoring, inspection, completion, release and production closure."
+  },
+  {
+    "category": "operations",
+    "code": "opm",
+    "name": "Manufacturing Process Lifecycle",
+    "definition": "Manages a manufacturing method or production process from process requirements and design through development, validation, qualification, deployment, operational control, improvement, engineering change and retirement."
+  },
+  {
+    "category": "operations",
+    "code": "opw",
+    "name": "Work Order Lifecycle",
+    "definition": "Manages an authorized unit of operational, production or maintenance work from work-order creation and approval through planning, scheduling, assignment, execution, verification, completion and closure or cancellation."
+  },
+  {
+    "category": "operations",
+    "code": "oq",
+    "name": "Quality Lifecycle",
+    "definition": "Manages product, process and operational quality from quality planning and requirements through assurance, inspection, testing, monitoring, nonconformance control, corrective action, verification and improvement."
+  },
+  {
+    "category": "operations",
+    "code": "oqc",
+    "name": "CAPA Lifecycle",
+    "definition": "Manages corrective and preventive action arising from nonconformance, defects, complaints, audit findings or other issues from containment and investigation through root-cause analysis, action planning, implementation, effectiveness verification and closure."
+  },
+  {
+    "category": "operations",
+    "code": "oc",
+    "name": "Engineering Change Lifecycle",
+    "definition": "Manages engineering or technical changes to products, designs, specifications, processes or configurations from change request and impact assessment through review, approval, implementation, verification, release and closure."
+  },
+  {
+    "category": "operations",
+    "code": "oi",
+    "name": "Incident Lifecycle",
+    "definition": "Manages unplanned events, disruptions, failures or incidents from detection and reporting through classification, containment, investigation, root-cause analysis, resolution, recovery, review and closure."
+  },
+
+  {
+    "category": "asset",
+    "code": "aa",
+    "name": "Asset Lifecycle",
+    "definition": "Manages physical or organizational assets from need identification, specification and acquisition through registration, deployment, use, maintenance, transfer, upgrade, impairment, decommissioning and disposal."
+  },
+  {
+    "category": "asset",
+    "code": "aae",
+    "name": "Equipment Lifecycle",
+    "definition": "Manages machines and operational equipment from specification and acquisition through installation, commissioning, qualification, operation, servicing, modification, decommissioning and disposal."
+  },
+  {
+    "category": "asset",
+    "code": "aam",
+    "name": "Maintenance Lifecycle",
+    "definition": "Manages preventive, predictive and corrective maintenance requirements from identification or schedule through planning, work preparation, execution, repair, inspection or testing, return to service and maintenance closure."
+  },
+  {
+    "category": "asset",
+    "code": "aat",
+    "name": "Tooling Lifecycle",
+    "definition": "Manages tools, dies, moulds, jigs, fixtures and production aids from requirement, design or acquisition through fabrication, qualification, issue, use, servicing, repair, modification and retirement."
+  },
+  {
+    "category": "asset",
+    "code": "aac",
+    "name": "Calibration Lifecycle",
+    "definition": "Manages measuring and test equipment calibration from calibration requirements and scheduling through calibration, measurement results, tolerance evaluation, adjustment or repair, certification, recalibration and retirement."
+  },
+  {
+    "category": "asset",
+    "code": "af",
+    "name": "Facility Lifecycle",
+    "definition": "Manages buildings, production areas and physical facilities from need and concept through design, construction or acquisition, commissioning, occupancy, operation, maintenance, renovation and decommissioning."
+  },
+  {
+    "category": "asset",
+    "code": "at",
+    "name": "Technology Lifecycle",
+    "definition": "Manages technology capabilities, platforms or technical solutions from research and evaluation through selection, adoption, deployment, operation, upgrade, evolution, obsolescence, replacement and retirement."
+  },
+
+  {
+    "category": "supply",
+    "code": "sm",
+    "name": "Material Lifecycle",
+    "definition": "Manages raw materials, components, consumables and other material from specification and sourcing through procurement, receipt, inspection, storage, issue, consumption or transformation, recovery and disposal."
+  },
+  {
+    "category": "supply",
+    "code": "smi",
+    "name": "Inventory Lifecycle",
+    "definition": "Manages stock and inventory from demand or replenishment planning through receipt, put-away, storage, reservation, picking, movement, counting, reconciliation, issue, obsolescence and disposition."
+  },
+  {
+    "category": "supply",
+    "code": "sc",
+    "name": "Supply Chain Lifecycle",
+    "definition": "Manages end-to-end supply from demand and supply planning through sourcing, procurement, production coordination, inventory, fulfilment, distribution, returns and supply-chain improvement."
+  },
+  {
+    "category": "supply",
+    "code": "scl",
+    "name": "Logistics Lifecycle",
+    "definition": "Manages transportation and movement of materials or goods from shipment requirement and planning through packing, dispatch, transportation, tracking, receiving, delivery confirmation, returns and shipment closure."
+  },
+
+  {
+    "category": "relationship",
+    "code": "rc",
+    "name": "Customer Lifecycle",
+    "definition": "Manages the organizational relationship with a customer from prospect or acquisition and onboarding through engagement, sales or service, satisfaction, retention, growth, recovery, reactivation and relationship closure."
+  },
+  {
+    "category": "relationship",
+    "code": "rv",
+    "name": "Vendor Lifecycle",
+    "definition": "Manages a commercial vendor or external provider from identification, due diligence and registration through onboarding, commercial engagement, performance monitoring, review, renewal, suspension and termination."
+  },
+  {
+    "category": "relationship",
+    "code": "rvs",
+    "name": "Supplier Lifecycle",
+    "definition": "Manages suppliers of materials, components or supply-chain inputs from identification, evaluation and qualification through onboarding, sourcing, performance monitoring, supplier development, requalification, suspension and exit."
+  },
+  {
+    "category": "relationship",
+    "code": "rvc",
+    "name": "Contractor Lifecycle",
+    "definition": "Manages external contractors or contracted personnel from requirement, selection and engagement through onboarding, access, assignment, work oversight, performance review, demobilization, clearance and contract closure."
+  },
+  {
+    "category": "relationship",
+    "code": "rp",
+    "name": "Partner Lifecycle",
+    "definition": "Manages strategic, technology, business or operational partnerships from partner identification and evaluation through agreement, onboarding, collaboration, joint activities, performance review, renewal, transformation and termination."
+  }
+]

@@ -28,8 +28,9 @@ final class HookPathTest extends TestCase
             ],
         );
 
-        $path = app(HookPath::class)->interpolate(
-            '/flows/{context.workflow_instance.id}/documents/{parameter.document_id}',
+        $path = (new HookPath)->interpolate(
+            '/flows/{context.workflow_instance.id}'
+            .'/documents/{parameter.document_id}',
             $hookContext,
         );
 
