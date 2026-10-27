@@ -1,0 +1,870 @@
+{
+    "lifecycles": [
+        {
+            "category": "governance",
+            "code_name": "gs",
+            "name": "Strategy Lifecycle",
+            "search_definition": "Manages organizational strategy, objectives and direction from business analysis, priorities and strategic planning through approval, execution, performance monitoring, review, adaptation and renewal.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "WorkflowInstance",
+            "phases": [
+                {"name": "Vision", "sequence": 1, "functional_role": "EXECUTIVE_SPONSOR", "model_state_description": "WorkflowInstance is in the Vision phase of the Strategy Lifecycle."},
+                {"name": "Plan", "sequence": 2, "functional_role": "STRATEGY_MANAGER", "model_state_description": "WorkflowInstance is in the Plan phase of the Strategy Lifecycle."},
+                {"name": "Execute", "sequence": 3, "functional_role": "INITIATIVE_OWNER", "model_state_description": "WorkflowInstance is in the Execute phase of the Strategy Lifecycle."},
+                {"name": "Monitor", "sequence": 4, "functional_role": "STRATEGY_ANALYST", "model_state_description": "WorkflowInstance is in the Monitor phase of the Strategy Lifecycle."},
+                {"name": "Renew", "sequence": 5, "functional_role": "EXECUTIVE_SPONSOR", "model_state_description": "WorkflowInstance is in the Renew phase of the Strategy Lifecycle."}
+            ]
+        },
+        {
+            "category": "governance",
+            "code_name": "gsp",
+            "name": "Project Lifecycle",
+            "search_definition": "Manages a project or temporary initiative from proposal, business case and approval through initiation, planning, resources, execution, monitoring, delivery, handover, closure and benefits review.",
+            "parent_code_name": "gs",
+            "parent_lifecycle": "Strategy Lifecycle",
+            "primary_model": "WorkflowInstance",
+            "phases": [
+                {"name": "Initiate", "sequence": 1, "functional_role": "PROJECT_SPONSOR", "model_state_description": "WorkflowInstance is in the Initiate phase of the Project Lifecycle."},
+                {"name": "Plan", "sequence": 2, "functional_role": "PROJECT_MANAGER", "model_state_description": "WorkflowInstance is in the Plan phase of the Project Lifecycle."},
+                {"name": "Execute", "sequence": 3, "functional_role": "PROJECT_MANAGER", "model_state_description": "WorkflowInstance is in the Execute phase of the Project Lifecycle."},
+                {"name": "Monitor", "sequence": 4, "functional_role": "PROJECT_CONTROL_ANALYST", "model_state_description": "WorkflowInstance is in the Monitor phase of the Project Lifecycle."},
+                {"name": "Close", "sequence": 5, "functional_role": "PROJECT_SPONSOR", "model_state_description": "WorkflowInstance is in the Close phase of the Project Lifecycle."}
+            ]
+        },
+        {
+            "category": "governance",
+            "code_name": "gsr",
+            "name": "Risk Lifecycle",
+            "search_definition": "Manages business, operational or strategic risks from identification and assessment through likelihood and impact analysis, ownership, mitigation or treatment, monitoring, escalation, acceptance, reassessment and closure.",
+            "parent_code_name": "gs",
+            "parent_lifecycle": "Strategy Lifecycle",
+            "primary_model": "WorkflowInstance",
+            "phases": [
+                {"name": "Identify", "sequence": 1, "functional_role": "RISK_OWNER", "model_state_description": "WorkflowInstance is in the Identify phase of the Risk Lifecycle."},
+                {"name": "Assess", "sequence": 2, "functional_role": "RISK_ANALYST", "model_state_description": "WorkflowInstance is in the Assess phase of the Risk Lifecycle."},
+                {"name": "Mitigate", "sequence": 3, "functional_role": "CONTROL_OWNER", "model_state_description": "WorkflowInstance is in the Mitigate phase of the Risk Lifecycle."},
+                {"name": "Monitor", "sequence": 4, "functional_role": "RISK_MANAGER", "model_state_description": "WorkflowInstance is in the Monitor phase of the Risk Lifecycle."},
+                {"name": "Review", "sequence": 5, "functional_role": "RISK_COMMITTEE", "model_state_description": "WorkflowInstance is in the Review phase of the Risk Lifecycle."}
+            ]
+        },
+        {
+            "category": "governance",
+            "code_name": "gsc",
+            "name": "Compliance Lifecycle",
+            "search_definition": "Manages legal, regulatory, policy, standard, contractual and internal compliance obligations from identification and applicability assessment through controls, evidence, monitoring, reporting, remediation and reassessment.",
+            "parent_code_name": "gs",
+            "parent_lifecycle": "Strategy Lifecycle",
+            "primary_model": "Document",
+            "phases": [
+                {"name": "Identify", "sequence": 1, "functional_role": "COMPLIANCE_OWNER", "model_state_description": "Document is in the Identify phase of the Compliance Lifecycle."},
+                {"name": "Implement", "sequence": 2, "functional_role": "CONTROL_OWNER", "model_state_description": "Document is in the Implement phase of the Compliance Lifecycle."},
+                {"name": "Monitor", "sequence": 3, "functional_role": "COMPLIANCE_ANALYST", "model_state_description": "Document is in the Monitor phase of the Compliance Lifecycle."},
+                {"name": "Audit", "sequence": 4, "functional_role": "COMPLIANCE_AUDITOR", "model_state_description": "Document is in the Audit phase of the Compliance Lifecycle."},
+                {"name": "Remediate", "sequence": 5, "functional_role": "PROCESS_OWNER", "model_state_description": "Document is in the Remediate phase of the Compliance Lifecycle."}
+            ]
+        },
+        {
+            "category": "governance",
+            "code_name": "ge",
+            "name": "Environmental Lifecycle",
+            "search_definition": "Manages environmental aspects, impacts and controls involving emissions, waste, pollution, energy, water, resources and environmental obligations from identification and assessment through control, monitoring, reporting and reassessment.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "EnvironmentalRecord",
+            "phases": [
+                {"name": "Identify", "sequence": 1, "functional_role": "ENVIRONMENTAL_SPECIALIST", "model_state_description": "EnvironmentalRecord is in the Identify phase of the Environmental Lifecycle."},
+                {"name": "Assess", "sequence": 2, "functional_role": "ENVIRONMENTAL_ENGINEER", "model_state_description": "EnvironmentalRecord is in the Assess phase of the Environmental Lifecycle."},
+                {"name": "Control", "sequence": 3, "functional_role": "EHS_MANAGER", "model_state_description": "EnvironmentalRecord is in the Control phase of the Environmental Lifecycle."},
+                {"name": "Monitor", "sequence": 4, "functional_role": "ENVIRONMENTAL_SPECIALIST", "model_state_description": "EnvironmentalRecord is in the Monitor phase of the Environmental Lifecycle."},
+                {"name": "Improve", "sequence": 5, "functional_role": "EHS_MANAGER", "model_state_description": "EnvironmentalRecord is in the Improve phase of the Environmental Lifecycle."}
+            ]
+        },
+        {
+            "category": "governance",
+            "code_name": "ges",
+            "name": "Sustainability Lifecycle",
+            "search_definition": "Manages sustainability commitments, goals and initiatives involving environmental, resource and long-term organizational impacts from assessment and target setting through implementation, measurement, reporting, improvement and renewal.",
+            "parent_code_name": "ge",
+            "parent_lifecycle": "Environmental Lifecycle",
+            "primary_model": "SustainabilityInitiative",
+            "phases": [
+                {"name": "Baseline", "sequence": 1, "functional_role": "SUSTAINABILITY_ANALYST", "model_state_description": "SustainabilityInitiative is in the Baseline phase of the Sustainability Lifecycle."},
+                {"name": "Target", "sequence": 2, "functional_role": "SUSTAINABILITY_MANAGER", "model_state_description": "SustainabilityInitiative is in the Target phase of the Sustainability Lifecycle."},
+                {"name": "Implement", "sequence": 3, "functional_role": "INITIATIVE_OWNER", "model_state_description": "SustainabilityInitiative is in the Implement phase of the Sustainability Lifecycle."},
+                {"name": "Measure", "sequence": 4, "functional_role": "SUSTAINABILITY_ANALYST", "model_state_description": "SustainabilityInitiative is in the Measure phase of the Sustainability Lifecycle."},
+                {"name": "Report", "sequence": 5, "functional_role": "SUSTAINABILITY_MANAGER", "model_state_description": "SustainabilityInitiative is in the Report phase of the Sustainability Lifecycle."}
+            ]
+        },
+        {
+            "category": "information",
+            "code_name": "ik",
+            "name": "Knowledge Lifecycle",
+            "search_definition": "Manages organizational knowledge, know-how, lessons learned and reusable information from creation or capture through validation, classification, storage, sharing, application, maintenance, preservation and retirement.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "Version",
+            "phases": [
+                {"name": "Capture", "sequence": 1, "functional_role": "KNOWLEDGE_AUTHOR", "model_state_description": "Version is in the Capture phase of the Knowledge Lifecycle."},
+                {"name": "Store", "sequence": 2, "functional_role": "KNOWLEDGE_MANAGER", "model_state_description": "Version is in the Store phase of the Knowledge Lifecycle."},
+                {"name": "Share", "sequence": 3, "functional_role": "KNOWLEDGE_CURATOR", "model_state_description": "Version is in the Share phase of the Knowledge Lifecycle."},
+                {"name": "Apply", "sequence": 4, "functional_role": "KNOWLEDGE_USER", "model_state_description": "Version is in the Apply phase of the Knowledge Lifecycle."},
+                {"name": "Retain", "sequence": 5, "functional_role": "KNOWLEDGE_MANAGER", "model_state_description": "Version is in the Retain phase of the Knowledge Lifecycle."}
+            ]
+        },
+        {
+            "category": "information",
+            "code_name": "ikd",
+            "name": "Document Lifecycle",
+            "search_definition": "Manages controlled documents and documented information such as policies, procedures, specifications, manuals and work instructions from authoring and review through approval, publication, revision, distribution, retention, archival and disposal.",
+            "parent_code_name": "ik",
+            "parent_lifecycle": "Knowledge Lifecycle",
+            "primary_model": "Document",
+            "phases": [
+                {"name": "Create", "sequence": 1, "functional_role": "DOCUMENT_AUTHOR", "model_state_description": "Document is in the Create phase of the Document Lifecycle."},
+                {"name": "Review", "sequence": 2, "functional_role": "DOCUMENT_REVIEWER", "model_state_description": "Document is in the Review phase of the Document Lifecycle."},
+                {"name": "Approve", "sequence": 3, "functional_role": "DOCUMENT_APPROVER", "model_state_description": "Document is in the Approve phase of the Document Lifecycle."},
+                {"name": "Publish", "sequence": 4, "functional_role": "DOCUMENT_CONTROLLER", "model_state_description": "Document is in the Publish phase of the Document Lifecycle."},
+                {"name": "Archive", "sequence": 5, "functional_role": "RECORDS_MANAGER", "model_state_description": "Document is in the Archive phase of the Document Lifecycle."}
+            ]
+        },
+        {
+            "category": "information",
+            "code_name": "ia",
+            "name": "Audit Lifecycle",
+            "search_definition": "Manages internal, external or compliance audits from audit planning, scope and criteria definition through evidence collection, examination, findings, reporting, corrective-action follow-up and formal closure.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "AuditLog",
+            "phases": [
+                {"name": "Plan", "sequence": 1, "functional_role": "LEAD_AUDITOR", "model_state_description": "AuditLog is in the Plan phase of the Audit Lifecycle."},
+                {"name": "Prepare", "sequence": 2, "functional_role": "LEAD_AUDITOR", "model_state_description": "AuditLog is in the Prepare phase of the Audit Lifecycle."},
+                {"name": "Audit", "sequence": 3, "functional_role": "AUDITOR", "model_state_description": "AuditLog is in the Audit phase of the Audit Lifecycle."},
+                {"name": "Report", "sequence": 4, "functional_role": "LEAD_AUDITOR", "model_state_description": "AuditLog is in the Report phase of the Audit Lifecycle."},
+                {"name": "Verify", "sequence": 5, "functional_role": "AUDIT_MANAGER", "model_state_description": "AuditLog is in the Verify phase of the Audit Lifecycle."}
+            ]
+        },
+        {
+            "category": "information",
+            "code_name": "ic",
+            "name": "Continuous Improvement Lifecycle",
+            "search_definition": "Manages improvement opportunities, ideas and performance gaps from identification and prioritization through analysis, improvement action, implementation, verification, effectiveness review, standardization and further improvement.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "WorkflowInstance",
+            "phases": [
+                {"name": "Identify", "sequence": 1, "functional_role": "PROCESS_OWNER", "model_state_description": "WorkflowInstance is in the Identify phase of the Continuous Improvement Lifecycle."},
+                {"name": "Analyze", "sequence": 2, "functional_role": "CONTINUOUS_IMPROVEMENT_SPECIALIST", "model_state_description": "WorkflowInstance is in the Analyze phase of the Continuous Improvement Lifecycle."},
+                {"name": "Improve", "sequence": 3, "functional_role": "CONTINUOUS_IMPROVEMENT_SPECIALIST", "model_state_description": "WorkflowInstance is in the Improve phase of the Continuous Improvement Lifecycle."},
+                {"name": "Control", "sequence": 4, "functional_role": "PROCESS_OWNER", "model_state_description": "WorkflowInstance is in the Control phase of the Continuous Improvement Lifecycle."},
+                {"name": "Sustain", "sequence": 5, "functional_role": "PROCESS_OWNER", "model_state_description": "WorkflowInstance is in the Sustain phase of the Continuous Improvement Lifecycle."}
+            ]
+        },
+        {
+            "category": "workforce",
+            "code_name": "ww",
+            "name": "Workforce Lifecycle",
+            "search_definition": "Manages organizational workforce capacity, staffing and people resources from workforce planning and acquisition through deployment, development, retention, transition and workforce renewal.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "WorkforceAssignment",
+            "phases": [
+                {"name": "Plan", "sequence": 1, "functional_role": "WORKFORCE_PLANNER", "model_state_description": "Workforce requirement has been identified and approved."},
+                {"name": "Acquire", "sequence": 2, "functional_role": "TALENT_ACQUISITION_OWNER", "model_state_description": "Workforce position is being filled through recruitment or assignment."},
+                {"name": "Develop", "sequence": 3, "functional_role": "PEOPLE_DEVELOPMENT_OWNER", "model_state_description": "Workforce member is assigned and capability development is ongoing."},
+                {"name": "Retain", "sequence": 4, "functional_role": "LINE_MANAGER", "model_state_description": "Workforce member is actively assigned and retained within the organization."},
+                {"name": "Transition", "sequence": 5, "functional_role": "HR_BUSINESS_PARTNER", "model_state_description": "Workforce assignment is being promoted, transferred or exited."}
+            ]
+        },
+        {
+            "category": "workforce",
+            "code_name": "wwe",
+            "name": "Employee Lifecycle",
+            "search_definition": "Manages an employee's employment relationship from recruitment and entry through onboarding, active employment, development, performance, career movement, retention and separation.",
+            "parent_code_name": "ww",
+            "parent_lifecycle": "Workforce Lifecycle",
+            "primary_model": "Employee",
+            "phases": [
+                {"name": "Recruit", "sequence": 1, "functional_role": "TALENT_ACQUISITION_OWNER", "model_state_description": "Employee record exists as a prospective hire and candidate selection is underway."},
+                {"name": "Onboard", "sequence": 2, "functional_role": "HR_OPERATIONS_OWNER", "model_state_description": "Employee has joined and is completing onboarding requirements."},
+                {"name": "Develop", "sequence": 3, "functional_role": "PEOPLE_DEVELOPMENT_OWNER", "model_state_description": "Employee is building skills, experience and competency."},
+                {"name": "Perform", "sequence": 4, "functional_role": "LINE_MANAGER", "model_state_description": "Employee is actively performing assigned responsibilities."},
+                {"name": "Separate", "sequence": 5, "functional_role": "HR_OPERATIONS_OWNER", "model_state_description": "Employee relationship with the organization is ending or has ended."}
+            ]
+        },
+        {
+            "category": "workforce",
+            "code_name": "wwr",
+            "name": "Recruitment Lifecycle",
+            "search_definition": "Manages recruitment and hiring from manpower or vacancy request and job requisition through candidate sourcing, application, screening, interview, assessment, selection, offer, acceptance and recruitment closure.",
+            "parent_code_name": "ww",
+            "parent_lifecycle": "Workforce Lifecycle",
+            "primary_model": "ManpowerRequest",
+            "phases": [
+                {"name": "Source", "sequence": 1, "functional_role": "TALENT_ACQUISITION_OWNER", "model_state_description": "ManpowerRequest is in the Source phase of the Recruitment Lifecycle."},
+                {"name": "Screen", "sequence": 2, "functional_role": "TALENT_ACQUISITION_SPECIALIST", "model_state_description": "ManpowerRequest is in the Screen phase of the Recruitment Lifecycle."},
+                {"name": "Select", "sequence": 3, "functional_role": "HIRING_MANAGER", "model_state_description": "ManpowerRequest is in the Select phase of the Recruitment Lifecycle."},
+                {"name": "Offer", "sequence": 4, "functional_role": "HR_MANAGER", "model_state_description": "ManpowerRequest is in the Offer phase of the Recruitment Lifecycle."},
+                {"name": "Hire", "sequence": 5, "functional_role": "HR_OPERATIONS_OWNER", "model_state_description": "ManpowerRequest is in the Hire phase of the Recruitment Lifecycle."}
+            ]
+        },
+        {
+            "category": "workforce",
+            "code_name": "wwo",
+            "name": "Onboarding Lifecycle",
+            "search_definition": "Manages new employee, worker or contractor onboarding from pre-arrival preparation through registration, access provisioning, orientation, induction, initial training, integration and readiness for work.",
+            "parent_code_name": "ww",
+            "parent_lifecycle": "Workforce Lifecycle",
+            "primary_model": "WorkforceAssignment",
+            "phases": [
+                {"name": "Prepare", "sequence": 1, "functional_role": "HR_OPERATIONS_OWNER", "model_state_description": "WorkforceAssignment is in the Prepare phase of the Onboarding Lifecycle."},
+                {"name": "Orient", "sequence": 2, "functional_role": "HR_BUSINESS_PARTNER", "model_state_description": "WorkforceAssignment is in the Orient phase of the Onboarding Lifecycle."},
+                {"name": "Train", "sequence": 3, "functional_role": "TRAINING_COORDINATOR", "model_state_description": "WorkforceAssignment is in the Train phase of the Onboarding Lifecycle."},
+                {"name": "Integrate", "sequence": 4, "functional_role": "LINE_MANAGER", "model_state_description": "WorkforceAssignment is in the Integrate phase of the Onboarding Lifecycle."},
+                {"name": "Confirm", "sequence": 5, "functional_role": "HR_MANAGER", "model_state_description": "WorkforceAssignment is in the Confirm phase of the Onboarding Lifecycle."}
+            ]
+        },
+        {
+            "category": "workforce",
+            "code_name": "wwt",
+            "name": "Training Lifecycle",
+            "search_definition": "Manages employee or workforce training from training-needs identification and course planning through enrolment, scheduling, delivery, attendance, assessment, completion, evaluation and training records.",
+            "parent_code_name": "ww",
+            "parent_lifecycle": "Workforce Lifecycle",
+            "primary_model": "CourseEnrollment",
+            "phases": [
+                {"name": "Identify", "sequence": 1, "functional_role": "TRAINING_COORDINATOR", "model_state_description": "CourseEnrollment is in the Identify phase of the Training Lifecycle."},
+                {"name": "Enroll", "sequence": 2, "functional_role": "TRAINING_COORDINATOR", "model_state_description": "CourseEnrollment is in the Enroll phase of the Training Lifecycle."},
+                {"name": "Train", "sequence": 3, "functional_role": "TRAINER", "model_state_description": "CourseEnrollment is in the Train phase of the Training Lifecycle."},
+                {"name": "Assess", "sequence": 4, "functional_role": "COMPETENCY_ASSESSOR", "model_state_description": "CourseEnrollment is in the Assess phase of the Training Lifecycle."},
+                {"name": "Complete", "sequence": 5, "functional_role": "TRAINING_COORDINATOR", "model_state_description": "CourseEnrollment is in the Complete phase of the Training Lifecycle."}
+            ]
+        },
+        {
+            "category": "workforce",
+            "code_name": "wwc",
+            "name": "Certification Lifecycle",
+            "search_definition": "Manages qualifications, licences, authorizations and competency certifications from eligibility and assessment through approval, issuance, validity, renewal or recertification, suspension, expiration and revocation.",
+            "parent_code_name": "ww",
+            "parent_lifecycle": "Workforce Lifecycle",
+            "primary_model": "Certificate",
+            "phases": [
+                {"name": "Identify", "sequence": 1, "functional_role": "COMPLIANCE_COORDINATOR", "model_state_description": "Certificate is in the Identify phase of the Certification Lifecycle."},
+                {"name": "Train", "sequence": 2, "functional_role": "TRAINER", "model_state_description": "Certificate is in the Train phase of the Certification Lifecycle."},
+                {"name": "Evaluate", "sequence": 3, "functional_role": "CERTIFICATION_ASSESSOR", "model_state_description": "Certificate is in the Evaluate phase of the Certification Lifecycle."},
+                {"name": "Certify", "sequence": 4, "functional_role": "CERTIFICATION_AUTHORITY", "model_state_description": "Certificate is in the Certify phase of the Certification Lifecycle."},
+                {"name": "Renew", "sequence": 5, "functional_role": "COMPLIANCE_COORDINATOR", "model_state_description": "Certificate is in the Renew phase of the Certification Lifecycle."}
+            ]
+        },
+        {
+            "category": "workforce",
+            "code_name": "wwp",
+            "name": "Performance Lifecycle",
+            "search_definition": "Manages employee performance from goals, objectives and expectations through monitoring, feedback, coaching, appraisal, evaluation, improvement actions, recognition and performance-period closure.",
+            "parent_code_name": "ww",
+            "parent_lifecycle": "Workforce Lifecycle",
+            "primary_model": "PerformanceReview",
+            "phases": [
+                {"name": "Plan", "sequence": 1, "functional_role": "LINE_MANAGER", "model_state_description": "PerformanceReview is in the Plan phase of the Performance Lifecycle."},
+                {"name": "Execute", "sequence": 2, "functional_role": "EMPLOYEE", "model_state_description": "PerformanceReview is in the Execute phase of the Performance Lifecycle."},
+                {"name": "Review", "sequence": 3, "functional_role": "LINE_MANAGER", "model_state_description": "PerformanceReview is in the Review phase of the Performance Lifecycle."},
+                {"name": "Feedback", "sequence": 4, "functional_role": "LINE_MANAGER", "model_state_description": "PerformanceReview is in the Feedback phase of the Performance Lifecycle."},
+                {"name": "Improve", "sequence": 5, "functional_role": "PEOPLE_DEVELOPMENT_OWNER", "model_state_description": "PerformanceReview is in the Improve phase of the Performance Lifecycle."}
+            ]
+        },
+        {
+            "category": "workforce",
+            "code_name": "wwd",
+            "name": "Career Development Lifecycle",
+            "search_definition": "Manages employee career and professional development from capability and career assessment through development plans, learning, experience, mentoring, progression, promotion and advancement.",
+            "parent_code_name": "ww",
+            "parent_lifecycle": "Workforce Lifecycle",
+            "primary_model": "CareerPlan",
+            "phases": [
+                {"name": "Assess", "sequence": 1, "functional_role": "CAREER_DEVELOPMENT_ADVISOR", "model_state_description": "CareerPlan is in the Assess phase of the Career Development Lifecycle."},
+                {"name": "Plan", "sequence": 2, "functional_role": "EMPLOYEE", "model_state_description": "CareerPlan is in the Plan phase of the Career Development Lifecycle."},
+                {"name": "Develop", "sequence": 3, "functional_role": "EMPLOYEE", "model_state_description": "CareerPlan is in the Develop phase of the Career Development Lifecycle."},
+                {"name": "Mentor", "sequence": 4, "functional_role": "MENTOR", "model_state_description": "CareerPlan is in the Mentor phase of the Career Development Lifecycle."},
+                {"name": "Advance", "sequence": 5, "functional_role": "LINE_MANAGER", "model_state_description": "CareerPlan is in the Advance phase of the Career Development Lifecycle."}
+            ]
+        },
+        {
+            "category": "workforce",
+            "code_name": "wws",
+            "name": "Succession Lifecycle",
+            "search_definition": "Manages succession for critical positions and roles from critical-role identification and talent nomination through assessment, development, readiness monitoring, succession planning, placement and plan renewal.",
+            "parent_code_name": "ww",
+            "parent_lifecycle": "Workforce Lifecycle",
+            "primary_model": "SuccessionPlan",
+            "phases": [
+                {"name": "Identify", "sequence": 1, "functional_role": "HR_MANAGER", "model_state_description": "SuccessionPlan is in the Identify phase of the Succession Lifecycle."},
+                {"name": "Assess", "sequence": 2, "functional_role": "TALENT_REVIEW_BOARD", "model_state_description": "SuccessionPlan is in the Assess phase of the Succession Lifecycle."},
+                {"name": "Develop", "sequence": 3, "functional_role": "PEOPLE_DEVELOPMENT_OWNER", "model_state_description": "SuccessionPlan is in the Develop phase of the Succession Lifecycle."},
+                {"name": "Nominate", "sequence": 4, "functional_role": "EXECUTIVE_SPONSOR", "model_state_description": "SuccessionPlan is in the Nominate phase of the Succession Lifecycle."},
+                {"name": "Transition", "sequence": 5, "functional_role": "SUCCESSION_OWNER", "model_state_description": "SuccessionPlan is in the Transition phase of the Succession Lifecycle."}
+            ]
+        },
+        {
+            "category": "workforce",
+            "code_name": "wwx",
+            "name": "Offboarding Lifecycle",
+            "search_definition": "Manages employee, worker or contractor exit and separation through resignation or termination, handover, knowledge transfer, clearance, access removal, asset return, final processing and departure closure.",
+            "parent_code_name": "ww",
+            "parent_lifecycle": "Workforce Lifecycle",
+            "primary_model": "SeparationRequest",
+            "phases": [
+                {"name": "Notify", "sequence": 1, "functional_role": "HR_OPERATIONS_OWNER", "model_state_description": "SeparationRequest is in the Notify phase of the Offboarding Lifecycle."},
+                {"name": "Transfer", "sequence": 2, "functional_role": "LINE_MANAGER", "model_state_description": "SeparationRequest is in the Transfer phase of the Offboarding Lifecycle."},
+                {"name": "Recover", "sequence": 3, "functional_role": "ASSET_CUSTODIAN", "model_state_description": "SeparationRequest is in the Recover phase of the Offboarding Lifecycle."},
+                {"name": "Exit", "sequence": 4, "functional_role": "HR_OPERATIONS_OWNER", "model_state_description": "SeparationRequest is in the Exit phase of the Offboarding Lifecycle."},
+                {"name": "Archive", "sequence": 5, "functional_role": "RECORDS_MANAGER", "model_state_description": "SeparationRequest is in the Archive phase of the Offboarding Lifecycle."}
+            ]
+        },
+        {
+            "category": "product",
+            "code_name": "pp",
+            "name": "Product Lifecycle",
+            "search_definition": "Manages a product from idea, concept and development through introduction, commercialization, growth, maturity, change, decline, withdrawal, obsolescence and end-of-life support.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "Product",
+            "phases": [
+                {"name": "Ideate", "sequence": 1, "functional_role": "PRODUCT_MANAGER", "model_state_description": "Product is in the Ideate phase of the Product Lifecycle."},
+                {"name": "Design", "sequence": 2, "functional_role": "PRODUCT_DESIGN_OWNER", "model_state_description": "Product is in the Design phase of the Product Lifecycle."},
+                {"name": "Develop", "sequence": 3, "functional_role": "PRODUCT_ENGINEER", "model_state_description": "Product is in the Develop phase of the Product Lifecycle."},
+                {"name": "Launch", "sequence": 4, "functional_role": "PRODUCT_MANAGER", "model_state_description": "Product is in the Launch phase of the Product Lifecycle."},
+                {"name": "Retire", "sequence": 5, "functional_role": "PRODUCT_MANAGER", "model_state_description": "Product is in the Retire phase of the Product Lifecycle."}
+            ]
+        },
+        {
+            "category": "product",
+            "code_name": "ppn",
+            "name": "New Product Introduction Lifecycle",
+            "search_definition": "Manages new-product introduction or NPI from approved product development through industrialization, manufacturing readiness, process setup, pilot production, controlled launch, ramp-up and transfer to stable production.",
+            "parent_code_name": "pp",
+            "parent_lifecycle": "Product Lifecycle",
+            "primary_model": "Product",
+            "phases": [
+                {"name": "Concept", "sequence": 1, "functional_role": "NPI_MANAGER", "model_state_description": "Product is in the Concept phase of the New Product Introduction Lifecycle."},
+                {"name": "Prototype", "sequence": 2, "functional_role": "PRODUCT_ENGINEER", "model_state_description": "Product is in the Prototype phase of the New Product Introduction Lifecycle."},
+                {"name": "Qualify", "sequence": 3, "functional_role": "QUALITY_ENGINEER", "model_state_description": "Product is in the Qualify phase of the New Product Introduction Lifecycle."},
+                {"name": "Pilot", "sequence": 4, "functional_role": "MANUFACTURING_ENGINEER", "model_state_description": "Product is in the Pilot phase of the New Product Introduction Lifecycle."},
+                {"name": "Release", "sequence": 5, "functional_role": "NPI_MANAGER", "model_state_description": "Product is in the Release phase of the New Product Introduction Lifecycle."}
+            ]
+        },
+        {
+            "category": "product",
+            "code_name": "ppd",
+            "name": "Product Design Lifecycle",
+            "search_definition": "Manages product design from customer or technical requirements and concept development through detailed design, engineering analysis, prototype, verification, design review, release and design revision.",
+            "parent_code_name": "pp",
+            "parent_lifecycle": "Product Lifecycle",
+            "primary_model": "Product",
+            "phases": [
+                {"name": "Requirements", "sequence": 1, "functional_role": "PRODUCT_MANAGER", "model_state_description": "Product is in the Requirements phase of the Product Design Lifecycle."},
+                {"name": "Design", "sequence": 2, "functional_role": "DESIGN_ENGINEER", "model_state_description": "Product is in the Design phase of the Product Design Lifecycle."},
+                {"name": "Review", "sequence": 3, "functional_role": "DESIGN_REVIEW_BOARD", "model_state_description": "Product is in the Review phase of the Product Design Lifecycle."},
+                {"name": "Verify", "sequence": 4, "functional_role": "VERIFICATION_ENGINEER", "model_state_description": "Product is in the Verify phase of the Product Design Lifecycle."},
+                {"name": "Approve", "sequence": 5, "functional_role": "ENGINEERING_MANAGER", "model_state_description": "Product is in the Approve phase of the Product Design Lifecycle."}
+            ]
+        },
+        {
+            "category": "product",
+            "code_name": "ppq",
+            "name": "Product Qualification Lifecycle",
+            "search_definition": "Manages product qualification and validation from qualification requirements and test planning through samples, testing, evaluation, approval, conditional approval, requalification and qualification closure.",
+            "parent_code_name": "pp",
+            "parent_lifecycle": "Product Lifecycle",
+            "primary_model": "ProductQualification",
+            "phases": [
+                {"name": "Plan", "sequence": 1, "functional_role": "QUALITY_ENGINEER", "model_state_description": "ProductQualification is in the Plan phase of the Product Qualification Lifecycle."},
+                {"name": "Test", "sequence": 2, "functional_role": "TEST_ENGINEER", "model_state_description": "ProductQualification is in the Test phase of the Product Qualification Lifecycle."},
+                {"name": "Validate", "sequence": 3, "functional_role": "VALIDATION_ENGINEER", "model_state_description": "ProductQualification is in the Validate phase of the Product Qualification Lifecycle."},
+                {"name": "Approve", "sequence": 4, "functional_role": "QUALITY_MANAGER", "model_state_description": "ProductQualification is in the Approve phase of the Product Qualification Lifecycle."},
+                {"name": "Release", "sequence": 5, "functional_role": "NPI_MANAGER", "model_state_description": "ProductQualification is in the Release phase of the Product Qualification Lifecycle."}
+            ]
+        },
+        {
+            "category": "product",
+            "code_name": "pm",
+            "name": "Market Lifecycle",
+            "search_definition": "Manages an addressable market, market segment or commercial opportunity from market discovery and analysis through entry, development, growth, maturity, contraction, repositioning and exit.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "Product",
+            "phases": [
+                {"name": "Research", "sequence": 1, "functional_role": "MARKET_RESEARCH_ANALYST", "model_state_description": "Product is in the Research phase of the Market Lifecycle."},
+                {"name": "Launch", "sequence": 2, "functional_role": "MARKETING_MANAGER", "model_state_description": "Product is in the Launch phase of the Market Lifecycle."},
+                {"name": "Grow", "sequence": 3, "functional_role": "SALES_MANAGER", "model_state_description": "Product is in the Grow phase of the Market Lifecycle."},
+                {"name": "Mature", "sequence": 4, "functional_role": "BUSINESS_OWNER", "model_state_description": "Product is in the Mature phase of the Market Lifecycle."},
+                {"name": "Retire", "sequence": 5, "functional_role": "PRODUCT_MANAGER", "model_state_description": "Product is in the Retire phase of the Market Lifecycle."}
+            ]
+        },
+        {
+            "category": "product",
+            "code_name": "pmd",
+            "name": "Demand Lifecycle",
+            "search_definition": "Manages customer, market or internal demand from demand capture and validation through forecasting, prioritization, planning alignment, supply or capacity alignment, monitoring and forecast revision.",
+            "parent_code_name": "pm",
+            "parent_lifecycle": "Market Lifecycle",
+            "primary_model": "DemandForecast",
+            "phases": [
+                {"name": "Forecast", "sequence": 1, "functional_role": "DEMAND_PLANNER", "model_state_description": "DemandForecast is in the Forecast phase of the Demand Lifecycle."},
+                {"name": "Review", "sequence": 2, "functional_role": "SALES_AND_OPERATIONS_PLANNER", "model_state_description": "DemandForecast is in the Review phase of the Demand Lifecycle."},
+                {"name": "Commit", "sequence": 3, "functional_role": "SUPPLY_CHAIN_MANAGER", "model_state_description": "DemandForecast is in the Commit phase of the Demand Lifecycle."},
+                {"name": "Monitor", "sequence": 4, "functional_role": "DEMAND_ANALYST", "model_state_description": "DemandForecast is in the Monitor phase of the Demand Lifecycle."},
+                {"name": "Adjust", "sequence": 5, "functional_role": "DEMAND_PLANNER", "model_state_description": "DemandForecast is in the Adjust phase of the Demand Lifecycle."}
+            ]
+        },
+        {
+            "category": "product",
+            "code_name": "pmp",
+            "name": "Sales Lifecycle",
+            "search_definition": "Manages sales opportunities from lead generation and qualification through customer engagement, requirements, quotation or proposal, negotiation, commitment, conversion, win or loss and sales closure.",
+            "parent_code_name": "pm",
+            "parent_lifecycle": "Market Lifecycle",
+            "primary_model": "SalesOrder",
+            "phases": [
+                {"name": "Lead", "sequence": 1, "functional_role": "SALES_REPRESENTATIVE", "model_state_description": "SalesOrder is in the Lead phase of the Sales Lifecycle."},
+                {"name": "Qualify", "sequence": 2, "functional_role": "ACCOUNT_MANAGER", "model_state_description": "SalesOrder is in the Qualify phase of the Sales Lifecycle."},
+                {"name": "Quote", "sequence": 3, "functional_role": "SALES_OPERATIONS_SPECIALIST", "model_state_description": "SalesOrder is in the Quote phase of the Sales Lifecycle."},
+                {"name": "Negotiate", "sequence": 4, "functional_role": "SALES_MANAGER", "model_state_description": "SalesOrder is in the Negotiate phase of the Sales Lifecycle."},
+                {"name": "Win", "sequence": 5, "functional_role": "ACCOUNT_MANAGER", "model_state_description": "SalesOrder is in the Win phase of the Sales Lifecycle."}
+            ]
+        },
+        {
+            "category": "fulfilment",
+            "code_name": "fi",
+            "name": "Internal Offering Lifecycle",
+            "search_definition": "Manages an internal organizational offering from identification and design through approval, publication, availability, change and retirement. An active offering defines something available to eligible internal users to request, such as information, access, approval, support, material, equipment, training, work or another provided outcome.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "Offering",
+            "phases": [
+                {"name": "Identify", "sequence": 1, "functional_role": "OFFERING_OWNER", "model_state_description": "A need for an internal organizational offering has been identified, including the intended users, purpose and provided outcome."},
+                {"name": "Design", "sequence": 2, "functional_role": "OFFERING_OWNER", "model_state_description": "The offering is being designed, including eligibility, request information, approvals, fulfilment route, service expectations and the outcome to be provided."},
+                {"name": "Approve", "sequence": 3, "functional_role": "OFFERING_APPROVER", "model_state_description": "The offering definition is undergoing authorization before it can be made available to eligible internal users."},
+                {"name": "Publish", "sequence": 4, "functional_role": "OFFERING_MANAGER", "model_state_description": "The approved offering is being published and made discoverable to eligible internal users."},
+                {"name": "Operate", "sequence": 5, "functional_role": "OFFERING_OWNER", "model_state_description": "The offering is active and available for eligible internal users to request, with resulting requests processed through their applicable fulfilment lifecycle."},
+                {"name": "Change", "sequence": 6, "functional_role": "OFFERING_OWNER", "model_state_description": "The active offering is being revised to reflect changes to eligibility, requirements, approvals, fulfilment arrangements, provided outcomes or other offering conditions."},
+                {"name": "Retire", "sequence": 7, "functional_role": "OFFERING_OWNER", "model_state_description": "The offering is being withdrawn from availability and will no longer accept new requests."}
+            ]
+        },
+        {
+            "category": "fulfilment",
+            "code_name": "fir",
+            "name": "Request Lifecycle",
+            "search_definition": "Manages a request for an active internal offering from submission and validation through assessment, approval where required, assignment, fulfilment, delivery or completion, confirmation, cancellation and closure.",
+            "parent_code_name": "fi",
+            "parent_lifecycle": "Internal Offering Lifecycle",
+            "primary_model": "Request",
+            "phases": [
+                {"name": "Submit", "sequence": 1, "functional_role": "REQUESTER", "model_state_description": "The request has been submitted for information, access, approval, support, material, equipment, work, or another organizational offering."},
+                {"name": "Assess", "sequence": 2, "functional_role": "REQUEST_COORDINATOR", "model_state_description": "The request is being validated, classified, prioritized, and assessed for eligibility, required approval, and fulfilment route."},
+                {"name": "Approve", "sequence": 3, "functional_role": "REQUEST_APPROVER", "model_state_description": "The request is awaiting or undergoing authorization when approval is required by policy, entitlement, cost, risk, or authority limits."},
+                {"name": "Fulfil", "sequence": 4, "functional_role": "FULFILMENT_OWNER", "model_state_description": "The approved or eligible request is being assigned, processed, provided, delivered, or otherwise fulfilled."},
+                {"name": "Close", "sequence": 5, "functional_role": "REQUEST_COORDINATOR", "model_state_description": "Fulfilment has been confirmed, rejected, cancelled, withdrawn, or otherwise concluded, and the request is closed."}
+            ]
+        },
+        {
+            "category": "fulfilment",
+            "code_name": "fo",
+            "name": "Order Lifecycle",
+            "search_definition": "Manages a formal order or commitment for goods, products or services from order capture and validation through confirmation, planning, allocation, fulfilment, shipment or delivery, acceptance, invoicing, cancellation and closure.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "SalesOrder",
+            "phases": [
+                {"name": "Receive", "sequence": 1, "functional_role": "ORDER_MANAGEMENT_SPECIALIST", "model_state_description": "SalesOrder is in the Receive phase of the Order Lifecycle."},
+                {"name": "Review", "sequence": 2, "functional_role": "ORDER_MANAGEMENT_SPECIALIST", "model_state_description": "SalesOrder is in the Review phase of the Order Lifecycle."},
+                {"name": "Schedule", "sequence": 3, "functional_role": "PRODUCTION_PLANNER", "model_state_description": "SalesOrder is in the Schedule phase of the Order Lifecycle."},
+                {"name": "Fulfill", "sequence": 4, "functional_role": "FULFILLMENT_MANAGER", "model_state_description": "SalesOrder is in the Fulfill phase of the Order Lifecycle."},
+                {"name": "Close", "sequence": 5, "functional_role": "ORDER_MANAGEMENT_SPECIALIST", "model_state_description": "SalesOrder is in the Close phase of the Order Lifecycle."}
+            ]
+        },
+        {
+            "category": "fulfilment",
+            "code_name": "fs",
+            "name": "Service Lifecycle",
+            "search_definition": "Manages an internal or external service or organizational offering from service need, definition and design through approval, introduction, availability, operation, support, performance review, improvement, change and retirement.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "Service",
+            "phases": [
+                {"name": "Design", "sequence": 1, "functional_role": "SERVICE_DESIGNER", "model_state_description": "Service is in the Design phase of the Service Lifecycle."},
+                {"name": "Launch", "sequence": 2, "functional_role": "SERVICE_MANAGER", "model_state_description": "Service is in the Launch phase of the Service Lifecycle."},
+                {"name": "Deliver", "sequence": 3, "functional_role": "SERVICE_DELIVERY_MANAGER", "model_state_description": "Service is in the Deliver phase of the Service Lifecycle."},
+                {"name": "Support", "sequence": 4, "functional_role": "SUPPORT_MANAGER", "model_state_description": "Service is in the Support phase of the Service Lifecycle."},
+                {"name": "Retire", "sequence": 5, "functional_role": "SERVICE_MANAGER", "model_state_description": "Service is in the Retire phase of the Service Lifecycle."}
+            ]
+        },
+        {
+            "category": "operations",
+            "code_name": "op",
+            "name": "Production Lifecycle",
+            "search_definition": "Manages production and manufacturing output from production demand, planning and scheduling through material preparation, execution, monitoring, inspection, completion, release and production closure.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "ProductionOrder",
+            "phases": [
+                {"name": "Plan", "sequence": 1, "functional_role": "PRODUCTION_PLANNER", "model_state_description": "ProductionOrder is in the Plan phase of the Production Lifecycle."},
+                {"name": "Schedule", "sequence": 2, "functional_role": "PRODUCTION_PLANNER", "model_state_description": "ProductionOrder is in the Schedule phase of the Production Lifecycle."},
+                {"name": "Produce", "sequence": 3, "functional_role": "PRODUCTION_SUPERVISOR", "model_state_description": "ProductionOrder is in the Produce phase of the Production Lifecycle."},
+                {"name": "Monitor", "sequence": 4, "functional_role": "PRODUCTION_ENGINEER", "model_state_description": "ProductionOrder is in the Monitor phase of the Production Lifecycle."},
+                {"name": "Optimize", "sequence": 5, "functional_role": "MANUFACTURING_ENGINEER", "model_state_description": "ProductionOrder is in the Optimize phase of the Production Lifecycle."}
+            ]
+        },
+        {
+            "category": "operations",
+            "code_name": "opm",
+            "name": "Manufacturing Process Lifecycle",
+            "search_definition": "Manages a manufacturing method or production process from process requirements and design through development, validation, qualification, deployment, operational control, improvement, engineering change and retirement.",
+            "parent_code_name": "op",
+            "parent_lifecycle": "Production Lifecycle",
+            "primary_model": "ManufacturingProcess",
+            "phases": [
+                {"name": "Design", "sequence": 1, "functional_role": "PROCESS_ENGINEER", "model_state_description": "ManufacturingProcess is in the Design phase of the Manufacturing Process Lifecycle."},
+                {"name": "Qualify", "sequence": 2, "functional_role": "QUALITY_ENGINEER", "model_state_description": "ManufacturingProcess is in the Qualify phase of the Manufacturing Process Lifecycle."},
+                {"name": "Operate", "sequence": 3, "functional_role": "PRODUCTION_SUPERVISOR", "model_state_description": "ManufacturingProcess is in the Operate phase of the Manufacturing Process Lifecycle."},
+                {"name": "Control", "sequence": 4, "functional_role": "PROCESS_ENGINEER", "model_state_description": "ManufacturingProcess is in the Control phase of the Manufacturing Process Lifecycle."},
+                {"name": "Retire", "sequence": 5, "functional_role": "ENGINEERING_MANAGER", "model_state_description": "ManufacturingProcess is in the Retire phase of the Manufacturing Process Lifecycle."}
+            ]
+        },
+        {
+            "category": "operations",
+            "code_name": "opw",
+            "name": "Work Order Lifecycle",
+            "search_definition": "Manages an authorized unit of operational, production or maintenance work from work-order creation and approval through planning, scheduling, assignment, execution, verification, completion and closure or cancellation.",
+            "parent_code_name": "op",
+            "parent_lifecycle": "Production Lifecycle",
+            "primary_model": "WorkOrder",
+            "phases": [
+                {"name": "Create", "sequence": 1, "functional_role": "WORK_REQUESTER", "model_state_description": "WorkOrder is in the Create phase of the Work Order Lifecycle."},
+                {"name": "Release", "sequence": 2, "functional_role": "WORK_ORDER_PLANNER", "model_state_description": "WorkOrder is in the Release phase of the Work Order Lifecycle."},
+                {"name": "Execute", "sequence": 3, "functional_role": "TECHNICIAN", "model_state_description": "WorkOrder is in the Execute phase of the Work Order Lifecycle."},
+                {"name": "Verify", "sequence": 4, "functional_role": "WORK_SUPERVISOR", "model_state_description": "WorkOrder is in the Verify phase of the Work Order Lifecycle."},
+                {"name": "Close", "sequence": 5, "functional_role": "WORK_ORDER_PLANNER", "model_state_description": "WorkOrder is in the Close phase of the Work Order Lifecycle."}
+            ]
+        },
+        {
+            "category": "operations",
+            "code_name": "oq",
+            "name": "Quality Lifecycle",
+            "search_definition": "Manages product, process and operational quality from quality planning and requirements through assurance, inspection, testing, monitoring, nonconformance control, corrective action, verification and improvement.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "QualityRecord",
+            "phases": [
+                {"name": "Plan", "sequence": 1, "functional_role": "QUALITY_MANAGER", "model_state_description": "QualityRecord is in the Plan phase of the Quality Lifecycle."},
+                {"name": "Assure", "sequence": 2, "functional_role": "QUALITY_ENGINEER", "model_state_description": "QualityRecord is in the Assure phase of the Quality Lifecycle."},
+                {"name": "Control", "sequence": 3, "functional_role": "QUALITY_INSPECTOR", "model_state_description": "QualityRecord is in the Control phase of the Quality Lifecycle."},
+                {"name": "Audit", "sequence": 4, "functional_role": "QUALITY_AUDITOR", "model_state_description": "QualityRecord is in the Audit phase of the Quality Lifecycle."},
+                {"name": "Improve", "sequence": 5, "functional_role": "QUALITY_MANAGER", "model_state_description": "QualityRecord is in the Improve phase of the Quality Lifecycle."}
+            ]
+        },
+        {
+            "category": "operations",
+            "code_name": "oqc",
+            "name": "CAPA Lifecycle",
+            "search_definition": "Manages corrective and preventive action arising from nonconformance, defects, complaints, audit findings or other issues from containment and investigation through root-cause analysis, action planning, implementation, effectiveness verification and closure.",
+            "parent_code_name": "oq",
+            "parent_lifecycle": "Quality Lifecycle",
+            "primary_model": "Capa",
+            "phases": [
+                {"name": "Detect", "sequence": 1, "functional_role": "QUALITY_INSPECTOR", "model_state_description": "Capa is in the Detect phase of the CAPA Lifecycle."},
+                {"name": "Investigate", "sequence": 2, "functional_role": "QUALITY_ENGINEER", "model_state_description": "Capa is in the Investigate phase of the CAPA Lifecycle."},
+                {"name": "Correct", "sequence": 3, "functional_role": "PROCESS_OWNER", "model_state_description": "Capa is in the Correct phase of the CAPA Lifecycle."},
+                {"name": "Verify", "sequence": 4, "functional_role": "QUALITY_AUDITOR", "model_state_description": "Capa is in the Verify phase of the CAPA Lifecycle."},
+                {"name": "Close", "sequence": 5, "functional_role": "QUALITY_MANAGER", "model_state_description": "Capa is in the Close phase of the CAPA Lifecycle."}
+            ]
+        },
+        {
+            "category": "operations",
+            "code_name": "oc",
+            "name": "Engineering Change Lifecycle",
+            "search_definition": "Manages engineering or technical changes to products, designs, specifications, processes or configurations from change request and impact assessment through review, approval, implementation, verification, release and closure.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "EngineeringChange",
+            "phases": [
+                {"name": "Request", "sequence": 1, "functional_role": "CHANGE_REQUESTER", "model_state_description": "EngineeringChange is in the Request phase of the Engineering Change Lifecycle."},
+                {"name": "Assess", "sequence": 2, "functional_role": "CHANGE_ENGINEER", "model_state_description": "EngineeringChange is in the Assess phase of the Engineering Change Lifecycle."},
+                {"name": "Approve", "sequence": 3, "functional_role": "CHANGE_CONTROL_BOARD", "model_state_description": "EngineeringChange is in the Approve phase of the Engineering Change Lifecycle."},
+                {"name": "Implement", "sequence": 4, "functional_role": "IMPLEMENTATION_OWNER", "model_state_description": "EngineeringChange is in the Implement phase of the Engineering Change Lifecycle."},
+                {"name": "Validate", "sequence": 5, "functional_role": "VALIDATION_ENGINEER", "model_state_description": "EngineeringChange is in the Validate phase of the Engineering Change Lifecycle."}
+            ]
+        },
+        {
+            "category": "operations",
+            "code_name": "oi",
+            "name": "Incident Lifecycle",
+            "search_definition": "Manages unplanned events, disruptions, failures or incidents from detection and reporting through classification, containment, investigation, root-cause analysis, resolution, recovery, review and closure.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "Incident",
+            "phases": [
+                {"name": "Report", "sequence": 1, "functional_role": "INCIDENT_REPORTER", "model_state_description": "Incident is in the Report phase of the Incident Lifecycle."},
+                {"name": "Contain", "sequence": 2, "functional_role": "INCIDENT_RESPONSE_LEAD", "model_state_description": "Incident is in the Contain phase of the Incident Lifecycle."},
+                {"name": "Investigate", "sequence": 3, "functional_role": "INCIDENT_INVESTIGATOR", "model_state_description": "Incident is in the Investigate phase of the Incident Lifecycle."},
+                {"name": "Resolve", "sequence": 4, "functional_role": "RESOLUTION_OWNER", "model_state_description": "Incident is in the Resolve phase of the Incident Lifecycle."},
+                {"name": "Close", "sequence": 5, "functional_role": "INCIDENT_MANAGER", "model_state_description": "Incident is in the Close phase of the Incident Lifecycle."}
+            ]
+        },
+        {
+            "category": "asset",
+            "code_name": "aa",
+            "name": "Asset Lifecycle",
+            "search_definition": "Manages physical or organizational assets from need identification, specification and acquisition through registration, deployment, use, maintenance, transfer, upgrade, impairment, decommissioning and disposal.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "Asset",
+            "phases": [
+                {"name": "Plan", "sequence": 1, "functional_role": "ASSET_MANAGER", "model_state_description": "Asset is in the Plan phase of the Asset Lifecycle."},
+                {"name": "Acquire", "sequence": 2, "functional_role": "PROCUREMENT_MANAGER", "model_state_description": "Asset is in the Acquire phase of the Asset Lifecycle."},
+                {"name": "Operate", "sequence": 3, "functional_role": "ASSET_OWNER", "model_state_description": "Asset is in the Operate phase of the Asset Lifecycle."},
+                {"name": "Maintain", "sequence": 4, "functional_role": "MAINTENANCE_ENGINEER", "model_state_description": "Asset is in the Maintain phase of the Asset Lifecycle."},
+                {"name": "Dispose", "sequence": 5, "functional_role": "ASSET_MANAGER", "model_state_description": "Asset is in the Dispose phase of the Asset Lifecycle."}
+            ]
+        },
+        {
+            "category": "asset",
+            "code_name": "aae",
+            "name": "Equipment Lifecycle",
+            "search_definition": "Manages machines and operational equipment from specification and acquisition through installation, commissioning, qualification, operation, servicing, modification, decommissioning and disposal.",
+            "parent_code_name": "aa",
+            "parent_lifecycle": "Asset Lifecycle",
+            "primary_model": "Equipment",
+            "phases": [
+                {"name": "Specify", "sequence": 1, "functional_role": "EQUIPMENT_ENGINEER", "model_state_description": "Equipment is in the Specify phase of the Equipment Lifecycle."},
+                {"name": "Install", "sequence": 2, "functional_role": "PROJECT_ENGINEER", "model_state_description": "Equipment is in the Install phase of the Equipment Lifecycle."},
+                {"name": "Operate", "sequence": 3, "functional_role": "PRODUCTION_SUPERVISOR", "model_state_description": "Equipment is in the Operate phase of the Equipment Lifecycle."},
+                {"name": "Maintain", "sequence": 4, "functional_role": "MAINTENANCE_ENGINEER", "model_state_description": "Equipment is in the Maintain phase of the Equipment Lifecycle."},
+                {"name": "Decommission", "sequence": 5, "functional_role": "ASSET_MANAGER", "model_state_description": "Equipment is in the Decommission phase of the Equipment Lifecycle."}
+            ]
+        },
+        {
+            "category": "asset",
+            "code_name": "aam",
+            "name": "Maintenance Lifecycle",
+            "search_definition": "Manages preventive, predictive and corrective maintenance requirements from identification or schedule through planning, work preparation, execution, repair, inspection or testing, return to service and maintenance closure.",
+            "parent_code_name": "aa",
+            "parent_lifecycle": "Asset Lifecycle",
+            "primary_model": "Equipment",
+            "phases": [
+                {"name": "Plan", "sequence": 1, "functional_role": "MAINTENANCE_PLANNER", "model_state_description": "Equipment is in the Plan phase of the Maintenance Lifecycle."},
+                {"name": "Schedule", "sequence": 2, "functional_role": "MAINTENANCE_SCHEDULER", "model_state_description": "Equipment is in the Schedule phase of the Maintenance Lifecycle."},
+                {"name": "Execute", "sequence": 3, "functional_role": "MAINTENANCE_TECHNICIAN", "model_state_description": "Equipment is in the Execute phase of the Maintenance Lifecycle."},
+                {"name": "Verify", "sequence": 4, "functional_role": "MAINTENANCE_SUPERVISOR", "model_state_description": "Equipment is in the Verify phase of the Maintenance Lifecycle."},
+                {"name": "Analyze", "sequence": 5, "functional_role": "RELIABILITY_ENGINEER", "model_state_description": "Equipment is in the Analyze phase of the Maintenance Lifecycle."}
+            ]
+        },
+        {
+            "category": "asset",
+            "code_name": "aat",
+            "name": "Tooling Lifecycle",
+            "search_definition": "Manages tools, dies, moulds, jigs, fixtures and production aids from requirement, design or acquisition through fabrication, qualification, issue, use, servicing, repair, modification and retirement.",
+            "parent_code_name": "aa",
+            "parent_lifecycle": "Asset Lifecycle",
+            "primary_model": "Tool",
+            "phases": [
+                {"name": "Design", "sequence": 1, "functional_role": "TOOLING_ENGINEER", "model_state_description": "Tool is in the Design phase of the Tooling Lifecycle."},
+                {"name": "Build", "sequence": 2, "functional_role": "TOOLMAKER", "model_state_description": "Tool is in the Build phase of the Tooling Lifecycle."},
+                {"name": "Qualify", "sequence": 3, "functional_role": "QUALITY_ENGINEER", "model_state_description": "Tool is in the Qualify phase of the Tooling Lifecycle."},
+                {"name": "Use", "sequence": 4, "functional_role": "TOOL_CUSTODIAN", "model_state_description": "Tool is in the Use phase of the Tooling Lifecycle."},
+                {"name": "Retire", "sequence": 5, "functional_role": "TOOLING_ENGINEER", "model_state_description": "Tool is in the Retire phase of the Tooling Lifecycle."}
+            ]
+        },
+        {
+            "category": "asset",
+            "code_name": "aac",
+            "name": "Calibration Lifecycle",
+            "search_definition": "Manages measuring and test equipment calibration from calibration requirements and scheduling through calibration, measurement results, tolerance evaluation, adjustment or repair, certification, recalibration and retirement.",
+            "parent_code_name": "aa",
+            "parent_lifecycle": "Asset Lifecycle",
+            "primary_model": "Equipment",
+            "phases": [
+                {"name": "Plan", "sequence": 1, "functional_role": "CALIBRATION_COORDINATOR", "model_state_description": "Equipment is in the Plan phase of the Calibration Lifecycle."},
+                {"name": "Calibrate", "sequence": 2, "functional_role": "CALIBRATION_TECHNICIAN", "model_state_description": "Equipment is in the Calibrate phase of the Calibration Lifecycle."},
+                {"name": "Verify", "sequence": 3, "functional_role": "METROLOGY_ENGINEER", "model_state_description": "Equipment is in the Verify phase of the Calibration Lifecycle."},
+                {"name": "Release", "sequence": 4, "functional_role": "QUALITY_ENGINEER", "model_state_description": "Equipment is in the Release phase of the Calibration Lifecycle."},
+                {"name": "Recalibrate", "sequence": 5, "functional_role": "CALIBRATION_COORDINATOR", "model_state_description": "Equipment is in the Recalibrate phase of the Calibration Lifecycle."}
+            ]
+        },
+        {
+            "category": "asset",
+            "code_name": "af",
+            "name": "Facility Lifecycle",
+            "search_definition": "Manages buildings, production areas and physical facilities from need and concept through design, construction or acquisition, commissioning, occupancy, operation, maintenance, renovation and decommissioning.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "Location",
+            "phases": [
+                {"name": "Design", "sequence": 1, "functional_role": "FACILITY_ENGINEER", "model_state_description": "Location is in the Design phase of the Facility Lifecycle."},
+                {"name": "Construct", "sequence": 2, "functional_role": "PROJECT_MANAGER", "model_state_description": "Location is in the Construct phase of the Facility Lifecycle."},
+                {"name": "Operate", "sequence": 3, "functional_role": "FACILITY_MANAGER", "model_state_description": "Location is in the Operate phase of the Facility Lifecycle."},
+                {"name": "Maintain", "sequence": 4, "functional_role": "FACILITY_MAINTENANCE_ENGINEER", "model_state_description": "Location is in the Maintain phase of the Facility Lifecycle."},
+                {"name": "Decommission", "sequence": 5, "functional_role": "FACILITY_MANAGER", "model_state_description": "Location is in the Decommission phase of the Facility Lifecycle."}
+            ]
+        },
+        {
+            "category": "asset",
+            "code_name": "at",
+            "name": "Technology Lifecycle",
+            "search_definition": "Manages technology capabilities, platforms or technical solutions from research and evaluation through selection, adoption, deployment, operation, upgrade, evolution, obsolescence, replacement and retirement.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "System",
+            "phases": [
+                {"name": "Select", "sequence": 1, "functional_role": "ENTERPRISE_ARCHITECT", "model_state_description": "System is in the Select phase of the Technology Lifecycle."},
+                {"name": "Implement", "sequence": 2, "functional_role": "SYSTEM_IMPLEMENTATION_MANAGER", "model_state_description": "System is in the Implement phase of the Technology Lifecycle."},
+                {"name": "Operate", "sequence": 3, "functional_role": "SYSTEM_OWNER", "model_state_description": "System is in the Operate phase of the Technology Lifecycle."},
+                {"name": "Upgrade", "sequence": 4, "functional_role": "SOLUTION_ARCHITECT", "model_state_description": "System is in the Upgrade phase of the Technology Lifecycle."},
+                {"name": "Retire", "sequence": 5, "functional_role": "SYSTEM_OWNER", "model_state_description": "System is in the Retire phase of the Technology Lifecycle."}
+            ]
+        },
+        {
+            "category": "supply",
+            "code_name": "sm",
+            "name": "Material Lifecycle",
+            "search_definition": "Manages raw materials, components, consumables and other material from specification and sourcing through procurement, receipt, inspection, storage, issue, consumption or transformation, recovery and disposal.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "Material",
+            "phases": [
+                {"name": "Source", "sequence": 1, "functional_role": "MATERIAL_PLANNER", "model_state_description": "Material is in the Source phase of the Material Lifecycle."},
+                {"name": "Receive", "sequence": 2, "functional_role": "RECEIVING_INSPECTOR", "model_state_description": "Material is in the Receive phase of the Material Lifecycle."},
+                {"name": "Store", "sequence": 3, "functional_role": "WAREHOUSE_SUPERVISOR", "model_state_description": "Material is in the Store phase of the Material Lifecycle."},
+                {"name": "Consume", "sequence": 4, "functional_role": "PRODUCTION_SUPERVISOR", "model_state_description": "Material is in the Consume phase of the Material Lifecycle."},
+                {"name": "Dispose", "sequence": 5, "functional_role": "WASTE_COORDINATOR", "model_state_description": "Material is in the Dispose phase of the Material Lifecycle."}
+            ]
+        },
+        {
+            "category": "supply",
+            "code_name": "smi",
+            "name": "Inventory Lifecycle",
+            "search_definition": "Manages stock and inventory from demand or replenishment planning through receipt, put-away, storage, reservation, picking, movement, counting, reconciliation, issue, obsolescence and disposition.",
+            "parent_code_name": "sm",
+            "parent_lifecycle": "Material Lifecycle",
+            "primary_model": "InventoryItem",
+            "phases": [
+                {"name": "Receive", "sequence": 1, "functional_role": "RECEIVING_CLERK", "model_state_description": "InventoryItem is in the Receive phase of the Inventory Lifecycle."},
+                {"name": "Store", "sequence": 2, "functional_role": "WAREHOUSE_SUPERVISOR", "model_state_description": "InventoryItem is in the Store phase of the Inventory Lifecycle."},
+                {"name": "Allocate", "sequence": 3, "functional_role": "INVENTORY_PLANNER", "model_state_description": "InventoryItem is in the Allocate phase of the Inventory Lifecycle."},
+                {"name": "Count", "sequence": 4, "functional_role": "INVENTORY_CONTROLLER", "model_state_description": "InventoryItem is in the Count phase of the Inventory Lifecycle."},
+                {"name": "Dispose", "sequence": 5, "functional_role": "INVENTORY_MANAGER", "model_state_description": "InventoryItem is in the Dispose phase of the Inventory Lifecycle."}
+            ]
+        },
+        {
+            "category": "supply",
+            "code_name": "sc",
+            "name": "Supply Chain Lifecycle",
+            "search_definition": "Manages end-to-end supply from demand and supply planning through sourcing, procurement, production coordination, inventory, fulfilment, distribution, returns and supply-chain improvement.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "SupplyChainOrder",
+            "phases": [
+                {"name": "Source", "sequence": 1, "functional_role": "SUPPLY_CHAIN_PLANNER", "model_state_description": "SupplyChainOrder is in the Source phase of the Supply Chain Lifecycle."},
+                {"name": "Procure", "sequence": 2, "functional_role": "BUYER", "model_state_description": "SupplyChainOrder is in the Procure phase of the Supply Chain Lifecycle."},
+                {"name": "Produce", "sequence": 3, "functional_role": "PRODUCTION_PLANNER", "model_state_description": "SupplyChainOrder is in the Produce phase of the Supply Chain Lifecycle."},
+                {"name": "Deliver", "sequence": 4, "functional_role": "LOGISTICS_MANAGER", "model_state_description": "SupplyChainOrder is in the Deliver phase of the Supply Chain Lifecycle."},
+                {"name": "Return", "sequence": 5, "functional_role": "RETURNS_COORDINATOR", "model_state_description": "SupplyChainOrder is in the Return phase of the Supply Chain Lifecycle."}
+            ]
+        },
+        {
+            "category": "supply",
+            "code_name": "scl",
+            "name": "Logistics Lifecycle",
+            "search_definition": "Manages transportation and movement of materials or goods from shipment requirement and planning through packing, dispatch, transportation, tracking, receiving, delivery confirmation, returns and shipment closure.",
+            "parent_code_name": "sc",
+            "parent_lifecycle": "Supply Chain Lifecycle",
+            "primary_model": "Shipment",
+            "phases": [
+                {"name": "Pack", "sequence": 1, "functional_role": "PACKING_SUPERVISOR", "model_state_description": "Shipment is in the Pack phase of the Logistics Lifecycle."},
+                {"name": "Stage", "sequence": 2, "functional_role": "WAREHOUSE_SUPERVISOR", "model_state_description": "Shipment is in the Stage phase of the Logistics Lifecycle."},
+                {"name": "Ship", "sequence": 3, "functional_role": "SHIPPING_COORDINATOR", "model_state_description": "Shipment is in the Ship phase of the Logistics Lifecycle."},
+                {"name": "Track", "sequence": 4, "functional_role": "LOGISTICS_COORDINATOR", "model_state_description": "Shipment is in the Track phase of the Logistics Lifecycle."},
+                {"name": "Deliver", "sequence": 5, "functional_role": "DELIVERY_COORDINATOR", "model_state_description": "Shipment is in the Deliver phase of the Logistics Lifecycle."}
+            ]
+        },
+        {
+            "category": "relationship",
+            "code_name": "rc",
+            "name": "Customer Lifecycle",
+            "search_definition": "Manages the organizational relationship with a customer from prospect or acquisition and onboarding through engagement, sales or service, satisfaction, retention, growth, recovery, reactivation and relationship closure.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "Agreement",
+            "phases": [
+                {"name": "Acquire", "sequence": 1, "functional_role": "SALES_MANAGER", "model_state_description": "Agreement is in the Acquire phase of the Customer Lifecycle."},
+                {"name": "Onboard", "sequence": 2, "functional_role": "CUSTOMER_SUCCESS_MANAGER", "model_state_description": "Agreement is in the Onboard phase of the Customer Lifecycle."},
+                {"name": "Support", "sequence": 3, "functional_role": "SUPPORT_MANAGER", "model_state_description": "Agreement is in the Support phase of the Customer Lifecycle."},
+                {"name": "Retain", "sequence": 4, "functional_role": "ACCOUNT_MANAGER", "model_state_description": "Agreement is in the Retain phase of the Customer Lifecycle."},
+                {"name": "Advocate", "sequence": 5, "functional_role": "CUSTOMER_SUCCESS_MANAGER", "model_state_description": "Agreement is in the Advocate phase of the Customer Lifecycle."}
+            ]
+        },
+        {
+            "category": "relationship",
+            "code_name": "rv",
+            "name": "Vendor Lifecycle",
+            "search_definition": "Manages a commercial vendor or external provider from identification, due diligence and registration through onboarding, commercial engagement, performance monitoring, review, renewal, suspension and termination.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "Agreement",
+            "phases": [
+                {"name": "Select", "sequence": 1, "functional_role": "SOURCING_SPECIALIST", "model_state_description": "Agreement is in the Select phase of the Vendor Lifecycle."},
+                {"name": "Contract", "sequence": 2, "functional_role": "CONTRACT_MANAGER", "model_state_description": "Agreement is in the Contract phase of the Vendor Lifecycle."},
+                {"name": "Manage", "sequence": 3, "functional_role": "VENDOR_MANAGER", "model_state_description": "Agreement is in the Manage phase of the Vendor Lifecycle."},
+                {"name": "Review", "sequence": 4, "functional_role": "VENDOR_PERFORMANCE_ANALYST", "model_state_description": "Agreement is in the Review phase of the Vendor Lifecycle."},
+                {"name": "Terminate", "sequence": 5, "functional_role": "PROCUREMENT_MANAGER", "model_state_description": "Agreement is in the Terminate phase of the Vendor Lifecycle."}
+            ]
+        },
+        {
+            "category": "relationship",
+            "code_name": "rvs",
+            "name": "Supplier Lifecycle",
+            "search_definition": "Manages suppliers of materials, components or supply-chain inputs from identification, evaluation and qualification through onboarding, sourcing, performance monitoring, supplier development, requalification, suspension and exit.",
+            "parent_code_name": "rv",
+            "parent_lifecycle": "Vendor Lifecycle",
+            "primary_model": "Agreement",
+            "phases": [
+                {"name": "Identify", "sequence": 1, "functional_role": "SOURCING_SPECIALIST", "model_state_description": "Agreement is in the Identify phase of the Supplier Lifecycle."},
+                {"name": "Qualify", "sequence": 2, "functional_role": "SUPPLIER_QUALITY_ENGINEER", "model_state_description": "Agreement is in the Qualify phase of the Supplier Lifecycle."},
+                {"name": "Approve", "sequence": 3, "functional_role": "PROCUREMENT_MANAGER", "model_state_description": "Agreement is in the Approve phase of the Supplier Lifecycle."},
+                {"name": "Develop", "sequence": 4, "functional_role": "SUPPLIER_DEVELOPMENT_ENGINEER", "model_state_description": "Agreement is in the Develop phase of the Supplier Lifecycle."},
+                {"name": "Exit", "sequence": 5, "functional_role": "PROCUREMENT_MANAGER", "model_state_description": "Agreement is in the Exit phase of the Supplier Lifecycle."}
+            ]
+        },
+        {
+            "category": "relationship",
+            "code_name": "rvc",
+            "name": "Contractor Lifecycle",
+            "search_definition": "Manages external contractors or contracted personnel from requirement, selection and engagement through onboarding, access, assignment, work oversight, performance review, demobilization, clearance and contract closure.",
+            "parent_code_name": "rv",
+            "parent_lifecycle": "Vendor Lifecycle",
+            "primary_model": "Agreement",
+            "phases": [
+                {"name": "Qualify", "sequence": 1, "functional_role": "CONTRACTOR_COORDINATOR", "model_state_description": "Agreement is in the Qualify phase of the Contractor Lifecycle."},
+                {"name": "Approve", "sequence": 2, "functional_role": "CONTRACT_MANAGER", "model_state_description": "Agreement is in the Approve phase of the Contractor Lifecycle."},
+                {"name": "Mobilize", "sequence": 3, "functional_role": "SITE_MANAGER", "model_state_description": "Agreement is in the Mobilize phase of the Contractor Lifecycle."},
+                {"name": "Monitor", "sequence": 4, "functional_role": "CONTRACT_OWNER", "model_state_description": "Agreement is in the Monitor phase of the Contractor Lifecycle."},
+                {"name": "Exit", "sequence": 5, "functional_role": "CONTRACT_MANAGER", "model_state_description": "Agreement is in the Exit phase of the Contractor Lifecycle."}
+            ]
+        },
+        {
+            "category": "relationship",
+            "code_name": "rp",
+            "name": "Partner Lifecycle",
+            "search_definition": "Manages strategic, technology, business or operational partnerships from partner identification and evaluation through agreement, onboarding, collaboration, joint activities, performance review, renewal, transformation and termination.",
+            "parent_code_name": null,
+            "parent_lifecycle": null,
+            "primary_model": "Agreement",
+            "phases": [
+                {"name": "Identify", "sequence": 1, "functional_role": "PARTNERSHIP_MANAGER", "model_state_description": "Agreement is in the Identify phase of the Partner Lifecycle."},
+                {"name": "Engage", "sequence": 2, "functional_role": "BUSINESS_DEVELOPMENT_MANAGER", "model_state_description": "Agreement is in the Engage phase of the Partner Lifecycle."},
+                {"name": "Collaborate", "sequence": 3, "functional_role": "PARTNERSHIP_OWNER", "model_state_description": "Agreement is in the Collaborate phase of the Partner Lifecycle."},
+                {"name": "Review", "sequence": 4, "functional_role": "PARTNERSHIP_MANAGER", "model_state_description": "Agreement is in the Review phase of the Partner Lifecycle."},
+                {"name": "Renew", "sequence": 5, "functional_role": "CONTRACT_MANAGER", "model_state_description": "Agreement is in the Renew phase of the Partner Lifecycle."}
+            ]
+        }
+    ]
+}
