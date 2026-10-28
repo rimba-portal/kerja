@@ -1,0 +1,35 @@
+[
+    {
+        "code": "equipment-fault-report",
+        "name": "Equipment Fault Report",
+        "description": "Collects the information required to report an equipment fault.",
+        "provider": "packstub",
+        "provider_key": "equipment-fault-report",
+        "display_mode": "wizard",
+        "version": 1,
+        "is_active": true,
+        "verify_provider": true
+    },
+    {
+        "code": "incident-report",
+        "name": "Incident Report",
+        "description": "Collects initial incident information.",
+        "provider": "packstub",
+        "provider_key": "incident-report",
+        "display_mode": "wizard",
+        "version": 1,
+        "is_active": true,
+        "verify_provider": true
+    },
+    {
+        "code": "permit-to-work-request",
+        "name": "Permit to Work Request",
+        "description": "Collects work scope, hazards, controls and authorization information.",
+        "provider": "packstub",
+        "provider_key": "permit-to-work-request",
+        "display_mode": "wizard",
+        "version": 1,
+        "is_active": true,
+        "verify_provider": true
+    }
+]

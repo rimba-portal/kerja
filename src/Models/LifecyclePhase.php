@@ -4,23 +4,61 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Table;
-use Illuminate\Database\Eloquent\Attributes\Unguarded;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[Fillable([
+    'lifecycle_code',
+    'code',
+    'name',
+    'description',
+    'sequence',
+    'entry_criteria',
+    'exit_criteria',
+    'settings',
+])]
 #[Table(name: 'work_lifecycle_phases')]
-#[Unguarded]
 class LifecyclePhase extends Model
 {
-    public function lifecycle(): BelongsTo
+    use HasUuids;
+
+    protected function casts(): array
     {
-        return $this->belongsTo(Lifecycle::class);
+        return [
+            'sequence' => 'integer',
+            'entry_criteria' => 'array',
+            'exit_criteria' => 'array',
+            'settings' => 'array',
+        ];
     }
 
-    public function flows(): HasMany
+    public function lifecycle(): BelongsTo
     {
-        return $this->hasMany(Flow::class, 'lifecycle_phase_id');
+        return $this->belongsTo(
+            Lifecycle::class,
+            'lifecycle_code',
+            'code',
+        );
+    }
+
+    public function workflowEntries()
+    {
+        return Workflow::query()
+            ->where(
+                'lifecycle_code',
+                $this->lifecycle_code,
+            )
+            ->where(
+                'lifecycle_phase_code',
+                $this->code,
+            );
+    }
+
+    public function qualifiedCode(): string
+    {
+        return "{$this->lifecycle_code}:{$this->code}";
     }
 }

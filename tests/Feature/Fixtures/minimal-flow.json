@@ -1,9 +1,0 @@
-JSON imports
-Flow validates
-Flow starts
-Task is ready
-eligible actor claims Task
-actor starts Task
-FlowAction routes or terminates
-LifecycleTracking is created
-completed Flow applies lifecycle transition

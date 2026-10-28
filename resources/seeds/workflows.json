@@ -1,0 +1,43 @@
+[
+    {
+        "code": "standard-fault-restoration",
+        "name": "Standard Fault Restoration",
+        "description": "Standard workflow for assessment, repair, verification and restoration of equipment faults.",
+        "lifecycle_code": "fault-to-restoration",
+        "lifecycle_phase_code": "reported",
+        "provider": "packstub",
+        "provider_lookup": {
+            "column": "name",
+            "value": "Standard Fault Restoration"
+        },
+        "version": 1,
+        "is_active": true
+    },
+    {
+        "code": "incident-response",
+        "name": "Incident Response",
+        "description": "Standard workflow for incident assessment, response, investigation and closure.",
+        "lifecycle_code": "incident",
+        "provider": "packstub",
+        "provider_lookup": {
+            "column": "name",
+            "value": "Incident Response"
+        },
+        "version": 1,
+        "is_active": true
+    },
+    {
+        "code": "permit-to-work-approval",
+        "name": "Permit to Work Approval",
+        "description": "Assessment and authorization workflow for permit-controlled work.",
+        "lifecycle_code": "permit-to-work",
+        "lifecycle_phase_code": "requested",
+        "provider": "packstub",
+        "provider_lookup": {
+            "column": "name",
+            "value": "Permit to Work Approval"
+        },
+        "version": 1,
+        "is_active": true
+    }
+]
