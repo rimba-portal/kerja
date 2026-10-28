@@ -5,13 +5,27 @@ declare(strict_types=1);
 namespace Rimba\Work;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
+use Packstub\Flow\Models\WorkflowRun;
 use Rimba\Work\Actions\BuildOfferingContext;
 use Rimba\Work\Contracts\OfferingAuthorizer;
 use Rimba\Work\Contracts\OfferingContextBuilder;
 use Rimba\Work\Contracts\OfferingInputMapper;
 use Rimba\Work\Contracts\SubjectRegistry as SubjectRegistryContract;
 use Rimba\Work\Contracts\WorkflowRunner;
+use Rimba\Work\Models\Form;
+use Rimba\Work\Models\Lifecycle;
+use Rimba\Work\Models\Offering;
+use Rimba\Work\Models\OfferingExecution;
+use Rimba\Work\Models\Workflow;
+use Rimba\Work\Observers\OfferingExecutionObserver;
+use Rimba\Work\Observers\OfferingObserver;
 use Rimba\Work\Observers\PackstubWorkflowRunObserver;
+use Rimba\Work\Policies\FormPolicy;
+use Rimba\Work\Policies\LifecyclePolicy;
+use Rimba\Work\Policies\OfferingExecutionPolicy;
+use Rimba\Work\Policies\OfferingPolicy;
+use Rimba\Work\Policies\WorkflowPolicy;
 use Rimba\Work\Providers\Forms\LocalFormProvider;
 use Rimba\Work\Providers\Forms\PackstubFormProvider;
 use Rimba\Work\Providers\Workflows\NullWorkflowProvider;
@@ -21,23 +35,10 @@ use Rimba\Work\Registries\SubjectRegistry;
 use Rimba\Work\Registries\WorkflowProviderRegistry;
 use Rimba\Work\Services\OfferingMappingService;
 use Rimba\Work\Services\OfferingPolicyAuthorizer;
-use Rimba\Work\Services\WorkManager;
 use Rimba\Work\Services\WorkflowManager;
+use Rimba\Work\Services\WorkManager;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Illuminate\Support\Facades\Gate;
-use Rimba\Work\Models\Form;
-use Rimba\Work\Models\Lifecycle;
-use Rimba\Work\Models\Offering;
-use Rimba\Work\Models\OfferingExecution;
-use Rimba\Work\Models\Workflow;
-use Rimba\Work\Observers\OfferingExecutionObserver;
-use Rimba\Work\Observers\OfferingObserver;
-use Rimba\Work\Policies\FormPolicy;
-use Rimba\Work\Policies\LifecyclePolicy;
-use Rimba\Work\Policies\OfferingExecutionPolicy;
-use Rimba\Work\Policies\OfferingPolicy;
-use Rimba\Work\Policies\WorkflowPolicy;
 
 class WorkServiceProvider extends PackageServiceProvider
 {
@@ -121,6 +122,7 @@ class WorkServiceProvider extends PackageServiceProvider
 
         $this->registerPackstubRunObserver();
     }
+
     protected function registerObservers(): void
     {
         Offering::observe(
@@ -131,6 +133,7 @@ class WorkServiceProvider extends PackageServiceProvider
             OfferingExecutionObserver::class,
         );
     }
+
     protected function registerPolicies(): void
     {
         Gate::policy(
@@ -158,13 +161,14 @@ class WorkServiceProvider extends PackageServiceProvider
             WorkflowPolicy::class,
         );
     }
+
     protected function registerFormProviders(): void
     {
-        $registry = $this->app->make(
+        $formProviderRegistry = $this->app->make(
             FormProviderRegistry::class,
         );
 
-        $registry
+        $formProviderRegistry
             ->register(
                 $this->app->make(
                     PackstubFormProvider::class,
@@ -179,11 +183,11 @@ class WorkServiceProvider extends PackageServiceProvider
 
     protected function registerWorkflowProviders(): void
     {
-        $registry = $this->app->make(
+        $workflowProviderRegistry = $this->app->make(
             WorkflowProviderRegistry::class,
         );
 
-        $registry
+        $workflowProviderRegistry
             ->register(
                 $this->app->make(
                     PackstubWorkflowProvider::class,
@@ -198,15 +202,14 @@ class WorkServiceProvider extends PackageServiceProvider
 
     protected function registerConfiguredSubjects(): void
     {
-        $registry = $this->app->make(
+        $subjectRegistry = $this->app->make(
             SubjectRegistryContract::class,
         );
 
         foreach (
-            config('work.subjects', [])
-            as $alias => $modelClass
+            config('work.subjects', []) as $alias => $modelClass
         ) {
-            $registry->register(
+            $subjectRegistry->register(
                 alias: $alias,
                 modelClass: $modelClass,
             );
@@ -217,7 +220,7 @@ class WorkServiceProvider extends PackageServiceProvider
     {
         $modelClass = config(
             'work.providers.workflows.drivers.packstub.run_model',
-            \Packstub\Flow\Models\WorkflowRun::class,
+            WorkflowRun::class,
         );
 
         if (
