@@ -28,7 +28,7 @@ class MyRequests extends Page implements HasTable
     protected static ?int $navigationSort = 30;
 
     protected string $view =
-        'work::filament.staff.pages.my-requests';
+        'bites::staff.pages.my-requests';
 
     public function table(
         Table $table,

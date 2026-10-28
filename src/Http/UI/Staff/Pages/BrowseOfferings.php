@@ -23,7 +23,7 @@ class BrowseOfferings extends Page
     protected static ?int $navigationSort = 10;
 
     protected string $view =
-        'bites.staff.pages.browse-offerings';
+        'bites::staff.pages.browse-offerings';
 
     public string $search = '';
 

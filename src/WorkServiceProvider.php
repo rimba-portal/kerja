@@ -60,7 +60,7 @@ class WorkServiceProvider extends BitesServiceProvider
      */
     protected string $configName = 'work';
 
-    protected string $viewNamespace = 'work';
+    protected string $viewNamespace = 'bites';
 
     /*
      * Work currently does not need its own icon set.
@@ -179,17 +179,17 @@ class WorkServiceProvider extends BitesServiceProvider
 
     protected function registerFormProviders(): void
     {
-        $registry = $this->app->make(
+        $formProviderRegistry = $this->app->make(
             FormProviderRegistry::class,
         );
 
-        $registry->register(
+        $formProviderRegistry->register(
             $this->app->make(
                 PackstubFormProvider::class,
             ),
         );
 
-        $registry->register(
+        $formProviderRegistry->register(
             $this->app->make(
                 LocalFormProvider::class,
             ),
@@ -204,17 +204,17 @@ class WorkServiceProvider extends BitesServiceProvider
 
     protected function registerWorkflowProviders(): void
     {
-        $registry = $this->app->make(
+        $workflowProviderRegistry = $this->app->make(
             WorkflowProviderRegistry::class,
         );
 
-        $registry->register(
+        $workflowProviderRegistry->register(
             $this->app->make(
                 PackstubWorkflowProvider::class,
             ),
         );
 
-        $registry->register(
+        $workflowProviderRegistry->register(
             $this->app->make(
                 NullWorkflowProvider::class,
             ),
@@ -229,14 +229,14 @@ class WorkServiceProvider extends BitesServiceProvider
 
     protected function registerConfiguredSubjects(): void
     {
-        $registry = $this->app->make(
+        $subjectRegistry = $this->app->make(
             SubjectRegistryContract::class,
         );
 
         foreach (
             config('work.subjects', []) as $alias => $modelClass
         ) {
-            $registry->register(
+            $subjectRegistry->register(
                 alias: $alias,
                 modelClass: $modelClass,
             );

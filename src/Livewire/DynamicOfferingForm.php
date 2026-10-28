@@ -41,7 +41,7 @@ class DynamicOfferingForm extends Component
     public function render(): View
     {
         return view(
-            'work::livewire.dynamic-offering-form',
+            'bites::livewire.dynamic-offering-form',
         );
     }
 }

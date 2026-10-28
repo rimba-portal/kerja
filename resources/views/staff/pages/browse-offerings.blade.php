@@ -25,7 +25,10 @@
         @else
             <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                 @foreach ($this->offerings as $offering)
-                    <x-work::offering-card :offering="$offering" :url="$this->offeringUrl($offering)" />
+                    @include('work::components.offering-card', [
+                        'offering' => $offering,
+                        'url' => $this->offeringUrl($offering),
+                    ])
                 @endforeach
             </div>
         @endif

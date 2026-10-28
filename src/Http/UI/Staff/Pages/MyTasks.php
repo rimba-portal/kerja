@@ -28,7 +28,7 @@ class MyTasks extends Page implements HasTable
     protected static ?int $navigationSort = 20;
 
     protected string $view =
-        'work::filament.staff.pages.my-tasks';
+        'bites::staff.pages.my-tasks';
 
     public function table(
         Table $table,
