@@ -22,6 +22,12 @@ class NullWorkflowProvider implements WorkflowProvider
         return $workflow->provider === WorkflowProviderType::Null;
     }
 
+    public function designerUrl(
+        Workflow $workflow,
+    ): ?string {
+        return null;
+    }
+
     public function exists(Workflow $workflow): bool
     {
         return true;

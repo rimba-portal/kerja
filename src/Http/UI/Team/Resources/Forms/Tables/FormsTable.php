@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Http\UI\Team\Resources\Forms\Tables;
 
-declare(strict_types=1);
-
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;

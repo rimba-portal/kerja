@@ -45,13 +45,14 @@ class WorkflowsTable
                     ->label('Open designer')
                     ->icon('heroicon-m-share')
                     ->url(
-                        fn (
-                            Workflow $record,
-                        ): ?string => app(
-                            WorkflowManager::class,
-                        )
-                            ->provider($record)
+                        fn (Workflow $record): ?string => app(WorkflowManager::class)
                             ->designerUrl($record),
+                    )
+                    ->visible(
+                        fn (Workflow $record): bool => filled(
+                            app(WorkflowManager::class)
+                                ->designerUrl($record)
+                        ),
                     )
                     ->openUrlInNewTab(),
 

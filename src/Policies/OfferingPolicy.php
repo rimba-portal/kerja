@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rimba\Work\Policies;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Rimba\People\Models\Staff;
 use Rimba\Work\Models\Offering;
 use Rimba\Work\Services\WorkAccessService;
 
@@ -17,14 +18,14 @@ final readonly class OfferingPolicy
     public function viewAny(
         Authenticatable $user,
     ): bool {
-        return $this->workAccessService->staff($user) !== null;
+        return $this->workAccessService->staff($user) instanceof Staff;
     }
 
     public function view(
         Authenticatable $user,
         Offering $offering,
     ): bool {
-        return $this->workAccessService->staff($user) !== null
+        return $this->workAccessService->staff($user) instanceof Staff
             && $offering->is_active;
     }
 
@@ -60,7 +61,7 @@ final readonly class OfferingPolicy
         Authenticatable $user,
         Offering $offering,
     ): bool {
-        return $this->workAccessService->staff($user) !== null
+        return $this->workAccessService->staff($user) instanceof Staff
             && $offering->is_active
             && $offering->availability->value
                 === 'available';

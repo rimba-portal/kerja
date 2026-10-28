@@ -27,6 +27,12 @@ class PackstubWorkflowProvider implements WorkflowProvider
         return $workflow->provider === WorkflowProviderType::Packstub;
     }
 
+    public function designerUrl(
+        Workflow $workflow,
+    ): ?string {
+        return null;
+    }
+
     public function exists(Workflow $workflow): bool
     {
         return $this->query($workflow)->exists();

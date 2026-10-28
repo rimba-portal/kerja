@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rimba\Work\Policies;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Rimba\People\Models\Staff;
 use Rimba\Work\Models\Lifecycle;
 use Rimba\Work\Services\WorkAccessService;
 
@@ -23,7 +24,7 @@ final readonly class LifecyclePolicy
     ): bool {
         return $this->workAccessService->staff(
             $user,
-        ) !== null;
+        ) instanceof Staff;
     }
 
     /**

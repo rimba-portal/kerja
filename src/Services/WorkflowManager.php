@@ -23,6 +23,14 @@ class WorkflowManager implements WorkflowRunner
         return $this->providers->for($workflow);
     }
 
+    public function designerUrl(
+        Workflow $workflow,
+    ): ?string {
+        return $this
+            ->provider($workflow)
+            ->designerUrl($workflow);
+    }
+
     public function resolve(
         Workflow $workflow,
     ): WorkflowDefinition {
