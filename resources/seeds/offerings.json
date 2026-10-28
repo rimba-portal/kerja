@@ -1,122 +1,33 @@
 [
     {
         "code": "report-equipment-fault",
+        "org_unit_code": "MAINTENANCE",
         "name": "Report Equipment Fault",
-        "description": "Report a fault or abnormal condition affecting equipment.",
-
-        "team_code": "maintenance",
-
+        "description": "Report an equipment fault for assessment and restoration.",
         "form_code": "equipment-fault-report",
-        "workflow_code": "standard-fault-restoration",
-
+        "workflow_code": "equipment-fault-restoration",
         "subject_type": "asset.fault-report",
         "subject_creation_mode": "create",
-
         "input_mapping": {
             "asset": "asset_id",
             "location": "location_id",
             "problem": "description",
-            "severity": "severity",
-            "observed_at": "reported_at"
+            "severity": "severity"
         },
-
         "context_mapping": {
-            "user.id": "reported_by",
-            "team.id": "org_team_id"
+            "staff.id": "reported_by",
+            "unit.id": "org_unit_id",
+            "offering.code": "offering_code"
         },
-
         "defaults": {
             "status": "reported",
-            "source": "staff-portal"
+            "source": "staff-panel"
         },
-
         "visibility": "organization",
         "availability": "available",
-
         "icon": "heroicon-o-wrench-screwdriver",
         "color": "warning",
         "sort": 10,
-
-        "is_active": true
-    },
-
-    {
-        "code": "report-incident",
-        "name": "Report Incident",
-        "description": "Report a safety or operational incident.",
-
-        "team_code": "safety",
-
-        "form_code": "incident-report",
-        "workflow_code": "incident-response",
-
-        "subject_type": "safety.incident",
-        "subject_creation_mode": "create",
-
-        "input_mapping": {
-            "incident_type": "type",
-            "location": "location_id",
-            "description": "description",
-            "occurred_at": "occurred_at",
-            "severity": "severity"
-        },
-
-        "context_mapping": {
-            "user.id": "reported_by",
-            "team.id": "org_team_id"
-        },
-
-        "defaults": {
-            "status": "reported"
-        },
-
-        "visibility": "organization",
-        "availability": "available",
-
-        "icon": "heroicon-o-exclamation-triangle",
-        "color": "danger",
-        "sort": 20,
-
-        "is_active": true
-    },
-
-    {
-        "code": "request-permit-to-work",
-        "name": "Request Permit to Work",
-        "description": "Request authorization to perform controlled work.",
-
-        "team_code": "safety",
-
-        "form_code": "permit-to-work-request",
-        "workflow_code": "permit-to-work-approval",
-
-        "subject_type": "safety.permit-to-work",
-        "subject_creation_mode": "create",
-
-        "input_mapping": {
-            "work_type": "work_type",
-            "location": "location_id",
-            "description": "work_description",
-            "planned_start": "planned_start_at",
-            "planned_end": "planned_end_at"
-        },
-
-        "context_mapping": {
-            "user.id": "requested_by",
-            "team.id": "org_team_id"
-        },
-
-        "defaults": {
-            "status": "requested"
-        },
-
-        "visibility": "organization",
-        "availability": "available",
-
-        "icon": "heroicon-o-document-check",
-        "color": "info",
-        "sort": 30,
-
         "is_active": true
     }
 ]

@@ -19,7 +19,6 @@ use Rimba\Work\Models\Offering;
 use Rimba\Work\Models\OfferingExecution;
 use Rimba\Work\Models\Workflow;
 use Rimba\Work\Observers\OfferingExecutionObserver;
-use Rimba\Work\Observers\OfferingObserver;
 use Rimba\Work\Observers\PackstubWorkflowRunObserver;
 use Rimba\Work\Policies\FormPolicy;
 use Rimba\Work\Policies\LifecyclePolicy;
@@ -35,6 +34,7 @@ use Rimba\Work\Registries\SubjectRegistry;
 use Rimba\Work\Registries\WorkflowProviderRegistry;
 use Rimba\Work\Services\OfferingMappingService;
 use Rimba\Work\Services\OfferingPolicyAuthorizer;
+use Rimba\Work\Services\WorkAccessService;
 use Rimba\Work\Services\WorkflowManager;
 use Rimba\Work\Services\WorkManager;
 use Spatie\LaravelPackageTools\Package;
@@ -64,13 +64,12 @@ class WorkServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->app->singleton(
-            SubjectRegistryContract::class,
             SubjectRegistry::class,
         );
 
         $this->app->alias(
-            SubjectRegistryContract::class,
             SubjectRegistry::class,
+            SubjectRegistryContract::class,
         );
 
         $this->app->singleton(
@@ -79,6 +78,9 @@ class WorkServiceProvider extends PackageServiceProvider
 
         $this->app->singleton(
             WorkflowProviderRegistry::class,
+        );
+        $this->app->singleton(
+            WorkAccessService::class,
         );
 
         $this->app->bind(
@@ -125,10 +127,6 @@ class WorkServiceProvider extends PackageServiceProvider
 
     protected function registerObservers(): void
     {
-        Offering::observe(
-            OfferingObserver::class,
-        );
-
         OfferingExecution::observe(
             OfferingExecutionObserver::class,
         );

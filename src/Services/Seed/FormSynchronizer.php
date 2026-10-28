@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rimba\Work\Services\Seed;
 
 use Illuminate\Support\Facades\DB;
+use Rimba\Work\Contracts\SeedSynchronizer;
+use Rimba\Work\Exceptions\SeedSynchronizationException;
 use Rimba\Work\Models\Form;
 
-class FormSynchronizer
+class FormSynchronizer implements SeedSynchronizer
 {
     public function sync(
         array $records,
@@ -27,11 +29,20 @@ class FormSynchronizer
                 'code' => $record['code'],
             ],
             [
+                'org_unit_id' => $this->resolveOrgUnitId(
+                    $record['org_unit_code']
+                        ?? throw new SeedSynchronizationException(
+                            "Form [{$record['code']}] is missing org_unit_code."
+                        ),
+                ),
+
                 'name' => $record['name'],
 
-                'description' => $record['description'] ?? null,
+                'description' => $record['description']
+                    ?? null,
 
-                'provider' => $record['provider'] ?? 'packstub',
+                'provider' => $record['provider']
+                    ?? 'packstub',
 
                 'provider_key' => $record['provider_key']
                     ?? $record['code'],
@@ -39,14 +50,44 @@ class FormSynchronizer
                 'display_mode' => $record['display_mode']
                     ?? 'single',
 
-                'schema' => $record['schema'] ?? null,
+                'schema' => $record['schema']
+                    ?? null,
 
-                'settings' => $record['settings'] ?? null,
+                'settings' => $record['settings']
+                    ?? null,
 
-                'version' => $record['version'] ?? 1,
+                'version' => $record['version']
+                    ?? 1,
 
-                'is_active' => $record['is_active'] ?? true,
+                'is_active' => $record['is_active']
+                    ?? true,
             ],
         );
+    }
+
+    protected function resolveOrgUnitId(
+        string $code,
+    ): int|string {
+        $model = config(
+            'work.models.org_unit',
+        );
+
+        if (! $model) {
+            throw new SeedSynchronizationException(
+                'work.models.org_unit is not configured.'
+            );
+        }
+
+        $unit = $model::query()
+            ->where('code', $code)
+            ->first();
+
+        if (! $unit) {
+            throw new SeedSynchronizationException(
+                "OrgUnit [{$code}] does not exist."
+            );
+        }
+
+        return $unit->getKey();
     }
 }

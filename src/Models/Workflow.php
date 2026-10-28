@@ -13,9 +13,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Rimba\Organization\Models\OrgUnit;
 use Rimba\Work\Enums\WorkflowProviderType;
 
 #[Fillable([
+    'org_unit_id',
     'code',
     'name',
     'description',
@@ -23,6 +25,7 @@ use Rimba\Work\Enums\WorkflowProviderType;
     'lifecycle_phase_code',
     'provider',
     'provider_key',
+    'provider_reference',
     'version',
     'is_active',
     'settings',
@@ -51,6 +54,14 @@ class Workflow extends Model
             Lifecycle::class,
             'lifecycle_code',
             'code',
+        );
+    }
+
+    public function orgUnit(): BelongsTo
+    {
+        return $this->belongsTo(
+            OrgUnit::class,
+            'org_unit_id',
         );
     }
 

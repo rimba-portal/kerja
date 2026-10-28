@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Rimba\Organization\Models\OrgUnit;
 use Rimba\Work\Enums\OfferingAvailability;
 use Rimba\Work\Enums\OfferingVisibility;
 use Rimba\Work\Enums\SubjectCreationMode;
@@ -22,7 +23,7 @@ use Rimba\Work\Enums\SubjectCreationMode;
     'name',
     'description',
 
-    'org_team_id',
+    'org_unit_id',
 
     'form_code',
     'workflow_code',
@@ -96,11 +97,11 @@ class Offering extends Model
         );
     }
 
-    public function team(): BelongsTo
+    public function orgUnit(): BelongsTo
     {
         return $this->belongsTo(
-            config('work.models.org_team'),
-            'org_team_id',
+            OrgUnit::class,
+            'org_unit_id',
         );
     }
 
@@ -127,13 +128,13 @@ class Offering extends Model
     }
 
     #[Scope]
-    protected function forTeam(
+    protected function forOrgUnit(
         Builder $query,
-        string $teamId,
+        int|string $orgUnitId,
     ): Builder {
         return $query->where(
-            'org_team_id',
-            $teamId,
+            'org_unit_id',
+            $orgUnitId,
         );
     }
 
@@ -160,7 +161,7 @@ class Offering extends Model
     {
         return filled($this->subject_type)
             && $this->subject_creation_mode
-                !== SubjectCreationMode::None;
+            !== SubjectCreationMode::None;
     }
 
     public function canCreateSubject(): bool

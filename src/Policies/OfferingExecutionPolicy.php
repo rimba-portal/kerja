@@ -9,6 +9,8 @@ use Rimba\Work\Models\OfferingExecution;
 
 class OfferingExecutionPolicy
 {
+    public $access;
+
     public function viewAny(
         Authenticatable $user,
     ): bool {
@@ -22,18 +24,17 @@ class OfferingExecutionPolicy
         OfferingExecution $execution,
     ): bool {
         if (
-            $user->can(
-                'work.execution.view',
-            )
+            (string) $user->getAuthIdentifier()
+            === (string) $execution->user_id
         ) {
             return true;
         }
 
-        /*
-         * A user may see their own work.
-         */
-        return (string) $user->getAuthIdentifier()
-            === (string) $execution->user_id;
+        return $execution->orgUnit !== null
+            && $this->access->canManageUnit(
+                $user,
+                $execution->orgUnit,
+            );
     }
 
     public function cancel(

@@ -231,6 +231,11 @@ class ExecuteOffering
             'offering_code' => $offering->code,
 
             'user_id' => data_get($context, 'user.id'),
+
+            'staff_id' => data_get($context, 'staff.id'),
+
+            'org_unit_id' => data_get($context, 'unit.id'),
+
             'org_team_id' => data_get($context, 'team.id'),
 
             'status' => ExecutionStatus::Failed,

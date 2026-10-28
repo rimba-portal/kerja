@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Actions;
 
+use Rimba\People\Models\Staff;
 use Rimba\Work\Contracts\OfferingContextBuilder;
 use Rimba\Work\Data\OfferingContext;
 use Rimba\Work\Models\Offering;
@@ -16,26 +17,34 @@ class BuildOfferingContext implements OfferingContextBuilder
     ): OfferingContext {
         $user = auth()->user();
 
+        $staff = $user?->staff;
+
+        if (! $staff instanceof Staff) {
+            $staff = null;
+        }
+
+        $jobPosition = $staff?->jobPosition;
+
         return new OfferingContext(
             userId: $this->identifier(
-                data_get($user, 'id'),
+                $user?->getAuthIdentifier(),
             ),
 
             staffId: $this->identifier(
-                data_get($user, 'staff_id'),
+                $staff?->getKey(),
             ),
 
             jobPositionId: $this->identifier(
-                data_get($user, 'job_position_id'),
+                $jobPosition?->getKey(),
             ),
 
             orgTeamId: $this->identifier(
-                $offering->org_team_id
-                    ?? data_get($user, 'org_team_id'),
+                $metadata['org_team_id']
+                    ?? null,
             ),
 
             orgUnitId: $this->identifier(
-                data_get($user, 'org_unit_id'),
+                $staff?->org_unit_id,
             ),
 
             offeringCode: $offering->code,

@@ -6,49 +6,64 @@ namespace Rimba\Work\Policies;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Rimba\Work\Models\Lifecycle;
+use Rimba\Work\Services\WorkAccessService;
 
-class LifecyclePolicy
+final readonly class LifecyclePolicy
 {
+    public function __construct(
+        private WorkAccessService $workAccessService,
+    ) {}
+
+    /**
+     * Any authenticated User with a Staff record
+     * may see the lifecycle catalog.
+     */
     public function viewAny(
         Authenticatable $user,
     ): bool {
-        return $user->can(
-            'work.lifecycle.view-any',
-        );
+        return $this->workAccessService->staff(
+            $user,
+        ) !== null;
     }
 
+    /**
+     * Lifecycle is a global reference catalog,
+     * not owned by OrgUnit.
+     */
     public function view(
         Authenticatable $user,
-        Lifecycle $lifecycle,
     ): bool {
-        return $user->can(
-            'work.lifecycle.view',
+        return $this->viewAny(
+            $user,
         );
     }
 
-    public function create(
-        Authenticatable $user,
-    ): bool {
-        return $user->can(
-            'work.lifecycle.create',
-        );
+    /**
+     * Team Panel users do not create global
+     * lifecycle definitions.
+     */
+    public function create(): bool
+    {
+        return false;
     }
 
-    public function update(
-        Authenticatable $user,
-        Lifecycle $lifecycle,
-    ): bool {
-        return $user->can(
-            'work.lifecycle.update',
-        );
+    public function update(): bool
+    {
+        return false;
     }
 
-    public function delete(
-        Authenticatable $user,
-        Lifecycle $lifecycle,
-    ): bool {
-        return $user->can(
-            'work.lifecycle.delete',
-        );
+    public function delete(): bool
+    {
+        return false;
+    }
+
+    public function restore(): bool
+    {
+        return false;
+    }
+
+    public function forceDelete(): bool
+    {
+        return false;
     }
 }

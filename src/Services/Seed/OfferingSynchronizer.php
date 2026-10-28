@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Rimba\Work\Services\Seed;
 
 use Illuminate\Support\Facades\DB;
+use Rimba\Work\Contracts\SeedSynchronizer;
 use Rimba\Work\Contracts\SubjectRegistry;
+use Rimba\Work\Exceptions\SeedSynchronizationException;
 use Rimba\Work\Models\Form;
 use Rimba\Work\Models\Offering;
 use Rimba\Work\Models\Workflow;
-use RuntimeException;
 
-class OfferingSynchronizer
+class OfferingSynchronizer implements SeedSynchronizer
 {
     public function __construct(
         protected SubjectRegistry $subjects,
@@ -22,7 +23,9 @@ class OfferingSynchronizer
     ): void {
         DB::transaction(function () use ($records): void {
             foreach ($records as $record) {
-                $this->syncOffering($record);
+                $this->syncOffering(
+                    $record,
+                );
             }
         });
     }
@@ -30,34 +33,56 @@ class OfferingSynchronizer
     protected function syncOffering(
         array $record,
     ): Offering {
-        $formCode = $record['form_code'] ?? null;
+        $code = $record['code'];
 
-        $workflowCode = $record['workflow_code'] ?? null;
+        $orgUnitCode =
+            $record['org_unit_code']
+            ?? throw new SeedSynchronizationException(
+                "Offering [{$code}] is missing org_unit_code."
+            );
 
-        $subjectType = $record['subject_type'] ?? null;
+        $orgUnitId =
+            $this->resolveOrgUnitId(
+                $orgUnitCode,
+            );
 
-        $this->validateForm($formCode);
+        $formCode =
+            $record['form_code']
+            ?? null;
 
-        $this->validateWorkflow($workflowCode);
+        $workflowCode =
+            $record['workflow_code']
+            ?? null;
 
-        $this->validateSubject($subjectType);
+        $subjectType =
+            $record['subject_type']
+            ?? null;
+
+        $this->validateForm(
+            code: $formCode,
+            orgUnitId: $orgUnitId,
+        );
+
+        $this->validateWorkflow(
+            code: $workflowCode,
+            orgUnitId: $orgUnitId,
+        );
+
+        $this->validateSubject(
+            $subjectType,
+        );
 
         return Offering::query()->updateOrCreate(
             [
-                'code' => $record['code'],
+                'code' => $code,
             ],
             [
+                'org_unit_id' => $orgUnitId,
+
                 'name' => $record['name'],
 
-                'description' => $record['description'] ?? null,
-
-                /*
-                 * Team resolution should be performed separately from an
-                 * environment-specific database ID.
-                 */
-                'org_team_id' => $this->resolveTeam(
-                    $record['team_code'] ?? null,
-                ),
+                'description' => $record['description']
+                    ?? null,
 
                 'form_code' => $formCode,
 
@@ -83,51 +108,76 @@ class OfferingSynchronizer
                 'availability' => $record['availability']
                     ?? 'available',
 
-                'icon' => $record['icon'] ?? null,
+                'icon' => $record['icon']
+                    ?? null,
 
-                'color' => $record['color'] ?? null,
+                'color' => $record['color']
+                    ?? null,
 
-                'sort' => $record['sort'] ?? 0,
+                'sort' => $record['sort']
+                    ?? 0,
 
-                'is_active' => $record['is_active'] ?? true,
+                'is_active' => $record['is_active']
+                    ?? true,
 
-                'settings' => $record['settings'] ?? null,
+                'settings' => $record['settings']
+                    ?? null,
             ],
         );
     }
 
     protected function validateForm(
         ?string $code,
+        int|string $orgUnitId,
     ): void {
         if ($code === null) {
             return;
         }
 
-        if (
-            ! Form::query()
-                ->where('code', $code)
-                ->exists()
-        ) {
-            throw new RuntimeException(
+        $form = Form::query()
+            ->where('code', $code)
+            ->first();
+
+        if (! $form) {
+            throw new SeedSynchronizationException(
                 "Form [{$code}] does not exist."
+            );
+        }
+
+        if (
+            (string) $form->org_unit_id
+            !== (string) $orgUnitId
+        ) {
+            throw new SeedSynchronizationException(
+                "Form [{$code}] belongs to a different OrgUnit."
             );
         }
     }
 
     protected function validateWorkflow(
         ?string $code,
+        int|string $orgUnitId,
     ): void {
         if ($code === null) {
             return;
         }
 
-        if (
-            ! Workflow::query()
-                ->where('code', $code)
-                ->exists()
-        ) {
-            throw new RuntimeException(
+        $workflow = Workflow::query()
+            ->where('code', $code)
+            ->first();
+
+        if (! $workflow) {
+            throw new SeedSynchronizationException(
                 "Workflow [{$code}] does not exist."
+            );
+        }
+
+        if (
+            (string) $workflow->org_unit_id
+            !== (string) $orgUnitId
+        ) {
+            throw new SeedSynchronizationException(
+                "Workflow [{$code}] belongs to a different OrgUnit."
             );
         }
     }
@@ -140,39 +190,35 @@ class OfferingSynchronizer
         }
 
         if (! $this->subjects->has($alias)) {
-            throw new RuntimeException(
+            throw new SeedSynchronizationException(
                 "Subject [{$alias}] is not registered."
             );
         }
     }
 
-    protected function resolveTeam(
-        ?string $teamCode,
-    ): ?string {
-        if ($teamCode === null) {
-            return null;
-        }
-
-        $modelClass = config(
-            'work.models.org_team',
+    protected function resolveOrgUnitId(
+        string $code,
+    ): int|string {
+        $model = config(
+            'work.models.org_unit',
         );
 
-        if (! $modelClass) {
-            throw new RuntimeException(
-                "Unable to resolve team [{$teamCode}]: work.models.org_team is not configured."
+        if (! $model) {
+            throw new SeedSynchronizationException(
+                'work.models.org_unit is not configured.'
             );
         }
 
-        $team = $modelClass::query()
-            ->where('code', $teamCode)
+        $unit = $model::query()
+            ->where('code', $code)
             ->first();
 
-        if (! $team) {
-            throw new RuntimeException(
-                "OrgTeam [{$teamCode}] does not exist."
+        if (! $unit) {
+            throw new SeedSynchronizationException(
+                "OrgUnit [{$code}] does not exist."
             );
         }
 
-        return (string) $team->getKey();
+        return $unit->getKey();
     }
 }

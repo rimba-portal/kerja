@@ -6,40 +6,45 @@ namespace Rimba\Work\Policies;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Rimba\Work\Models\Workflow;
+use Rimba\Work\Services\WorkAccessService;
 
-class WorkflowPolicy
+final readonly class WorkflowPolicy
 {
+    public function __construct(
+        private WorkAccessService $workAccessService,
+    ) {}
+
     public function viewAny(
         Authenticatable $user,
     ): bool {
-        return $user->can(
-            'work.workflow.view-any',
-        );
+        return $this->workAccessService
+            ->manageableUnitIds($user) !== [];
     }
 
     public function view(
         Authenticatable $user,
         Workflow $workflow,
     ): bool {
-        return $user->can(
-            'work.workflow.view',
-        );
+        return $workflow->orgUnit !== null
+            && $this->workAccessService->canManageUnit(
+                $user,
+                $workflow->orgUnit,
+            );
     }
 
     public function create(
         Authenticatable $user,
     ): bool {
-        return $user->can(
-            'work.workflow.create',
-        );
+        return $this->viewAny($user);
     }
 
     public function update(
         Authenticatable $user,
         Workflow $workflow,
     ): bool {
-        return $user->can(
-            'work.workflow.update',
+        return $this->view(
+            $user,
+            $workflow,
         );
     }
 
@@ -47,8 +52,9 @@ class WorkflowPolicy
         Authenticatable $user,
         Workflow $workflow,
     ): bool {
-        return $user->can(
-            'work.workflow.delete',
+        return $this->view(
+            $user,
+            $workflow,
         );
     }
 }

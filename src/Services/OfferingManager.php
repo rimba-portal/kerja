@@ -29,14 +29,14 @@ class OfferingManager
     }
 
     public function available(
-        ?string $teamId = null,
+        int|string|null $orgUnitId = null,
     ): Collection {
         return $this->query()
             ->available()
             ->when(
-                $teamId,
-                fn (Builder $query): Builder => $query->forTeam(
-                    $teamId,
+                $orgUnitId,
+                fn (Builder $query): Builder => $query->forOrgUnit(
+                    $orgUnitId,
                 ),
             )
             ->ordered()

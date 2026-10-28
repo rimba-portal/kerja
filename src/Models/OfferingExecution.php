@@ -12,12 +12,17 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Rimba\Organization\Models\OrgTeam;
+use Rimba\Organization\Models\OrgUnit;
+use Rimba\People\Models\Staff;
 use Rimba\Work\Enums\ExecutionStatus;
 
 #[Fillable([
     'offering_code',
 
     'user_id',
+    'staff_id',
+    'org_unit_id',
     'org_team_id',
 
     'subject_type',
@@ -99,6 +104,30 @@ class OfferingExecution extends Model
             __FUNCTION__,
             'form_submission_type',
             'form_submission_id',
+        );
+    }
+
+    public function staff(): BelongsTo
+    {
+        return $this->belongsTo(
+            Staff::class,
+            'staff_id',
+        );
+    }
+
+    public function orgUnit(): BelongsTo
+    {
+        return $this->belongsTo(
+            OrgUnit::class,
+            'org_unit_id',
+        );
+    }
+
+    public function orgTeam(): BelongsTo
+    {
+        return $this->belongsTo(
+            OrgTeam::class,
+            'org_team_id',
         );
     }
 

@@ -26,4 +26,8 @@ interface WorkflowProvider
         array $payload = [],
         ?bool $queue = null,
     ): ?Model;
+
+    public function designerUrl(
+        Workflow $workflow,
+    ): ?string;
 }

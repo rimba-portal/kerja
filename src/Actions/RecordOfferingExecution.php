@@ -24,6 +24,8 @@ class RecordOfferingExecution
             'offering_code' => $offering->code,
 
             'user_id' => $context->userId,
+            'staff_id' => $context->staffId,
+            'org_unit_id' => $context->orgUnitId,
             'org_team_id' => $context->orgTeamId,
 
             'form_submission_type' => $formSubmission?->getMorphClass(),

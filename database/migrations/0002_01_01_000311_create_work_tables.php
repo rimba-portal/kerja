@@ -40,6 +40,7 @@ return new class extends Migration
         });
         Schema::create('work_forms', function (Blueprint $table): void {
             $table->uuid('id')->primary();
+            $table->foreignId('org_unit_id')->index()->constrained('org_units');
             $table->string('code')->unique();
             $table->string('name');
             $table->text('description')->nullable();
@@ -57,6 +58,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('code')->unique();
             $table->string('name');
+            $table->foreignId('org_unit_id')->index()->constrained('org_units');
             $table->text('description')->nullable();
             $table->string('lifecycle_code')->nullable();
             $table->string('lifecycle_phase_code')->nullable();
@@ -75,7 +77,7 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->uuid('org_team_id')->nullable()->index();
+            $table->foreignId('org_unit_id')->index()->constrained('org_units');
             $table->string('form_code')->nullable();
             $table->string('workflow_code')->nullable();
             $table->string('subject_type')->nullable()->index();
@@ -97,8 +99,10 @@ return new class extends Migration
         Schema::create('work_offering_executions', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('offering_code')->index();
-            $table->uuid('user_id')->nullable()->index();
-            $table->uuid('org_team_id')->nullable()->index();
+            $table->foreignId('user_id')->nullable()->index()->constrained('users')->nullOnDelete();
+            $table->foreignId('staff_id')->nullable()->index()->constrained('staff')->nullOnDelete();
+            $table->foreignId('org_unit_id')->nullable()->index()->constrained('org_units')->nullOnDelete();
+            $table->foreignId('org_team_id')->nullable()->index()->constrained('org_teams')->nullOnDelete();
             $table->string('subject_type')->nullable();
             $table->string('subject_id')->nullable();
             $table->string('workflow_instance_type')->nullable();

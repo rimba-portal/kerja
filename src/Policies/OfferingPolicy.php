@@ -6,49 +6,53 @@ namespace Rimba\Work\Policies;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Rimba\Work\Models\Offering;
+use Rimba\Work\Services\WorkAccessService;
 
-class OfferingPolicy
+final readonly class OfferingPolicy
 {
+    public function __construct(
+        private WorkAccessService $workAccessService,
+    ) {}
+
     public function viewAny(
         Authenticatable $user,
     ): bool {
-        return $user->can(
-            'work.offering.view-any',
-        );
+        return $this->workAccessService->staff($user) !== null;
     }
 
     public function view(
         Authenticatable $user,
         Offering $offering,
     ): bool {
-        return $user->can(
-            'work.offering.view',
-        );
+        return $this->workAccessService->staff($user) !== null
+            && $offering->is_active;
     }
 
     public function create(
         Authenticatable $user,
     ): bool {
-        return $user->can(
-            'work.offering.create',
-        );
+        return $this->workAccessService
+            ->manageableUnitIds($user) !== [];
     }
 
     public function update(
         Authenticatable $user,
         Offering $offering,
     ): bool {
-        return $user->can(
-            'work.offering.update',
-        );
+        return $offering->orgUnit !== null
+            && $this->workAccessService->canManageUnit(
+                $user,
+                $offering->orgUnit,
+            );
     }
 
     public function delete(
         Authenticatable $user,
         Offering $offering,
     ): bool {
-        return $user->can(
-            'work.offering.delete',
+        return $this->update(
+            $user,
+            $offering,
         );
     }
 
@@ -56,10 +60,9 @@ class OfferingPolicy
         Authenticatable $user,
         Offering $offering,
     ): bool {
-        if (! $offering->is_active) {
-            return false;
-        }
-
-        return (bool) $user->can('work.offering.execute');
+        return $this->workAccessService->staff($user) !== null
+            && $offering->is_active
+            && $offering->availability->value
+                === 'available';
     }
 }

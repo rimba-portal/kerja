@@ -1,6 +1,7 @@
 [
     {
         "code": "standard-fault-restoration",
+        "org_unit_code": "MAINTENANCE",
         "name": "Standard Fault Restoration",
         "description": "Standard workflow for assessment, repair, verification and restoration of equipment faults.",
         "lifecycle_code": "fault-to-restoration",
@@ -15,6 +16,7 @@
     },
     {
         "code": "incident-response",
+        "org_unit_code": "MAINTENANCE",
         "name": "Incident Response",
         "description": "Standard workflow for incident assessment, response, investigation and closure.",
         "lifecycle_code": "incident",
@@ -28,6 +30,7 @@
     },
     {
         "code": "permit-to-work-approval",
+        "org_unit_code": "MAINTENANCE",
         "name": "Permit to Work Approval",
         "description": "Assessment and authorization workflow for permit-controlled work.",
         "lifecycle_code": "permit-to-work",

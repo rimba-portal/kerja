@@ -1,6 +1,7 @@
 [
     {
         "code": "equipment-fault-report",
+        "org_unit_code": "MAINTENANCE",
         "name": "Equipment Fault Report",
         "description": "Collects the information required to report an equipment fault.",
         "provider": "packstub",
@@ -12,6 +13,7 @@
     },
     {
         "code": "incident-report",
+        "org_unit_code": "MAINTENANCE",
         "name": "Incident Report",
         "description": "Collects initial incident information.",
         "provider": "packstub",
@@ -23,6 +25,7 @@
     },
     {
         "code": "permit-to-work-request",
+        "org_unit_code": "MAINTENANCE",
         "name": "Permit to Work Request",
         "description": "Collects work scope, hazards, controls and authorization information.",
         "provider": "packstub",

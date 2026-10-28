@@ -149,3 +149,62 @@ rimba/work/
     └── Support/
         └── SeedPath.php
 ```
+
+Filament
+```text
+src/
+├── WorkPlugin.php
+│
+├── Http/UI/
+│   ├── Staff/
+│   │   ├── Pages/
+│   │   │   ├── BrowseOfferings.php
+│   │   │   ├── ExecuteOffering.php
+│   │   │   ├── MyRequests.php
+│   │   │   ├── MyTasks.php
+│   │   │   └── ViewWorkItem.php
+│   │   │
+│   │   ├── Tables/
+│   │   │   ├── MyRequestsTable.php
+│   │   │   └── MyTasksTable.php
+│   │   │
+│   │   └── Widgets/
+│   │       ├── MyOpenRequests.php
+│   │       └── MyPendingTasks.php
+│   │
+│   ├── Team/
+│   │   ├── Pages/
+│   │   │   ├── TeamInbox.php
+│   │   │   └── ViewTeamWorkItem.php
+│   │   │
+│   │   ├── Resources/
+│   │   │   ├── LifecycleResource/
+│   │   │   ├── FormResource/
+│   │   │   ├── WorkflowResource/
+│   │   │   ├── OfferingResource/
+│   │   │   └── OfferingExecutionResource/
+│   │   │
+│   │   ├── Schemas/
+│   │   │   ├── LifecycleForm.php
+│   │   │   ├── FormRegistrationForm.php
+│   │   │   ├── WorkflowRegistrationForm.php
+│   │   │   ├── OfferingConfigurationForm.php
+│   │   │   ├── LifecycleInfolist.php
+│   │   │   ├── FormInfolist.php
+│   │   │   ├── WorkflowInfolist.php
+│   │   │   ├── OfferingInfolist.php
+│   │   │   └── OfferingExecutionInfolist.php
+│   │   │
+│   │   └── Tables/
+│   │       ├── LifecyclesTable.php
+│   │       ├── FormsTable.php
+│   │       ├── WorkflowsTable.php
+│   │       ├── OfferingsTable.php
+│   │       └── OfferingExecutionsTable.php
+│   │
+│   └── Support/
+│       └── ResolvesTeam.php
+│
+└── Livewire/
+    └── DynamicOfferingForm.php
+```

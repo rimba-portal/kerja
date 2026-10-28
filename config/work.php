@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 use Packstub\Flow\Models\WorkflowRun;
+use Rimba\Organization\Models\OrgTeam;
+use Rimba\Organization\Models\OrgUnit;
+use Rimba\People\Models\Staff;
 use Rimba\Work\Models\Form;
 use Rimba\Work\Models\Lifecycle;
 use Rimba\Work\Models\LifecyclePhase;
@@ -15,6 +18,7 @@ use Rimba\Work\Providers\Workflows\NullWorkflowProvider;
 use Rimba\Work\Providers\Workflows\PackstubWorkflowProvider;
 
 return [
+
     'models' => [
         'form' => Form::class,
         'lifecycle' => Lifecycle::class,
@@ -23,8 +27,13 @@ return [
         'offering_execution' => OfferingExecution::class,
         'workflow' => Workflow::class,
 
-        'org_team' => null,
-        'user' => config('auth.providers.users.model'),
+        'staff' => Staff::class,
+        'org_unit' => OrgUnit::class,
+        'org_team' => OrgTeam::class,
+
+        'user' => config(
+            'auth.providers.users.model',
+        ),
     ],
 
     'providers' => [

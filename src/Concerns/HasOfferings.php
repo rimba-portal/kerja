@@ -13,7 +13,7 @@ trait HasOfferings
     {
         return $this->hasMany(
             Offering::class,
-            'org_team_id',
+            'org_unit_id',
             $this->getKeyName(),
         );
     }

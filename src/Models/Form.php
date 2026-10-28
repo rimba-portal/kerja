@@ -11,11 +11,14 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Rimba\Organization\Models\OrgUnit;
 use Rimba\Work\Enums\FormDisplayMode;
 use Rimba\Work\Enums\FormProviderType;
 
 #[Fillable([
+    'org_unit_id',
     'code',
     'name',
     'description',
@@ -53,6 +56,14 @@ class Form extends Model
             Offering::class,
             'form_code',
             'code',
+        );
+    }
+
+    public function orgUnit(): BelongsTo
+    {
+        return $this->belongsTo(
+            OrgUnit::class,
+            'org_unit_id',
         );
     }
 
