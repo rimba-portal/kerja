@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rimba\Work\Policies;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Rimba\People\Models\Staff;
 use Rimba\Work\Models\OfferingExecution;
 use Rimba\Work\Services\WorkAccessService;
 
@@ -19,7 +20,7 @@ final readonly class OfferingExecutionPolicy
     ): bool {
         return $this->workAccessService->staff(
             $user,
-        ) !== null;
+        ) instanceof Staff;
     }
 
     public function view(
@@ -47,7 +48,7 @@ final readonly class OfferingExecutionPolicy
     ): bool {
         return $this->workAccessService->staff(
             $user,
-        ) !== null;
+        ) instanceof Staff;
     }
 
     public function cancel(
