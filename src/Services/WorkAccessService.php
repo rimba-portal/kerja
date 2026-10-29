@@ -31,7 +31,9 @@ final class WorkAccessService
         ?Authenticatable $user,
         OrgTeam $team,
     ): bool {
-        $staff = $this->staff($user);
+        $staff = $this->staff(
+            $user,
+        );
 
         if (! $staff instanceof Staff) {
             return false;
@@ -49,12 +51,6 @@ final class WorkAccessService
         ?Authenticatable $user,
         OrgUnit $unit,
     ): bool {
-        $staff = $this->staff($user);
-
-        if (! $staff instanceof Staff) {
-            return false;
-        }
-
         return $unit
             ->orgTeams()
             ->get()
@@ -64,6 +60,14 @@ final class WorkAccessService
                     team: $team,
                 ),
             );
+    }
+
+    public function hasManageableUnit(
+        ?Authenticatable $user,
+    ): bool {
+        return $this->manageableUnitIds(
+            $user,
+        ) !== [];
     }
 
     public function manageableUnits(
@@ -86,7 +90,9 @@ final class WorkAccessService
     public function manageableUnitIds(
         ?Authenticatable $user,
     ): array {
-        $staff = $this->staff($user);
+        $staff = $this->staff(
+            $user,
+        );
 
         if (! $staff instanceof Staff) {
             return [];
@@ -109,6 +115,7 @@ final class WorkAccessService
                 ),
             )
             ->pluck('org_unit_id')
+            ->filter()
             ->unique()
             ->values()
             ->all();

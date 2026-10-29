@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Rimba\Organization\Models\OrgUnit;
+use Rimba\Work\Contracts\OrgUnitOwned;
 use Rimba\Work\Enums\FormDisplayMode;
 use Rimba\Work\Enums\FormProviderType;
 
@@ -32,7 +33,7 @@ use Rimba\Work\Enums\FormProviderType;
 ])]
 #[RouteKey('code')]
 #[Table(name: 'work_forms')]
-class Form extends Model
+class Form extends Model implements OrgUnitOwned
 {
     use HasUuids;
 
@@ -65,6 +66,17 @@ class Form extends Model
             OrgUnit::class,
             'org_unit_id',
         );
+    }
+
+    public function owningOrgUnit(): ?OrgUnit
+    {
+        $unit = $this->getRelationValue(
+            'orgUnit',
+        );
+
+        return $unit instanceof OrgUnit
+            ? $unit
+            : null;
     }
 
     #[Scope]

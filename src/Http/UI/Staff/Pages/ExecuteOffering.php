@@ -23,7 +23,7 @@ class ExecuteOffering extends Page
         $this->offering = Offering::query()
             ->with([
                 'form',
-                'workflow.lifecycle',
+                'workflow',
             ])
             ->where('code', $offering)
             ->firstOrFail();

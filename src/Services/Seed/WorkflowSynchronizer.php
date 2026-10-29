@@ -4,53 +4,29 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Services\Seed;
 
-use Illuminate\Support\Facades\DB;
 use Rimba\Work\Contracts\SeedSynchronizer;
 use Rimba\Work\Exceptions\SeedSynchronizationException;
-use Rimba\Work\Models\Lifecycle;
-use Rimba\Work\Models\LifecyclePhase;
 use Rimba\Work\Models\Workflow;
 
-class WorkflowSynchronizer implements SeedSynchronizer
+final class WorkflowSynchronizer implements SeedSynchronizer
 {
-    public function sync(
-        array $records,
-    ): void {
-        DB::transaction(function () use ($records): void {
-            foreach ($records as $record) {
-                $this->syncWorkflow(
-                    $record,
-                );
-            }
-        });
+    public function sync(array $records): void
+    {
+        foreach ($records as $record) {
+            $this->syncRecord($record);
+        }
     }
 
-    protected function syncWorkflow(
-        array $record,
-    ): Workflow {
-        $code = $record['code'];
-
-        $orgUnitCode =
-            $record['org_unit_code']
-            ?? throw new SeedSynchronizationException(
-                "Workflow [{$code}] is missing org_unit_code."
-            );
-
-        $lifecycleCode =
-            $record['lifecycle_code']
-            ?? null;
-
-        $phaseCode =
-            $record['lifecycle_phase_code']
-            ?? null;
-
-        $this->validateLifecycle(
-            $lifecycleCode,
+    private function syncRecord(array $record): Workflow
+    {
+        $code = $this->requiredString(
+            $record,
+            'code',
         );
 
-        $this->validatePhase(
-            lifecycleCode: $lifecycleCode,
-            phaseCode: $phaseCode,
+        $orgUnitCode = $this->requiredString(
+            $record,
+            'org_unit_code',
         );
 
         return Workflow::query()->updateOrCreate(
@@ -62,97 +38,70 @@ class WorkflowSynchronizer implements SeedSynchronizer
                     $orgUnitCode,
                 ),
 
-                'name' => $record['name'],
+                'name' => $this->requiredString(
+                    $record,
+                    'name',
+                ),
 
-                'description' => $record['description']
-                    ?? null,
-
-                'lifecycle_code' => $lifecycleCode,
-
-                'lifecycle_phase_code' => $phaseCode,
-
-                'provider' => $record['provider']
-                    ?? 'packstub',
+                'description' => $record['description'] ?? null,
 
                 /*
-                 * Portable provider identity.
+                 * Semantic references owned by Rimba/Jalur.
                  *
-                 * Do not put Packstub's environment-specific
-                 * database ID into seed JSON.
+                 * Kerja stores the codes only and deliberately
+                 * does not enforce database foreign keys.
                  */
-                'provider_key' => $record['provider_key']
-                    ?? $code,
+                'lifecycle_code' => $record['lifecycle_code'] ?? null,
 
-                'version' => $record['version']
-                    ?? 1,
+                'lifecycle_phase_code' => $record['lifecycle_phase_code'] ?? null,
 
-                'is_active' => $record['is_active']
-                    ?? true,
+                'provider' => $record['provider'] ?? 'packstub',
 
-                'settings' => $record['settings']
-                    ?? null,
+                'provider_key' => $record['provider_key'] ?? $code,
+
+                'provider_reference' => $record['provider_reference'] ?? null,
+
+                'version' => $record['version'] ?? 1,
+
+                'is_active' => $record['is_active'] ?? true,
+
+                'settings' => $record['settings'] ?? null,
             ],
         );
     }
 
-    protected function validateLifecycle(
-        ?string $code,
-    ): void {
-        if ($code === null) {
-            return;
-        }
+    private function requiredString(
+        array $record,
+        string $key,
+    ): string {
+        $value = $record[$key] ?? null;
 
         if (
-            ! Lifecycle::query()
-                ->where('code', $code)
-                ->exists()
+            ! is_string($value)
+            || trim($value) === ''
         ) {
+            $code = $record['code']
+                ?? '(unknown)';
+
             throw new SeedSynchronizationException(
-                "Lifecycle [{$code}] does not exist."
+                "Workflow [{$code}] requires [{$key}]."
             );
         }
+
+        return trim($value);
     }
 
-    protected function validatePhase(
-        ?string $lifecycleCode,
-        ?string $phaseCode,
-    ): void {
-        if ($phaseCode === null) {
-            return;
-        }
-
-        if ($lifecycleCode === null) {
-            throw new SeedSynchronizationException(
-                "Lifecycle phase [{$phaseCode}] cannot be used without lifecycle_code."
-            );
-        }
-
-        if (
-            ! LifecyclePhase::query()
-                ->where(
-                    'lifecycle_code',
-                    $lifecycleCode,
-                )
-                ->where(
-                    'code',
-                    $phaseCode,
-                )
-                ->exists()
-        ) {
-            throw new SeedSynchronizationException(
-                "Lifecycle phase [{$lifecycleCode}:{$phaseCode}] does not exist."
-            );
-        }
-    }
-
-    protected function resolveOrgUnitId(
+    private function resolveOrgUnitId(
         string $code,
     ): int|string {
         $model = config(
             'work.models.org_unit',
         );
 
-        if (! $model) {
+        if (
+            ! is_string($model)
+            || $model === ''
+        ) {
             throw new SeedSynchronizationException(
                 'work.models.org_unit is not configured.'
             );

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Rimba\Organization\Models\OrgUnit;
+use Rimba\Work\Contracts\OrgUnitOwned;
 use Rimba\Work\Enums\WorkflowProviderType;
 
 #[Fillable([
@@ -32,7 +33,7 @@ use Rimba\Work\Enums\WorkflowProviderType;
 ])]
 #[RouteKey('code')]
 #[Table(name: 'work_workflows')]
-class Workflow extends Model
+class Workflow extends Model implements OrgUnitOwned
 {
     use HasUuids;
 
@@ -40,21 +41,10 @@ class Workflow extends Model
     {
         return [
             'provider' => WorkflowProviderType::class,
-
             'version' => 'integer',
             'is_active' => 'boolean',
-
             'settings' => 'array',
         ];
-    }
-
-    public function lifecycle(): BelongsTo
-    {
-        return $this->belongsTo(
-            Lifecycle::class,
-            'lifecycle_code',
-            'code',
-        );
     }
 
     public function orgUnit(): BelongsTo
@@ -65,35 +55,15 @@ class Workflow extends Model
         );
     }
 
-    /*
-     * LifecyclePhase has a composite logical identity:
-     *
-     * lifecycle_code + code
-     *
-     * A normal BelongsTo cannot enforce both columns, so use phase()
-     * for convenient loading and phaseQuery() where strict qualification
-     * is required.
-     */
-    public function phase(): BelongsTo
+    public function owningOrgUnit(): ?OrgUnit
     {
-        return $this->belongsTo(
-            LifecyclePhase::class,
-            'lifecycle_phase_code',
-            'code',
+        $unit = $this->getRelationValue(
+            'orgUnit',
         );
-    }
 
-    public function phaseQuery()
-    {
-        return LifecyclePhase::query()
-            ->where(
-                'lifecycle_code',
-                $this->lifecycle_code,
-            )
-            ->where(
-                'code',
-                $this->lifecycle_phase_code,
-            );
+        return $unit instanceof OrgUnit
+            ? $unit
+            : null;
     }
 
     public function offerings(): HasMany
@@ -118,13 +88,22 @@ class Workflow extends Model
     #[Scope]
     protected function forLifecycle(
         Builder $query,
-        Lifecycle|string $lifecycle,
+        string $lifecycleCode,
     ): Builder {
         return $query->where(
             'lifecycle_code',
-            $lifecycle instanceof Lifecycle
-                ? $lifecycle->code
-                : $lifecycle,
+            $lifecycleCode,
+        );
+    }
+
+    #[Scope]
+    protected function forLifecyclePhase(
+        Builder $query,
+        string $lifecyclePhaseCode,
+    ): Builder {
+        return $query->where(
+            'lifecycle_phase_code',
+            $lifecyclePhaseCode,
         );
     }
 
@@ -136,6 +115,8 @@ class Workflow extends Model
 
     public function hasProviderDefinition(): bool
     {
-        return filled($this->provider_key);
+        return filled(
+            $this->provider_key,
+        );
     }
 }

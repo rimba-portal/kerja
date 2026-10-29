@@ -10,34 +10,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('work_lifecycles', function (Blueprint $table): void {
-            $table->uuid('id')->primary();
-            $table->string('code')->unique();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->string('category')->index();
-            $table->string('parent_code')->nullable()->index();
-            $table->unsignedInteger('sort')->default(0);
-            $table->boolean('is_active')->default(true);
-            $table->json('settings')->nullable();
-            $table->timestamps();
-            $table->foreign('parent_code')->references('code')->on('work_lifecycles')->nullOnDelete();
-        });
-        Schema::create('work_lifecycle_phases', function (Blueprint $table): void {
-            $table->uuid('id')->primary();
-            $table->string('lifecycle_code');
-            $table->string('code');
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->unsignedInteger('sequence')->default(0);
-            $table->json('entry_criteria')->nullable();
-            $table->json('exit_criteria')->nullable();
-            $table->json('settings')->nullable();
-            $table->timestamps();
-            $table->unique(['lifecycle_code', 'code']);
-            $table->index(['lifecycle_code', 'sequence']);
-            $table->foreign('lifecycle_code')->references('code')->on('work_lifecycles')->cascadeOnDelete();
-        });
         Schema::create('work_forms', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->foreignId('org_unit_id')->index()->constrained('org_units');
@@ -60,8 +32,8 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('org_unit_id')->index()->constrained('org_units');
             $table->text('description')->nullable();
-            $table->string('lifecycle_code')->nullable();
-            $table->string('lifecycle_phase_code')->nullable();
+            $table->string('lifecycle_code')->nullable()->index();
+            $table->string('lifecycle_phase_code')->nullable()->index();
             $table->string('provider')->default('packstub')->index();
             $table->string('provider_key')->index();
             $table->string('provider_reference')->nullable()->index();
@@ -70,7 +42,6 @@ return new class extends Migration
             $table->json('settings')->nullable();
             $table->timestamps();
             $table->unique(['provider', 'provider_key']);
-            $table->foreign('lifecycle_code')->references('code')->on('work_lifecycles')->nullOnDelete();
         });
         Schema::create('work_offerings', function (Blueprint $table): void {
             $table->uuid('id')->primary();
@@ -133,7 +104,5 @@ return new class extends Migration
         Schema::dropIfExists('work_offerings');
         Schema::dropIfExists('work_workflows');
         Schema::dropIfExists('work_forms');
-        Schema::dropIfExists('work_lifecycle_phases');
-        Schema::dropIfExists('work_lifecycles');
     }
 };

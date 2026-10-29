@@ -22,7 +22,7 @@ class ViewWorkItem extends Page
         $this->execution = OfferingExecution::query()
             ->with([
                 'offering.form',
-                'offering.workflow.lifecycle',
+                'offering.workflow',
                 'subject',
                 'workflowInstance',
                 'formSubmission',

@@ -24,7 +24,7 @@ class OfferingManager
     {
         return Offering::query()->with([
             'form',
-            'workflow.lifecycle',
+            'workflow',
         ]);
     }
 

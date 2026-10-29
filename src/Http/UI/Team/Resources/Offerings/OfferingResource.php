@@ -75,16 +75,17 @@ class OfferingResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $unitIds = app(
-            WorkAccessService::class,
-        )->manageableUnitIds(
-            Filament::auth()->user(),
-        );
+        $builder = parent::getEloquentQuery();
+        $user = Filament::auth()->user();
+        if ($user === null) {
+            return $builder->whereRaw('1 = 0');
+        }
 
-        return parent::getEloquentQuery()
-            ->whereIn(
-                'org_unit_id',
-                $unitIds,
-            );
+        $unitIds = app(WorkAccessService::class)->manageableUnitIds($user);
+        if ($unitIds === []) {
+            return $builder->whereRaw('1 = 0');
+        }
+
+        return $builder->whereIn('org_unit_id', $unitIds);
     }
 }

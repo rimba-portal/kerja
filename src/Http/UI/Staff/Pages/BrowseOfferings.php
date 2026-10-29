@@ -35,7 +35,7 @@ class BrowseOfferings extends Page
             ->available()
             ->with([
                 'form',
-                'workflow.lifecycle',
+                'workflow',
             ])
             ->when(
                 filled($this->search),

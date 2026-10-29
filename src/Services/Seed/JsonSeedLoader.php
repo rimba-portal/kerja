@@ -7,11 +7,10 @@ namespace Rimba\Work\Services\Seed;
 use JsonException;
 use Rimba\Work\Exceptions\SeedSynchronizationException;
 
-class JsonSeedLoader
+final class JsonSeedLoader
 {
-    public function load(
-        string $path,
-    ): array {
+    public function loadDocument(string $path): array
+    {
         if (! is_file($path)) {
             throw new SeedSynchronizationException(
                 "Seed file [{$path}] does not exist."
@@ -34,15 +33,15 @@ class JsonSeedLoader
                 JSON_THROW_ON_ERROR,
             );
         } catch (JsonException $jsonException) {
-            throw new SeedSynchronizationException(message: "Invalid JSON in seed file [{$path}]: {$jsonException->getMessage()}", code: $jsonException->getCode(), previous: $jsonException);
+            throw new SeedSynchronizationException("Invalid JSON in [{$path}]: {$jsonException->getMessage()}", $jsonException->getCode(), previous: $jsonException);
         }
 
         if (! is_array($data)) {
             throw new SeedSynchronizationException(
-                "Seed file [{$path}] must contain a JSON array."
+                "Seed file [{$path}] must contain a JSON object."
             );
         }
 
-        return array_values($data);
+        return $data;
     }
 }

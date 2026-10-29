@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Models;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\RouteKey;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Rimba\Organization\Models\OrgUnit;
+use Rimba\Work\Contracts\OrgUnitOwned;
 use Rimba\Work\Enums\OfferingAvailability;
 use Rimba\Work\Enums\OfferingVisibility;
 use Rimba\Work\Enums\SubjectCreationMode;
@@ -47,7 +49,7 @@ use Rimba\Work\Enums\SubjectCreationMode;
 ])]
 #[RouteKey('code')]
 #[Table(name: 'work_offerings')]
-class Offering extends Model
+class Offering extends Model implements OrgUnitOwned
 {
     use HasUuids;
 
@@ -103,6 +105,29 @@ class Offering extends Model
             OrgUnit::class,
             'org_unit_id',
         );
+    }
+
+    public function owningOrgUnit(): ?OrgUnit
+    {
+        $unit = $this->getRelationValue(
+            'orgUnit',
+        );
+
+        return $unit instanceof OrgUnit
+            ? $unit
+            : null;
+    }
+
+    public function execute(
+        Authenticatable $user,
+        Offering $offering,
+    ): bool {
+        return $this->access->staff(
+            $user,
+        ) !== null
+            && $offering->is_active
+            && $offering->availability
+            === OfferingAvailability::Available;
     }
 
     #[Scope]

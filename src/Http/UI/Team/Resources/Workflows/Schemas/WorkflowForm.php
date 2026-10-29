@@ -12,8 +12,6 @@ use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Rimba\Work\Enums\WorkflowProviderType;
-use Rimba\Work\Models\Lifecycle;
-use Rimba\Work\Models\LifecyclePhase;
 use Rimba\Work\Services\WorkAccessService;
 
 class WorkflowForm
@@ -25,12 +23,8 @@ class WorkflowForm
             Select::make('org_unit_id')
                 ->label('Owning Unit')
                 ->options(
-                    fn (): array => app(
-                        WorkAccessService::class,
-                    )
-                        ->manageableUnits(
-                            Filament::auth()->user(),
-                        )
+                    fn (): array => app(WorkAccessService::class)
+                        ->manageableUnits(Filament::auth()->user())
                         ->pluck('name', 'id')
                         ->all(),
                 )
@@ -49,34 +43,6 @@ class WorkflowForm
 
                     Textarea::make('description')
                         ->columnSpanFull(),
-
-                    Select::make('lifecycle_code')
-                        ->label('Lifecycle')
-                        ->options(
-                            fn (): array => Lifecycle::query()
-                                ->active()
-                                ->ordered()
-                                ->pluck('name', 'code')
-                                ->all(),
-                        )
-                        ->searchable()
-                        ->preload()
-                        ->live(),
-
-                    Select::make('lifecycle_phase_code')
-                        ->label('Starting phase')
-                        ->options(
-                            fn ($get): array => LifecyclePhase::query()
-                                ->where(
-                                    'lifecycle_code',
-                                    $get('lifecycle_code'),
-                                )
-                                ->orderBy('sequence')
-                                ->pluck('name', 'code')
-                                ->all(),
-                        )
-                        ->searchable()
-                        ->preload(),
 
                     Select::make('provider')
                         ->options([

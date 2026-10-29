@@ -6,35 +6,48 @@ namespace Rimba\Work\Policies;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Rimba\Work\Models\OfferingExecution;
+use Rimba\Work\Services\WorkAccessService;
 
-class OfferingExecutionPolicy
+final readonly class OfferingExecutionPolicy
 {
-    public $access;
+    public function __construct(
+        private WorkAccessService $workAccessService,
+    ) {}
 
     public function viewAny(
         Authenticatable $user,
     ): bool {
-        return $user->can(
-            'work.execution.view-any',
-        );
+        return $this->workAccessService->staff(
+            $user,
+        ) !== null;
     }
 
     public function view(
         Authenticatable $user,
         OfferingExecution $execution,
     ): bool {
-        if (
-            (string) $user->getAuthIdentifier()
-            === (string) $execution->user_id
-        ) {
+        if ($this->isRequester($user, $execution)) {
             return true;
         }
 
-        return $execution->orgUnit !== null
-            && $this->access->canManageUnit(
-                $user,
-                $execution->orgUnit,
-            );
+        $unit = $execution->orgUnit;
+
+        if ($unit === null) {
+            return false;
+        }
+
+        return $this->workAccessService->canManageUnit(
+            user: $user,
+            unit: $unit,
+        );
+    }
+
+    public function create(
+        Authenticatable $user,
+    ): bool {
+        return $this->workAccessService->staff(
+            $user,
+        ) !== null;
     }
 
     public function cancel(
@@ -45,8 +58,9 @@ class OfferingExecutionPolicy
             return false;
         }
 
-        return $user->can(
-            'work.execution.cancel',
+        return $this->isRequester(
+            $user,
+            $execution,
         );
     }
 
@@ -58,8 +72,23 @@ class OfferingExecutionPolicy
             return false;
         }
 
-        return $user->can(
-            'work.execution.retry',
+        $unit = $execution->orgUnit;
+
+        if ($unit === null) {
+            return false;
+        }
+
+        return $this->workAccessService->canManageUnit(
+            user: $user,
+            unit: $unit,
         );
+    }
+
+    private function isRequester(
+        Authenticatable $user,
+        OfferingExecution $execution,
+    ): bool {
+        return (string) $user->getAuthIdentifier()
+            === (string) $execution->user_id;
     }
 }

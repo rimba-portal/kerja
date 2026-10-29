@@ -24,12 +24,8 @@ class FormForm
             Select::make('org_unit_id')
                 ->label('Owning Unit')
                 ->options(
-                    fn (): array => app(
-                        WorkAccessService::class,
-                    )
-                        ->manageableUnits(
-                            Filament::auth()->user(),
-                        )
+                    fn (): array => app(WorkAccessService::class)
+                        ->manageableUnits(Filament::auth()->user())
                         ->pluck('name', 'id')
                         ->all(),
                 )

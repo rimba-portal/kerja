@@ -21,14 +21,6 @@
                             <div class="text-gray-500">{{ $offering->workflow->name }}</div>
                         </div>
                     @endif
-
-                    @if ($offering->workflow?->lifecycle)
-                        <div>
-                            <div class="font-semibold">Lifecycle</div>
-
-                            <div class="text-gray-500">{{ $offering->workflow->lifecycle->name }}</div>
-                        </div>
-                    @endif
                 </div>
             </x-filament::section>
         </div>

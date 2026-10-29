@@ -12,10 +12,6 @@
 
             <div class="min-w-0">
                 <h3 class="font-semibold text-gray-950 dark:text-white">{{ $offering->name }}</h3>
-
-                @if ($offering->workflow?->lifecycle)
-                    <p class="mt-1 text-xs text-gray-500">{{ $offering->workflow->lifecycle->name }}</p>
-                @endif
             </div>
         </div>
 

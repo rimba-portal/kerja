@@ -27,8 +27,15 @@ class WorkflowsTable
                 TextColumn::make('code')
                     ->copyable(),
 
-                TextColumn::make('lifecycle.name')
-                    ->label('Lifecycle'),
+                TextColumn::make('lifecycle_code')
+                    ->label('Lifecycle')
+                    ->placeholder('None')
+                    ->searchable(),
+
+                TextColumn::make('lifecycle_phase_code')
+                    ->label('Phase')
+                    ->placeholder('None')
+                    ->searchable(),
 
                 TextColumn::make('provider')
                     ->badge(),

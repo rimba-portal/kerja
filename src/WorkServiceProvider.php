@@ -16,17 +16,13 @@ use Rimba\Work\Contracts\SubjectRegistry as SubjectRegistryContract;
 use Rimba\Work\Contracts\WorkflowRunner;
 use Rimba\Work\Livewire\DynamicOfferingForm;
 use Rimba\Work\Models\Form;
-use Rimba\Work\Models\Lifecycle;
 use Rimba\Work\Models\Offering;
 use Rimba\Work\Models\OfferingExecution;
 use Rimba\Work\Models\Workflow;
 use Rimba\Work\Observers\OfferingExecutionObserver;
 use Rimba\Work\Observers\PackstubWorkflowRunObserver;
-use Rimba\Work\Policies\FormPolicy;
-use Rimba\Work\Policies\LifecyclePolicy;
 use Rimba\Work\Policies\OfferingExecutionPolicy;
-use Rimba\Work\Policies\OfferingPolicy;
-use Rimba\Work\Policies\WorkflowPolicy;
+use Rimba\Work\Policies\WorkPolicy;
 use Rimba\Work\Providers\Forms\LocalFormProvider;
 use Rimba\Work\Providers\Forms\PackstubFormProvider;
 use Rimba\Work\Providers\Workflows\NullWorkflowProvider;
@@ -159,6 +155,7 @@ class WorkServiceProvider extends BitesServiceProvider
 
     protected function bootPackage(): void
     {
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->registerFormProviders();
         $this->registerWorkflowProviders();
         $this->registerConfiguredSubjects();
@@ -251,30 +248,10 @@ class WorkServiceProvider extends BitesServiceProvider
 
     protected function registerPolicies(): void
     {
-        Gate::policy(
-            Form::class,
-            FormPolicy::class,
-        );
-
-        Gate::policy(
-            Lifecycle::class,
-            LifecyclePolicy::class,
-        );
-
-        Gate::policy(
-            Workflow::class,
-            WorkflowPolicy::class,
-        );
-
-        Gate::policy(
-            Offering::class,
-            OfferingPolicy::class,
-        );
-
-        Gate::policy(
-            OfferingExecution::class,
-            OfferingExecutionPolicy::class,
-        );
+        Gate::policy(Form::class, WorkPolicy::class);
+        Gate::policy(Workflow::class, WorkPolicy::class);
+        Gate::policy(Offering::class, WorkPolicy::class);
+        Gate::policy(OfferingExecution::class, OfferingExecutionPolicy::class);
     }
 
     /*

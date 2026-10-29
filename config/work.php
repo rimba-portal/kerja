@@ -7,8 +7,6 @@ use Rimba\Organization\Models\OrgTeam;
 use Rimba\Organization\Models\OrgUnit;
 use Rimba\People\Models\Staff;
 use Rimba\Work\Models\Form;
-use Rimba\Work\Models\Lifecycle;
-use Rimba\Work\Models\LifecyclePhase;
 use Rimba\Work\Models\Offering;
 use Rimba\Work\Models\OfferingExecution;
 use Rimba\Work\Models\Workflow;
@@ -21,8 +19,6 @@ return [
 
     'models' => [
         'form' => Form::class,
-        'lifecycle' => Lifecycle::class,
-        'lifecycle_phase' => LifecyclePhase::class,
         'offering' => Offering::class,
         'offering_execution' => OfferingExecution::class,
         'workflow' => Workflow::class,
@@ -114,7 +110,6 @@ return [
         'navigation_group' => 'Work',
         'navigation_sort' => 50,
 
-        'show_lifecycles' => true,
         'show_forms' => true,
         'show_workflows' => true,
         'show_offerings' => true,
