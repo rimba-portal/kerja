@@ -231,7 +231,7 @@ class WorkServiceProvider extends BitesServiceProvider
         );
 
         foreach (
-            config('work.subjects', []) as $alias => $modelClass
+            config('bites.work.subjects', []) as $alias => $modelClass
         ) {
             $subjectRegistry->register(
                 alias: $alias,
