@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rimba\Work\Http\UI\Team\Resources;
 
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Rimba\Floorplan\Models\Location;
 use Rimba\Work\Http\UI\Staff\Pages\WorkUnit;
 use Rimba\Work\Http\UI\Team\Resources\WorkUnitResource\Pages\ListWorkUnits;
