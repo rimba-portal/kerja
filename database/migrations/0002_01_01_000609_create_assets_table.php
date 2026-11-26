@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+// database/migrations/xxxx_xx_xx_xxxxxx_create_assets_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,21 +12,22 @@ return new class extends Migration
     {
         Schema::create('assets', function (Blueprint $table): void {
             $table->id();
+
             $table->foreignId('equipment_id')
                 ->constrained('equipment')
-                ->restrictOnDelete();
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+
             $table->string('name');
             $table->string('code')->unique();
-            $table->string('inventory_number')->nullable()->index();
-            $table->string('main_asset_number')->nullable()->index();
-            $table->string('asset_class')->nullable();
             $table->text('description')->nullable();
-            $table->text('description2')->nullable();
-            $table->string('cost_center')->nullable()->index();
-            $table->string('group')->nullable();
-            $table->string('serial_number')->nullable();
+
             $table->json('attributes')->nullable();
+
             $table->timestamps();
+
+            $table->index('equipment_id');
+            $table->index('name');
         });
     }
 

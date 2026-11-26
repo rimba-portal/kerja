@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+// database/migrations/xxxx_xx_xx_xxxxxx_create_processes_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,11 +12,16 @@ return new class extends Migration
     {
         Schema::create('processes', function (Blueprint $table): void {
             $table->id();
+
             $table->string('name');
             $table->string('code')->unique();
             $table->text('description')->nullable();
+
             $table->json('attributes')->nullable();
+
             $table->timestamps();
+
+            $table->index('name');
         });
     }
 

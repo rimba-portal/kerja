@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+// database/migrations/xxxx_xx_xx_xxxxxx_create_equipment_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,21 +12,23 @@ return new class extends Migration
     {
         Schema::create('equipment', function (Blueprint $table): void {
             $table->id();
+
             $table->foreignId('hierarchy_scope_id')
                 ->nullable()
                 ->constrained('locations')
+                ->cascadeOnUpdate()
                 ->nullOnDelete();
+
             $table->string('name');
             $table->string('code')->unique();
-            $table->string('manufacturer')->nullable();
-            $table->string('model')->nullable();
-            $table->string('serial_number')->nullable();
-            $table->string('state')->nullable();
             $table->text('description')->nullable();
+
             $table->json('attributes')->nullable();
+
             $table->timestamps();
 
-            $table->index('state');
+            $table->index('hierarchy_scope_id');
+            $table->index('name');
         });
     }
 

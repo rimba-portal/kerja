@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+// database/migrations/xxxx_xx_xx_xxxxxx_create_process_hierarchy_scopes_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -10,28 +10,39 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('process_hierarchy_scopes', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('process_id')
-                ->constrained('processes')
-                ->cascadeOnDelete();
-            $table->foreignId('hierarchy_scope_id')
-                ->constrained('locations')
-                ->cascadeOnDelete();
-            $table->string('scope_level')->default('Work Unit');
-            $table->text('description')->nullable();
-            $table->json('attributes')->nullable();
-            $table->timestamps();
+        Schema::create(
+            'process_hierarchy_scopes',
+            function (Blueprint $table): void {
+                $table->id();
 
-            $table->unique(
-                ['process_id', 'hierarchy_scope_id'],
-                'process_hierarchy_scope_unique'
-            );
-            $table->index(
-                ['hierarchy_scope_id', 'scope_level'],
-                'process_scope_level_index'
-            );
-        });
+                $table->foreignId('process_id')
+                    ->constrained('processes')
+                    ->cascadeOnUpdate()
+                    ->cascadeOnDelete();
+
+                $table->foreignId('hierarchy_scope_id')
+                    ->constrained('locations')
+                    ->cascadeOnUpdate()
+                    ->cascadeOnDelete();
+
+                $table->string('scope_level')
+                    ->default('Work Unit');
+
+                $table->text('description')->nullable();
+                $table->json('attributes')->nullable();
+
+                $table->timestamps();
+
+                $table->unique(
+                    ['process_id', 'hierarchy_scope_id'],
+                    'process_location_scope_unique',
+                );
+
+                $table->index('process_id');
+                $table->index('hierarchy_scope_id');
+                $table->index('scope_level');
+            },
+        );
     }
 
     public function down(): void
